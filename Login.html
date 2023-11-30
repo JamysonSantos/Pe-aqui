@@ -41,9 +41,6 @@
     }
   </style>
   
-  <!-- Adicione a política de segurança -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://www.gstatic.com/firebasejs/;">
-  
 </head>
 <body>
   <h1>Bem-vindo ao Peçaqui!</h1>
@@ -54,31 +51,5 @@
     <button type="submit" class="button" id="cadastrarEmpresa">ENTRAR</button>
     <p>Se ainda não tem uma conta, <a href="cadastro.html">clique aqui</a> para fazer login ou se cadastrar.</p>
   </form>
-
-  <!-- Adicione o SDK do Firebase -->
-  <script src="popup.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyB08PSL6yI5_rQ0hJ6Ip-FxQbvoXelTcig",
-        authDomain: "pecaqui-c9dac.firebaseapp.com",
-        projectId: "pecaqui-c9dac",
-        storageBucket: "pecaqui-c9dac.appspot.com",
-        messagingSenderId: "223046946195",
-        appId: "1:223046946195:web:ee99b38aa517ed3cb06c66",
-        measurementId: "G-198FFR222H"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    console.log('antes');
-    firebase.auth().signInWithEmailAndPassword("pecaqui.contao@gmail.com", "adm2023").then(response => {
-        console.log('success', response)
-    }).catch(error => {
-        console.log('error', error)
-    });
-    console.log('depois')
-	window.location.href = "areadaempresa.html"
-	
 </body>
 </html>
