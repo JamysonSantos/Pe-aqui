@@ -57,6 +57,107 @@ body {
     background-color: #FF814E;
 }
 
+/* Estilos para o container do kanban */
+.kanban-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+/* Estilos para as colunas do kanban */
+.kanban-column {
+    flex: 1;
+    margin: 0 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    min-height: 200px;
+}
+
+/* Estilos para o título das colunas do kanban */
+.kanban-column h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Estilos para dispositivos móveis */
+@media only screen and (max-width: 600px) {
+    .orange-bar {
+        height: 70px;
+        padding: 10px;
+    }
+    .logo {
+        width: 30px;
+        height: 30px;
+    }
+    .company-info {
+        font-size: 14px;
+    }
+    .button-cadastrar {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    .kanban-container {
+        flex-direction: column;
+    }
+    .kanban-column {
+        margin: 10px 0;
+    }
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos para a barra laranja */
+.orange-bar {
+    background-color: #FF5733;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* Estilos para a logo */
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+/* Estilos para o nome da empresa */
+.company-info {
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.company-name {
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+/* Estilos para o botão "Cadastre seu cardápio" */
+.button-cadastrar {
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.button-cadastrar:hover {
+    background-color: #FF814E;
+}
+
 /* Estilos para o botão "Sair" */
 .button-sair {
     background-color: #FF5733;
