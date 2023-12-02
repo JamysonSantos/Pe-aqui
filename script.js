@@ -8,25 +8,34 @@ const firebaseConfig = {
     appId: "1:502925766451:web:52473d00da34033f789846"
   };
 
-// Inicialização do Firebase
+// Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Obtenção de instâncias de autenticação e banco de dados
+// Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
 
-// Função para login com e-mail e senha
+// Função de autenticação por email e senha
 function signInWithEmailPassword(email, password) {
-  auth.signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Usuário autenticado com sucesso
-      const user = userCredential.user;
-      console.log(user);
-      window.location.href = 'home.html'; // Redirecionamento após o login bem-sucedido
-    })
-    .catch((error) => {
-      // Tratamento de erro
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error(errorMessage);
-    });
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Usuário autenticado com sucesso
+            const user = userCredential.user;
+            console.log(user);
+            window.location.href = 'home.html'; // Redirecionamento após o login bem-sucedido
+        })
+        .catch((error) => {
+            // Tratamento de erro
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error(errorMessage);
+        });
 }
+
+// Adiciona um listener para o evento de clique no botão de login
+document.getElementById('loginButton').addEventListener('click', function(event) {
+    event.preventDefault(); // Evita o comportamento padrão do formulário
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    signInWithEmailPassword(email, password);
+});
