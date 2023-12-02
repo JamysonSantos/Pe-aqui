@@ -1,13 +1,12 @@
 // Cole suas configurações do Firebase aqui
 const firebaseConfig = {
-   apiKey: "AIzaSyAgJmyw5DPcPqN73eLqYqL3pMXLU4wqtCg",
-    authDomain: "pecaqui-48794.firebaseapp.com",
-    databaseURL: "https://pecaqui-48794-default-rtdb.firebaseio.com",
-    projectId: "pecaqui-48794",
-    storageBucket: "pecaqui-48794.appspot.com",
-    messagingSenderId: "530631627445",
-    appId: "1:530631627445:web:ae1eff8f00f60ff2d964fc"
-};
+   apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
+    authDomain: "pecaqui-cc6c1.firebaseapp.com",
+    projectId: "pecaqui-cc6c1",
+    storageBucket: "pecaqui-cc6c1.appspot.com",
+    messagingSenderId: "502925766451",
+    appId: "1:502925766451:web:52473d00da34033f789846"
+  };
 
 // Inicialização do Firebase
 firebase.initializeApp(firebaseConfig);
