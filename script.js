@@ -14,14 +14,14 @@ const firebaseConfig = {
     appId: "1:530631627445:web:ae1eff8f00f60ff2d964fc"
 };
 
-// Inicialize o Firebase
+// Inicialização do Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Para utilizar os recursos de autenticação e banco de dados
+// Obtenção de instâncias de autenticação e banco de dados
 const auth = firebase.auth();
 const database = firebase.database();
 
-// Funções de autenticação
+// Função para login com e-mail e senha
 function signInWithEmailPassword(email, password) {
   auth.signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -38,12 +38,12 @@ function signInWithEmailPassword(email, password) {
     });
 }
 
-// Funções de banco de dados
+// Função para salvar dados do usuário no banco de dados
 function saveUserData(email) {
   const userId = firebase.auth().currentUser.uid;
   database.ref('usuarios/' + userId).set({
     email: email,
-    // Outras informações do usuário
+    // Outras informações do usuário...
   })
     .then(() => {
       console.log("Dados do usuário salvos com sucesso!");
@@ -52,4 +52,3 @@ function saveUserData(email) {
       console.error("Erro ao salvar dados do usuário:", error);
     });
 }
-
