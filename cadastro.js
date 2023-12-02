@@ -32,5 +32,58 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
   }
 });
 
-// Função de criação de novo usuário
-function createUserWithEmailAnd
+function createUserWithEmailAndPassword(companyName, email, password) {
+  // Verifica se os dados do formulário são válidos
+  if (!companyName || companyName.trim().length === 0) {
+    alert("O campo 'Nome da sua empresa' é obrigatório.");
+    return;
+  }
+
+  if (!email || email.trim().length === 0) {
+    alert("O campo 'E-mail' é obrigatório.");
+    return;
+  }
+
+  if (!password || password.trim().length === 0) {
+    alert("O campo 'Crie sua Senha' é obrigatório.");
+    return;
+  }
+
+  // Valida o e-mail
+  if (!validateEmail(email)) {
+    alert("O e-mail fornecido é inválido.");
+    return;
+  }
+
+  // Chama o método `createUserWithEmailAndPassword()` do Firebase
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Usuário criado com sucesso
+      const user = userCredential.user;
+      console.log(user);
+
+      // Redirecionamento após o cadastro bem-sucedido
+      window.location.href = 'poscadastro.html';
+    })
+    .catch((error) => {
+      // Tratamento de erro
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorMessage);
+
+      // Verifica se o erro é de conexão com a internet
+      if (errorCode === "auth/network-request-failed") {
+        // Exibe uma mensagem de erro personalizada
+        alert("O dispositivo não está conectado à internet.");
+      } else {
+        // Exibe a mensagem de erro padrão do Firebase
+        alert(errorMessage);
+      }
+    });
+}
+
+// Função para validar um e-mail
+function validateEmail(email) {
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regex.test(email);
+}
