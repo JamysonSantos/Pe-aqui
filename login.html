@@ -52,5 +52,18 @@
     <p>Se ainda não tem uma conta, <a href="cadastro.html">clique aqui</a> para fazer login ou se cadastrar.</p>
 
 <script src="script.js"></script>
+
+    <script>
+    // Adicione um evento de clique ao botão de login
+    document.getElementById('loginButton').addEventListener('click', function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Chame a função signInWithEmailPassword com os valores dos campos de entrada
+      signInWithEmailPassword(email, password);
+    });
+  </script>
+</body>
+</html>
 </body>
 </html>
