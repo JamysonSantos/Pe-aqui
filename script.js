@@ -41,4 +41,4 @@ function signInWithEmailPassword(email, password) {
     });
 
     signInWithEmailPassword(email, password);
-});
+};
