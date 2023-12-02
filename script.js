@@ -14,7 +14,6 @@ firebase.initializeApp(firebaseConfig);
 
 // Obtenção de instâncias de autenticação e banco de dados
 const auth = firebase.auth();
-const database = firebase.database();
 
 // Função para login com e-mail e senha
 function signInWithEmailPassword(email, password) {
