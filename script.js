@@ -30,18 +30,3 @@ function signInWithEmailPassword(email, password) {
       console.error(errorMessage);
     });
 }
-
-// Função para salvar dados do usuário no banco de dados
-function saveUserData(email) {
-  const userId = firebase.auth().currentUser.uid;
-  database.ref('usuarios/' + userId).set({
-    email: email,
-    // Outras informações do usuário...
-  })
-    .then(() => {
-      console.log("Dados do usuário salvos com sucesso!");
-    })
-    .catch((error) => {
-      console.error("Erro ao salvar dados do usuário:", error);
-    });
-}
