@@ -20,3 +20,8 @@ function logout() {
   // Redireciona o usuário para a página de login
   window.location.href = "login.html";
 }
+// Adiciona evento de clique ao botão "Cadastrar Cardápio"
+document.querySelector(".button-cadastrar").addEventListener("click", function() {
+  // Redireciona o usuário para a página de cadastro de cardápio
+  window.location.href = "cadastrocardapio.html";
+});
