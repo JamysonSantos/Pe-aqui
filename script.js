@@ -23,6 +23,7 @@ function signInWithEmailPassword(email, password) {
       // Usuário autenticado com sucesso
       const user = userCredential.user;
       console.log(user);
+      window.location.href = 'home.html'; // Redirecionamento após o login bem-sucedido
     })
     .catch((error) => {
       // Tratamento de erro
@@ -46,3 +47,4 @@ function saveUserData(email) {
       console.error("Erro ao salvar dados do usuário:", error);
     });
 }
+
