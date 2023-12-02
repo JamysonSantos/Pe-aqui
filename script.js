@@ -39,6 +39,6 @@ function signInWithEmailPassword(email, password) {
       const errorMessage = error.message;
       console.error(errorMessage);
     });
-}
+
     signInWithEmailPassword(email, password);
 });
