@@ -1,8 +1,3 @@
-// Importe o Firebase de forma assíncrona
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js';
-import { getDatabase } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js';
-
 // Cole suas configurações do Firebase aqui
 const firebaseConfig = {
    apiKey: "AIzaSyAgJmyw5DPcPqN73eLqYqL3pMXLU4wqtCg",
