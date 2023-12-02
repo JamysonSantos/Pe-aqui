@@ -57,6 +57,22 @@ body {
     background-color: #FF814E;
 }
 
+/* Estilos para o botão "Sair" */
+.button-sair {
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.button-sair:hover {
+    background-color: #FF814E;
+}
+
 /* Estilos para o container do kanban */
 .kanban-container {
     display: flex;
@@ -99,6 +115,10 @@ body {
         padding: 8px 16px;
         font-size: 14px;
     }
+    .button-sair {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
     .kanban-container {
         flex-direction: column;
     }
@@ -111,30 +131,5 @@ body {
 </head>
 <body>
     <div class="orange-bar">
-        <div class="company-info">
-            <img src="icon128.png" alt="Logo da Empresa" class="logo">
-            <span class="company-name">Nome da Empresa</span>
-        </div>
-        <a href="cadastro_cardapio.html" class="button-cadastrar">Cadastre seu cardápio</a>
-    </div>
+        <div class
 
-    <div class="kanban-container">
-        <div class="kanban-column">
-            <h2>Novo Pedido</h2>
-            <!-- Adicione os pedidos nesta coluna -->
-        </div>
-        <div class="kanban-column">
-            <h2>Em Produção</h2>
-            <!-- Adicione os pedidos nesta coluna -->
-        </div>
-        <div class="kanban-column">
-            <h2>Em Rota de Entrega</h2>
-            <!-- Adicione os pedidos nesta coluna -->
-        </div>
-        <div class="kanban-column">
-            <h2>Entregue</h2>
-            <!-- Adicione os pedidos nesta coluna -->
-        </div>
-    </div>
-</body>
-</html>
