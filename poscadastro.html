@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Bem-vindo ao Peçaqui!</title>
+    <style>
+        /* Estilos para o corpo da página */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Estilos para o contêiner principal */
+        .container {
+            text-align: center;
+        }
+
+        /* Estilos para a logo */
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 10px;
+            border-radius: 50%;
+        }
+		
+        /* Estilos para o título */
+        h1 {
+            color: #FF5733;
+            font-size: 3rem;
+            margin-top: 20px;
+        }
+
+        /* Estilos para o texto */
+        p {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        /* Estilos para o botão */
+        .button {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            background-color: #FF5733;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #FF814E;
+        }
+		
+		/* Estilos para dispositivos móveis */
+    @media only screen and (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+      .button {
+        width: 150px;
+        font-size: 14px;
+      }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="icon128.png" alt="Logo Peçaqui" class="logo">
+        <h1>Bem-vindo ao Peçaqui!</h1>
+        <p>Obrigado! Clique em acessar e faça login com e-mail e senha cadastrados!.</p>
+        <a href="login.html" class="button">ACESSAR</a>
+    </div>
+	
+	<script src="script.js"></script>
+</body>
+</html>
