@@ -24,14 +24,3 @@ function logout() {
 document.querySelector(".button-cadastrar").addEventListener("click", function() {
   // Redireciona o usuário para a página de cadastro de cardápio
   window.location.href = "cadastrocardapio.html";
-
-// Adicione esta função no home.js
-document.getElementById('linkComanda').addEventListener('click', function (event) {
-    event.preventDefault(); // Impede o comportamento padrão do link (navegar para outra página)
-
-    var link = this.getAttribute('href'); // Obtém o link da comanda.html
-    navigator.clipboard.writeText(link); // Copia o link para a área de transferência
-
-    // Exibe o popup com a mensagem de confirmação
-    alert('Link copiado! Pode colar na sua Bio');
-});
