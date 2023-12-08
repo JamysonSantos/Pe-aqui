@@ -1,0 +1,30 @@
+/* Estilos gerais */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Cinza claro */
+    color: #333; /* Cor do texto principal */
+}
+
+/* Estilo do cabeçalho */
+.header {
+    background-color: #333; /* Preto */
+    padding: 20px;
+    text-align: center;
+    color: #fff; /* Texto branco */
+}
+
+/* Estilos para os botões */
+button {
+    background-color: #ff7f50; /* Laranja */
+    color: #fff; /* Texto branco */
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px; /* Borda arredondada */
+}
+
+/* ... (outros estilos) */
