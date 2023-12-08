@@ -1,20 +1,25 @@
-/* Reset CSS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 /* Estilos gerais */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4; /* Cinza claro */
-    color: #333; /* Cor do texto principal */
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4; /* Cinza claro */
+    color: #333; /* Cor do texto principal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* Estilo do cabeçalho */
+.main-content {
+    width: 90%;
+    max-width: 600px;
+    background-color: #fff; /* Fundo branco */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .header {
     background-color: #333; /* Preto */
     padding: 20px;
@@ -22,7 +27,6 @@ body {
     color: #fff; /* Texto branco */
 }
 
-/* Estilos para os botões */
 button {
     padding: 10px 20px;
     border: none;
@@ -42,63 +46,81 @@ button.finalize-button {
     color: #fff; /* Texto branco */
 }
 
-/* ... (outros estilos) */
-
-/* Estilização dos elementos da ordem */
-.order-section {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.order-section h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-.order-section table {
+table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    border-radius: 5px; /* Borda arredondada */
+    overflow: hidden; /* Esconde os cantos arredondados além da borda da tabela */
 }
 
-.order-section th, .order-section td {
+th, td {
     border: 1px solid #ddd;
-    padding: 12px;
+    padding: 12px; /* Mais espaço interno */
     text-align: center;
 }
 
-.order-section th {
-    background-color: #f39c12; /* Laranja */
+th {
+    background-color: #27ae60; /* Verde */
     color: #fff; /* Texto branco */
+}
+
+.total-label {
     font-weight: bold;
 }
 
-.order-section .total-label {
+.total-amount {
     font-weight: bold;
+    color: #27ae60; /* Verde */
 }
 
-/* ... (outros estilos) */
+.observation {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc; /* Bordas para destacar */
+    border-radius: 5px; /* Borda arredondada */
+}
 
-/* Responsividade */
-@media screen and (max-width: 768px) {
-    .order-section {
-        width: 95%;
-        margin: 10px auto;
-        padding: 15px;
+.customer-info label {
+    display: block;
+    margin-bottom: 5px;
+    color: #777; /* Cor do texto menos enfatizado */
+}
+
+.customer-info input, .customer-info select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; /* Bordas para destacar */
+    border-radius: 5px; /* Borda arredondada */
+}
+
+.additional-fields {
+    display: none;
+}
+
+.send-button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px; /* Borda arredondada */
+    background-color: #3498db; /* Azul */
+    color: #fff; /* Texto branco */
+}
+
+/* Estilos para dispositivos móveis */
+@media only screen and (max-width: 600px) {
+    .header {
+        padding: 10px;
     }
-}
 
-@media screen and (max-width: 480px) {
     button {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 8px;
+        padding: 8px 16px;
+    }
+
+    .main-content {
+        padding: 10px;
     }
 }
 
