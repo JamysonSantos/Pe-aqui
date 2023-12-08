@@ -24,7 +24,6 @@ function logout() {
 document.querySelector(".button-cadastrar").addEventListener("click", function() {
   // Redireciona o usuário para a página de cadastro de cardápio
   window.location.href = "cadastrocardapio.html";
-});
 
 // Adicione esta função no home.js
 document.getElementById('linkComanda').addEventListener('click', function (event) {
