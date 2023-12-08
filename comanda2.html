@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comanda de Pedido</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <h1>Nome da Empresa</h1>
+        <p>Slogan</p>
+        <p>Endereço da Empresa</p>
+        <img src="caminho/para/logo.png" alt="Logo da Empresa">
+    </header>
+
+    <main>
+        <section class="top-section">
+            <button class="consult-button">Consultar Cardápio</button>
+            <button class="finalize-button">Finalizar Pedido</button>
+
+            <div class="automatic-info">
+                <p>ID do Pedido: <span id="order-id">123</span></p>
+                <p>Data e Hora: <span id="order-time">00/00/0000 00:00</span></p>
+            </div>
+
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Item</th>
+                        <th>Quant</th>
+                        <th>Preço</th>
+                        <th>Remover</th>
+                    </tr>
+                </thead>
+                <tbody id="order-items">
+                    <!-- Os itens do pedido serão adicionados aqui -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="total-label">Total:</td>
+                        <td colspan="2" class="total-amount">R$ 0,00</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <textarea class="observation" placeholder="Observação"></textarea>
+
+            <div class="customer-info">
+                <label for="nome">Seu Nome</label>
+                <input type="text" id="nome" placeholder="Nome">
+
+                <label for="endereco">Seu Endereço</label>
+                <div id="endereco">
+                    <input type="text" id="cidade" placeholder="Cidade">
+                    <input type="text" id="bairro" placeholder="Bairro">
+                    <input type="text" id="rua" placeholder="Rua">
+                    <input type="text" id="complemento" placeholder="Complemento">
+                    <input type="text" id="cep" placeholder="CEP">
+                </div>
+
+                <label for="pagamento">Forma de pagamento</label>
+                <select id="pagamento" onchange="showAdditionalFields(this)">
+                    <option value="cartao">Cartão</option>
+                    <option value="dinheiro">Dinheiro</option>
+                    <option value="pix">Pix</option>
+                </select>
+
+                <div class="additional-fields" id="dinheiro-fields">
+                    <label for="troco">Vai precisar de Troco?</label>
+                    <select id="troco">
+                        <option value="nao">Não</option>
+                        <option value="sim">Sim</option>
+                    </select>
+                    <label for="troco-valor">Troco para quanto?</label>
+                    <input type="text" id="troco-valor" placeholder="Troco para quanto">
+                </div>
+            </div>
+
+            <button class="send-button">Enviar Pedido</button>
+        </section>
+
+        <div class="menu-popup">
+            <!-- Conteúdo do Cardápio -->
+        </div>
+    </main>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
