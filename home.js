@@ -39,7 +39,6 @@ window.addEventListener("load", function() {
    // Não redirecione
    return;
   }
-
   // Redirecione para a página de home
   window.location.href = "home.html";
 });
