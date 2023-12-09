@@ -20,15 +20,13 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-// Função para deslogar o usuário
 function logout() {
-  // Desloga o usuário do sistema
-  firebase.auth().signOut();
-
-  // Redireciona o usuário para a página de login
-  window.location.href = "login.html";
-}
-
+    firebase.auth().signOut().then(() => {
+        window.location.href = "login.html";
+    }).catch(() => {
+        alert('Erro ao fazer logout');
+    })
+  
 // Adiciona evento de clique ao botão "Cadastrar Cardápio"
 document.querySelector(".button-cadastrar").addEventListener("click", function() {
   // Redireciona o usuário para a página de cadastro de cardápio
