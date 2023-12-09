@@ -84,7 +84,7 @@
 <body>
     <div class="orange-bar">
         <h2>Cadastre seu cardápio</h2>
-        <form class="cardapio-form">
+        <form class="cardapio-form" id="cadastro-form">
             <label for="nome-produto">Nome do produto</label>
             <input type="text" id="nome-produto" name="nome-produto" required>
 
@@ -109,6 +109,7 @@
     <script>
         const inputImagem = document.getElementById('input-imagem');
         const previewImagem = document.getElementById('preview-imagem');
+        const formCadastro = document.getElementById('cadastro-form');
 
         inputImagem.addEventListener('change', function(event) {
             const arquivo = event.target.files[0];
@@ -136,13 +137,18 @@
                 <h3>${nomeProduto}</h3>
                 <p>${descricao}</p>
                 <p>Preço: R$ ${preco}</p>
+                <img src="${previewImagem.src}" alt="Imagem do produto" style="max-width: 100px; height: auto;">
             `;
             listaCardapio.appendChild(novoItem);
+
+            // Limpa os campos do formulário após o cadastro
+            formCadastro.reset();
+            previewImagem.src = '';
+            previewImagem.style.display = 'none';
         }
     </script>
 </body>
 </html>
-
 
 
 
