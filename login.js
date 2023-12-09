@@ -8,6 +8,11 @@ const firebaseConfig = {
   appId: "1:502925766451:web:52473d00da34033f789846"
 };
 
+// Cole suas configurações do Firebase aqui
+const firebaseConfig = {
+  // ...
+};
+
 // Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
 
@@ -19,6 +24,15 @@ function redirectToHomeIfAuthenticated() {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       window.location.href = "home.html";
+    }
+  });
+}
+
+// Função para redirecionar usuários deslogados
+function redirectToLoginIfNotAuthenticated() {
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = "login.html";
     }
   });
 }
@@ -43,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
       alert("O dispositivo não está conectado à internet.");
     }
   });
+
+  redirectToLoginIfNotAuthenticated(); // Adiciona a verificação de autenticação
 });
 
 // Função de autenticação por email e senha
@@ -72,4 +88,5 @@ function signInWithEmailPassword(email, password) {
       }
     });
 }
+
 
