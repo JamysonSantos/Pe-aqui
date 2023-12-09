@@ -20,7 +20,34 @@
         <section class="order-section">
             <button class="consult-button shake-horizontal">Consultar Cardápio</button>
             <button class="finalize-button shake-horizontal">Finalizar Pedido</button>
-
+        <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Item</th>
+                        <th>Quant</th>
+                        <th>Preço</th>
+                        <th>Remover</th>
+                    </tr>
+                </thead>
+                <tbody id="order-items">
+                    <!-- Aqui é onde os itens do pedido serão adicionados dinamicamente -->
+                    <!-- Exemplo de como um item pode ser adicionado -->
+                    <!-- <tr>
+                        <td>1</td>
+                        <td>Produto 1</td>
+                        <td>2</td>
+                        <td>R$ 25,00</td>
+                        <td><button class="remove-item">Remover</button></td>
+                    </tr> -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="total-label">Total:</td>
+                        <td colspan="2" class="total-amount">R$ 0,00</td>
+                    </tr>
+                </tfoot>
+            </table>
 
             <div class="automatic-info">
                 <p>ID do Pedido: <span id="order-id">123</span></p>
