@@ -4,7 +4,128 @@
     <meta charset="UTF-8">
     <title>Cadastro de Cardápio</title>
     <style>
-        /* Estilos... */
+        /  /* Reset de estilos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .orange-bar {
+            background-color: #FF5733;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .company-name {
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .button-voltar {
+            background-color: #FF5733;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-voltar:hover {
+            background-color: #FF814E;
+        }
+
+        /* Estilos para o formulário de cadastro de cardápio */
+        .cardapio-form {
+            width: 50%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cardapio-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cardapio-form label {
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .cardapio-form input {
+            width: calc(100% - 22px);
+            height: 40px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .cardapio-form button {
+            background-color: #FF5733;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cardapio-form button:hover {
+            background-color: #FF814E;
+        }
+
+        .cardapio-list {
+            width: 40%;
+            float: right;
+            padding: 20px;
+        }
+
+        .cardapio-item {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .cardapio-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 50%;
+            object-fit: cover;
+        }* Estilos... */
 
         .cardapio-list {
             width: 50%;
