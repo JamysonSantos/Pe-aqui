@@ -23,8 +23,8 @@ firebase.auth().onAuthStateChanged(user => {
 // Função para deslogar o usuário
 function logout() {
   // Desloga o usuário do sistema
-  firebase.auth().signOut()
-    .then(() => {
+  firebase.getAuth();
+signOut(auth).then(() => {
       // Redireciona o usuário para a página de login após o logout bem-sucedido
       window.location.href = "login.html";
     })
