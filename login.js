@@ -33,13 +33,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const loadingDiv = document.getElementById('loading'); // Obtém o elemento de loading
+
+    // Exibe a mensagem de "Acessando..." no momento do login
+    loadingDiv.style.display = 'block';
 
     // Verifica se o dispositivo está conectado à internet
     if (navigator.onLine) {
       // Chama o método `signInWithEmailPassword()`
       signInWithEmailPassword(email, password);
     } else {
-      // Exiba uma mensagem de erro
+      // Exibe uma mensagem de erro
       alert("O dispositivo não está conectado à internet.");
     }
   });
@@ -70,6 +74,10 @@ function signInWithEmailPassword(email, password) {
         // Exibe a mensagem de erro padrão do Firebase
         alert(errorMessage);
       }
+    })
+    .finally(() => {
+      // Oculta a mensagem de "Acessando..." após a conclusão (com sucesso ou erro) do login
+      loadingDiv.style.display = 'none';
     });
 }
 
