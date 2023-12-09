@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Cadastro de Cardápio</title>
     <style>
-        /  /* Reset de estilos */
+        /* Reset de estilos */
         * {
             margin: 0;
             padding: 0;
@@ -15,6 +15,8 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
+            display: flex;
+            justify-content: flex-start;
         }
 
         .orange-bar {
@@ -23,6 +25,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
+            width: 100%;
         }
 
         .logo {
@@ -61,7 +64,7 @@
         /* Estilos para o formulário de cadastro de cardápio */
         .cardapio-form {
             width: 50%;
-            margin: 20px auto;
+            margin: 20px;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
@@ -106,9 +109,10 @@
         }
 
         .cardapio-list {
-            width: 40%;
-            float: right;
+            width: 50%;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .cardapio-item {
@@ -125,79 +129,93 @@
             margin-right: 10px;
             border-radius: 50%;
             object-fit: cover;
-        }* Estilos... */
-
-        .cardapio-list {
-            width: 50%;
-            float: left;
-            padding: 20px;
         }
 
-        .cardapio-item {
+        .item-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        .item-card {
+            width: calc(33.33% - 10px);
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 10px;
         }
 
-        .cardapio-item img {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            border-radius: 50%;
+        .item-card img {
+            width: 100%;
+            height: 150px;
+            border-radius: 5px;
             object-fit: cover;
         }
     </style>
 </head>
 <body>
     <div class="orange-bar">
-        <!-- ... -->
+        <div class="company-info">
+            <img src="icon128.png" alt="Logo da Empresa" class="logo">
+            <span class="company-name">Nome da Empresa</span>
+        </div>
+        <a href="home.html" class="button-voltar">Voltar</a>
     </div>
 
     <div class="cardapio-form">
         <h2>Cadastre seu cardápio</h2>
-
-        <form id="form-produto">
+        <form id="item-form">
             <label for="nome-produto">Nome do produto</label>
             <input type="text" id="nome-produto" name="nome-produto" required>
-
             <label for="descricao">Descrição</label>
             <input type="text" id="descricao" name="descricao" required>
-
             <label for="preco">Preço</label>
             <input type="number" id="preco" name="preco" required>
-
-            <!-- Input para upload da imagem -->
-            <input type="file" id="imagem-produto" name="imagem-produto">
-
-            <button type="button" onclick="cadastrarProduto()">Cadastrar</button>
+            <label for="imagem">Imagem</label>
+            <input type="file" id="imagem" name="imagem">
+            <button type="submit">Cadastrar</button>
         </form>
     </div>
 
-    <div class="cardapio-list" id="cardapio-list">
-        <!-- Aqui serão exibidos os itens cadastrados -->
+    <div class="cardapio-list">
+        <h2>Itens Cadastrados</h2>
+        <div class="item-list">
+            <!-- Aqui serão exibidos os itens cadastrados -->
+        </div>
     </div>
 
     <script>
-        function cadastrarProduto() {
-            // Lógica para cadastrar o produto no Firebase com a imagem
-            // ... (utilizando o Firebase Storage e Realtime Database)
-        }
+        const form = document.getElementById('item-form');
+        const itemList = document.querySelector('.item-list');
 
-        // Essa função deve ser chamada após cadastrar um produto para exibir na tela
-        function exibirProduto(nome, descricao, preco, imagemUrl) {
-            var cardapioList = document.getElementById('cardapio-list');
-            var item = document.createElement('div');
-            item.classList.add('cardapio-item');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-            var imagem = document.createElement('img');
-            imagem.src = imagemUrl; // URL da imagem do produto
-            var texto = document.createTextNode(`${nome} - ${descricao} - R$ ${preco}`);
-            
-            item.appendChild(imagem);
-            item.appendChild(texto);
-            cardapioList.appendChild(item);
-        }
+            // Obter valores do formulário
+            const nome = this['nome-produto'].value;
+            const descricao = this['descricao'].value;
+            const preco = this['preco'].value;
+            const imagem = this['imagem'].files[0];
+
+            // Criar um item cardápio
+            const itemCard = document.createElement('div');
+            itemCard.classList.add('item-card');
+            const itemContent = `
+                <img src="${URL.createObjectURL(imagem)}" alt="${nome}">
+                <h3>${nome}</h3>
+                <p>${descricao}</p>
+                <span>R$ ${preco}</span>
+            `;
+            itemCard.innerHTML = itemContent;
+            itemList.appendChild(itemCard);
+
+            // Limpar o formulário
+            this.reset();
+        });
     </script>
 </body>
 </html>
+
 
