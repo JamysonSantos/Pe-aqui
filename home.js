@@ -12,6 +12,14 @@ firebase.initializeApp({
   appId: "1:502925766451:web:52473d00da34033f789846"
 };
 
+// Observa o estado de autenticação do Firebase
+firebase.auth().onAuthStateChanged(user => {
+  if (!user) {
+    // Se não houver usuário autenticado, redirecione para a página de login
+    window.location.href = "login.html";
+  }
+});
+
 // Função para deslogar o usuário
 function logout() {
   // Desloga o usuário do sistema
@@ -20,6 +28,7 @@ function logout() {
   // Redireciona o usuário para a página de login
   window.location.href = "login.html";
 }
+
 // Adiciona evento de clique ao botão "Cadastrar Cardápio"
 document.querySelector(".button-cadastrar").addEventListener("click", function() {
   // Redireciona o usuário para a página de cadastro de cardápio
