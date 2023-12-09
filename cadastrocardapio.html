@@ -11,6 +11,8 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .orange-bar {
@@ -19,12 +21,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            width: 20%;
+            width: 100%;
         }
 
         .cardapio-form {
             width: 80%;
             margin: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .cardapio-form label {
@@ -34,7 +38,9 @@
             margin-bottom: 5px;
         }
 
-        .cardapio-form input {
+        .cardapio-form input,
+        .cardapio-form button,
+        .cardapio-form #input-imagem {
             width: calc(100% - 22px);
             height: 40px;
             border: 1px solid #ccc;
@@ -43,23 +49,21 @@
             margin-bottom: 15px;
         }
 
-        .cardapio-form button {
-            background-color: #FF5733;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
+        .cardapio-form #preview-imagem {
+            max-width: 100%;
+            height: auto;
+            display: none;
+            margin-bottom: 15px;
         }
 
         .cardapio-list {
             list-style: none;
             padding: 0;
             margin: 20px;
-            width: 20%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 80%;
         }
 
         .cardapio-list li {
@@ -67,17 +71,13 @@
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
+            width: 30%;
         }
 
-        .cardapio-form #input-imagem {
-            margin-bottom: 15px;
-        }
-
-        .cardapio-form #preview-imagem {
+        .cardapio-list img {
             max-width: 100%;
             height: auto;
-            display: none;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -137,7 +137,7 @@
                 <h3>${nomeProduto}</h3>
                 <p>${descricao}</p>
                 <p>Preço: R$ ${preco}</p>
-                <img src="${previewImagem.src}" alt="Imagem do produto" style="max-width: 100px; height: auto;">
+                <img src="${previewImagem.src}" alt="Imagem do produto">
             `;
             listaCardapio.appendChild(novoItem);
 
@@ -149,7 +149,6 @@
     </script>
 </body>
 </html>
-
 
 
 
