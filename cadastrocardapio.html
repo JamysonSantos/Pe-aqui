@@ -11,8 +11,6 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         .orange-bar {
@@ -21,14 +19,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            width: 100%;
+            width: 20%;
         }
 
         .cardapio-form {
             width: 80%;
             margin: 20px;
-            display: flex;
-            flex-direction: column;
         }
 
         .cardapio-form label {
@@ -38,9 +34,7 @@
             margin-bottom: 5px;
         }
 
-        .cardapio-form input,
-        .cardapio-form button,
-        .cardapio-form #input-imagem {
+        .cardapio-form input {
             width: calc(100% - 22px);
             height: 40px;
             border: 1px solid #ccc;
@@ -49,21 +43,23 @@
             margin-bottom: 15px;
         }
 
-        .cardapio-form #preview-imagem {
-            max-width: 100%;
-            height: auto;
-            display: none;
-            margin-bottom: 15px;
+        .cardapio-form button {
+            background-color: #FF5733;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
         }
 
         .cardapio-list {
             list-style: none;
             padding: 0;
             margin: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            width: 80%;
+            width: 20%;
         }
 
         .cardapio-list li {
@@ -71,13 +67,17 @@
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
-            width: 30%;
         }
 
-        .cardapio-list img {
+        .cardapio-form #input-imagem {
+            margin-bottom: 15px;
+        }
+
+        .cardapio-form #preview-imagem {
             max-width: 100%;
             height: auto;
-            margin-bottom: 10px;
+            display: none;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -136,8 +136,8 @@
             novoItem.innerHTML = `
                 <h3>${nomeProduto}</h3>
                 <p>${descricao}</p>
-                <p>${preco}</p>
-                <img src="${previewImagem.src}" alt="Imagem do produto">
+                <p>R$ ${preco}</p>
+                <img src="${previewImagem.src}" alt="Imagem do produto" style="max-width: 100px; height: auto;">
             `;
             listaCardapio.appendChild(novoItem);
 
@@ -149,6 +149,7 @@
     </script>
 </body>
 </html>
+
 
 
 
