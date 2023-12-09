@@ -14,6 +14,21 @@ firebase.initializeApp(firebaseConfig);
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
 
+function isLoggedIn() {
+    return firebase.auth().currentUser != null;
+  }
+
+  // Ouvinte do evento de carregamento da página
+  window.addEventListener("load", function() {
+    // Se o usuário estiver logado, não redirecione
+    if (isLoggedIn()) {
+      return;
+    }
+
+    // Redirecione para a página de home
+    window.location.href = "home.html";
+  });
+
 // Função para redirecionar usuários autenticados
 function redirectToHomeIfAuthenticated() {
   firebase.auth().onAuthStateChanged(user => {
