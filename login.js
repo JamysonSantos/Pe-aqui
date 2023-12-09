@@ -14,21 +14,35 @@ firebase.initializeApp(firebaseConfig);
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
 
-// Adiciona um listener para o evento de submit no formulário de login
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-  event.preventDefault(); // Evita o comportamento padrão do formulário
+// Função para redirecionar usuários autenticados
+function redirectToHomeIfAuthenticated() {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      window.location.href = "home.html";
+    }
+  });
+}
 
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+// Adiciona um listener quando o documento HTML estiver carregado
+document.addEventListener('DOMContentLoaded', function() {
+  redirectToHomeIfAuthenticated();
 
-  // Verifica se o dispositivo está conectado à internet
-  if (navigator.onLine) {
-    // Chama o método `signInWithEmailPassword()`
-    signInWithEmailPassword(email, password);
-  } else {
-    // Exiba uma mensagem de erro
-    alert("O dispositivo não está conectado à internet.");
-  }
+  // Adiciona um listener para o evento de submit no formulário de login
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita o comportamento padrão do formulário
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Verifica se o dispositivo está conectado à internet
+    if (navigator.onLine) {
+      // Chama o método `signInWithEmailPassword()`
+      signInWithEmailPassword(email, password);
+    } else {
+      // Exiba uma mensagem de erro
+      alert("O dispositivo não está conectado à internet.");
+    }
+  });
 });
 
 // Função de autenticação por email e senha
