@@ -10,7 +10,7 @@ firebase.initializeApp({
   storageBucket: "pecaqui-cc6c1.appspot.com",
   messagingSenderId: "502925766451",
   appId: "1:502925766451:web:52473d00da34033f789846"
-}};
+});
 
 // Observa o estado de autenticação do Firebase
 firebase.auth().onAuthStateChanged(user => {
