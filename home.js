@@ -20,12 +20,19 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
+// Função para deslogar o usuário
 function logout() {
-    firebase.auth().signOut().then(() => {
-        window.location.href = "login.html";
-    }).catch(() => {
-        alert('Erro ao fazer logout');
+  // Desloga o usuário do sistema
+  firebase.auth().signOut()
+    .then(() => {
+      // Redireciona o usuário para a página de login após o logout bem-sucedido
+      window.location.href = "login.html";
     })
+    .catch((error) => {
+      // Se houver um erro durante o logout, exibe o erro no console
+      console.error("Erro ao fazer logout:", error);
+    });
+}
   
 // Adiciona evento de clique ao botão "Cadastrar Cardápio"
 document.querySelector(".button-cadastrar").addEventListener("click", function() {
