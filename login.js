@@ -27,24 +27,6 @@ function redirectToHomeIfAuthenticated() {
 document.addEventListener('DOMContentLoaded', function() {
   redirectToHomeIfAuthenticated();
 
-  // Adiciona um listener para o evento de submit no formulário de login
-  document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita o comportamento padrão do formulário
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    // Verifica se o dispositivo está conectado à internet
-    if (navigator.onLine) {
-      // Chama o método `signInWithEmailPassword()`
-      signInWithEmailPassword(email, password);
-    } else {
-      // Exiba uma mensagem de erro
-      alert("O dispositivo não está conectado à internet.");
-    }
-  });
-});
-
 // Função de autenticação por email e senha
 function signInWithEmailPassword(email, password) {
   // Chama o método `signInWithEmailAndPassword()` do Firebase
