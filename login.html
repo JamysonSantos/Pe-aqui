@@ -58,22 +58,14 @@
 <script src="login.js"></script>
 
     <script>
-// Função para redirecionar o usuário para a página de home após o login
-function redirectToHome() {
-  window.location.href = "home.html";
-}
+    // Adicione um evento de clique ao botão de login
+    document.getElementById('loginButton').addEventListener('click', function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-// Adiciona evento de click ao botão "Entrar"
-document.getElementById('loginButton').addEventListener('click', function() {
-  // Realiza o login do usuário
-  firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
-    // Redireciona o usuário para a página de home
-    redirectToHome();
-  }).catch(() => {
-    // Tratamento de erro
-    alert('Erro ao fazer login');
-  });
-});
-</script>
+      // Chame a função signInWithEmailPassword com os valores dos campos de entrada
+      signInWithEmailPassword(email, password);
+    });
+  </script>
 </body>
 </html>
