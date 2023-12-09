@@ -33,12 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const loadingDiv = document.getElementById('loading'); // Obtém o elemento de loading
-
-   // Adiciona um listener para o evento de clique no botão de Acessar
-document.querySelector('.button').addEventListener('click', function(event) {
-    const loadingDiv = document.getElementById('loading');
-    loadingDiv.style.display = 'block'; // Exibe a mensagem de "Acessando..."
 
     // Verifica se o dispositivo está conectado à internet
     if (navigator.onLine) {
