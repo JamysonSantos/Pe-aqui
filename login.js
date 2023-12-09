@@ -77,9 +77,5 @@ function signInWithEmailPassword(email, password) {
         alert(errorMessage);
       }
     })
-    .finally(() => {
-      // Oculta a mensagem de "Acessando..." após a conclusão (com sucesso ou erro) do login
-      loadingDiv.style.display = 'none';
-    });
-}
+    
 
