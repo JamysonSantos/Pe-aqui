@@ -124,6 +124,10 @@
         <label for="preco">Preço</label>
         <input type="number" id="preco" name="preco" required>
 
+        <label for="input-imagem">Imagem do produto</label>
+        <input type="file" id="input-imagem" accept="image/*">
+        <img id="preview-imagem" src="" alt="Preview da Imagem" style="display: none; max-width: 200px; margin-bottom: 15px;">
+
         <button type="button" onclick="cadastrarItem()">Cadastrar</button>
     </form>
 
@@ -132,6 +136,24 @@
     </ul>
 
     <script>
+        const inputImagem = document.getElementById('input-imagem');
+        const previewImagem = document.getElementById('preview-imagem');
+
+        inputImagem.addEventListener('change', function(event) {
+            const arquivo = event.target.files[0];
+
+            if (arquivo) {
+                const leitor = new FileReader();
+
+                leitor.onload = function(e) {
+                    previewImagem.src = e.target.result;
+                    previewImagem.style.display = 'block';
+                };
+
+                leitor.readAsDataURL(arquivo);
+            }
+        });
+
         function cadastrarItem() {
             const nomeProduto = document.getElementById('nome-produto').value;
             const descricao = document.getElementById('descricao').value;
@@ -149,6 +171,7 @@
     </script>
 </body>
 </html>
+
 
 
 
