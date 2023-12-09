@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Chama o método `signInWithEmailPassword()`
       signInWithEmailPassword(email, password);
     } else {
-      // Exibe uma mensagem de erro
+      // Exiba uma mensagem de erro
       alert("O dispositivo não está conectado à internet.");
     }
   });
@@ -70,6 +70,6 @@ function signInWithEmailPassword(email, password) {
         // Exibe a mensagem de erro padrão do Firebase
         alert(errorMessage);
       }
-    })
-    
+    });
+}
 
