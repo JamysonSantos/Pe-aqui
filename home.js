@@ -11,6 +11,8 @@ firebase.initializeApp({
 // Importa a biblioteca JavaScript do Firebase
 importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js");
+// Importa a biblioteca es6-promise
+import { Promise } from "es6-promise";
 
 // Observa o estado de autenticação do Firebase
 firebase.auth().onAuthStateChanged(user => {
