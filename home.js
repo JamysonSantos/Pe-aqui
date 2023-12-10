@@ -17,6 +17,15 @@ firebase.auth().onAuthStateChanged(user => {
   if (!user) {
     // Se não houver usuário autenticado, redirecione para a página de login
     window.location.href = "login.html";
+  } else {
+    // Obtém o nome da empresa do perfil do usuário
+    const companyName = user.displayName;
+
+    // Exibe o nome da empresa na página
+    const companyNameElement = document.querySelector('.company-name');
+    if (companyNameElement) {
+      companyNameElement.textContent = companyName;
+    }
   }
 });
 
@@ -40,10 +49,8 @@ document.querySelector(".button-cadastrar").addEventListener("click", function()
 // Adiciona um evento de load à página
 window.addEventListener("load", function() {
   // Verifica se o usuário está logado
-  if (firebase.auth().currentUser) {
-    // O usuário está logado, não redirecione
-    return;
+  if (!firebase.auth().currentUser) {
+    // Redirecione para a página de login se o usuário não estiver logado
+    window.location.href = "login.html";
   }
-  // Redirecione para a página de login
-  window.location.href = "login.html";
 });
