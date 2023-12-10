@@ -62,8 +62,17 @@ function createUserWithEmailAndPassword(companyName, email, password) {
       const user = userCredential.user;
       console.log(user);
 
-      // Redirecionamento após o cadastro bem-sucedido
-      window.location.href = 'poscadastro.html';
+      // Atualiza o nome da empresa no perfil do usuário
+      user.updateProfile({
+        displayName: companyName
+      }).then(() => {
+        // Redirecionamento após o cadastro bem-sucedido
+        window.location.href = 'poscadastro.html';
+      }).catch((error) => {
+        console.error("Erro ao atualizar o perfil do usuário:", error);
+        // Redirecionamento após o cadastro bem-sucedido, mesmo com erro ao atualizar o perfil
+        window.location.href = 'poscadastro.html';
+      });
     })
     .catch((error) => {
       // Tratamento de erro
