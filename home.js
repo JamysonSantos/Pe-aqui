@@ -42,4 +42,3 @@ window.addEventListener("load", function() {
   // Redirecione para a página de home
   window.location.href = "home.html";
  });
-});
