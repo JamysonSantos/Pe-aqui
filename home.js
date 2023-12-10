@@ -22,10 +22,13 @@ firebase.auth().onAuthStateChanged(user => {
 
 // Função para deslogar o usuário
 function logout() {
- firebase.auth().signOut().then(() => {
-  window.location.href = "login.html";
- }).catch(() => {
-  alert('Erro ao fazer logout');
+ firebase.auth().signOut().then(function() {
+  // Logout com sucesso
+  window.location.href = 'login.html'; // Redirecionar para a página de login
+}).catch(function(error) {
+  // Ocorreu um erro ao fazer logout
+  console.log(error.message);
+});
     
 // Adiciona evento de clique ao botão "Cadastrar Cardápio"
 document.querySelector(".button-cadastrar").addEventListener("click", function() {
