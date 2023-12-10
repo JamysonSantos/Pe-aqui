@@ -21,7 +21,7 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 // Função para deslogar o usuário
-function logout(): Promise<void> {
+function logout() Promise<void> {
   // Desloga o usuário
   firebase.auth().signOut();
   return Promise.resolve();
