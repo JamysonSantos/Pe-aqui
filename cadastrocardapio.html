@@ -77,18 +77,6 @@
             transition: background-color 0.3s ease;
             cursor: pointer;
         }
-        
-        .voltar-button {
-            background-color: #FF5733;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
 
         .cardapio-list {
             list-style: none;
@@ -102,27 +90,12 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
-
-        .voltar-button {
-            background-color: #FF5733;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
-        
     </style>
 </head>
 <body>
     <div class="orange-bar">
         <h2>Cadastre seu cardápio</h2>
     </div>
-    <div class="orange-bar">
-        <button onclick="voltar()">Voltar</button>
 
     <div class="container">
         <div class="left-panel">
@@ -190,10 +163,6 @@
             formCadastro.reset();
             previewImagem.src = '';
             previewImagem.style.display = 'none';
-        }
-        
-        function voltar() {
-            window.history.back();
         }
     </script>
 </body>
