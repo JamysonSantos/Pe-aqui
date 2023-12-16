@@ -67,10 +67,12 @@ function createUserWithEmailAndPassword(companyName, email, password) {
         displayName: companyName
       }).then(() => {
         // Redirecionamento após o cadastro bem-sucedido
+        localStorage.setItem('companyName', companyName); // Armazena o nome da empresa localmente
         window.location.href = 'poscadastro.html';
       }).catch((error) => {
         console.error("Erro ao atualizar o perfil do usuário:", error);
         // Redirecionamento após o cadastro bem-sucedido, mesmo com erro ao atualizar o perfil
+        localStorage.setItem('companyName', companyName); // Armazena o nome da empresa localmente
         window.location.href = 'poscadastro.html';
       });
     })
