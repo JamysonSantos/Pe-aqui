@@ -72,5 +72,15 @@ function signInWithEmailPassword(email, password) {
    }
   });
 }
+    const showPasswordCheckbox = document.getElementById("showPassword");
+    const passwordInput = document.getElementById("password");
+
+    showPasswordCheckbox.addEventListener("click", function() {
+      if (showPasswordCheckbox.checked) {
+    passwordInput.type = "text";
+      } else {
+    passwordInput.type = "password";
+  }
+});
 
 
