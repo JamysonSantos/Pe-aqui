@@ -1,175 +1,192 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Cadastre seu Cardápio</title>
-    <style>
-        /* Estilos para o corpo da página */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .orange-bar {
-            background-color: #FF5733;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            width: 100%;
-        }
+ <meta charset="UTF-8">
+ <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.min.css" rel="stylesheet">
+ <style>
+   /* Paleta de cores laranja */
+   :root {
+     --primary-color: #FF5733; /* Define a cor primária */
+     --secondary-color: #FF814E; /* Define a cor secundária */
+   }
 
-        .container {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: space-between;
-        }
+   /* Estilos para as imagens do cardápio */
+   .item-image {
+     width: 50px;
+     height: 50px;
+     object-fit: cover;
+     border-radius: 50%;
+   }
+   .image-preview {
+     display: flex;
+     align-items: center;
+     margin-bottom: 10px;
+   }
+   .image-preview img {
+     width: 50px;
+     height: 50px;
+     object-fit: cover;
+     border-radius: 5px;
+     margin-right: 10px;
+   }
 
-        .left-panel {
-            flex-basis: 20%;
-            padding: 20px;
-        }
+   /* Estilos para a barra laranja */
+   .orange-bar {
+     background-color: var(--primary-color);
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 10px 20px;
+     color: white;
+   }
 
-        .right-panel {
-            flex-basis: 70%;
-            padding: 20px;
-        }
+   .button-voltar {
+     text-decoration: none;
+     color: white;
+     font-weight: bold;
+     background-color: transparent;
+     border: none;
+     padding: 10px 20px;
+     border-radius: 5px;
+     transition: background-color 0.3s ease;
+   }
 
-        .cardapio-form {
-            width: 100%;
-            max-width: 500px;
-            margin-bottom: 20px;
-        }
-
-        .cardapio-list {
-            width: 100%;
-            max-width: 200px;
-        }
-
-        .cardapio-form label {
-            font-size: 16px;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .cardapio-form input {
-            width: calc(100% - 22px);
-            height: 40px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 15px;
-        }
-
-        .cardapio-form button {
-            background-color: #FF5733;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .cardapio-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .cardapio-list li {
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-    </style>
+   /* Aplica a paleta de cores laranja */
+   body {
+     background-color: #f0f0f0; /* Cor de fundo */
+   }
+   .text-primary {
+     color: var(--primary-color); /* Cor do texto primário */
+   }
+   .button {
+     background-color: var(--primary-color); /* Cor de fundo dos botões */
+     color: #fff; /* Cor do texto dos botões */
+   }
+   /* Estiliza outros elementos conforme necessário */
+ </style>
 </head>
 <body>
-    <div class="orange-bar">
-        <h2>Cadastre seu cardápio</h2>
-    </div>
+ <div class="orange-bar">
+   <a href="javascript:history.go(-1)" class="button-voltar">Voltar</a>
+   <!-- Botões adicionados para exemplo -->
+ </div>
 
-    <div class="container">
-        <div class="left-panel">
-            <form class="cardapio-form" id="cadastro-form">
-                <label for="nome-produto">Nome do produto</label>
-                <input type="text" id="nome-produto" name="nome-produto" required>
+ <div id="app">
+  <v-app>
+   <v-container>
+    <h1 class="text-center text-primary">Cadastro de Cardápio</h1>
+    <v-form @submit.prevent="submitForm">
+     <v-row>
+      <v-col cols="12" sm="6">
+       <v-text-field v-model="itemName" label="Nome do Item" required></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="4">
+       <v-text-field v-model="price" label="Preço" type="number" required></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="2">
+       <span v-if="images.length < 3" class="text-caption text-primary">Você pode escolher até 3 fotos do seu produto</span>
+       <v-btn @click="attachImage" color="primary" v-if="images.length < 3" class="button">Anexar foto</v-btn>
+       <input ref="fileInput" type="file" @change="onFileChange" style="display: none;" accept="image/*" multiple v-if="images.length < 3">
+       <div v-if="images.length > 0">
+         <div v-for="(image, index) in images" :key="index" class="image-preview">
+           <img :src="image.url" alt="Imagem" class="item-image">
+         </div>
+       </div>
+      </v-col>
+     </v-row>
+     <v-row>
+      <v-col>
+       <v-btn @click="submitForm" class="button">Adicionar Item</v-btn>
+       <v-btn @click="visualizarCardapio" class="button">Visualizar cardápio</v-btn>
+       <v-btn @click="finalizarCadastro" class="button">Finalizar cadastro</v-btn>
+      </v-col>
+     </v-row>
+    </v-form>
+    <v-divider class="my-4"></v-divider>
+    <h2 class="text-primary">Itens do Cardápio</h2>
+    <v-list dense>
+     <v-list-item v-for="(item, index) in menuItems" :key="index">
+      <v-list-item-content>
+       <v-list-item-title>{{ item.name }}</v-list-item-title>
+       <v-list-item-subtitle>R$ {{ item.price }}</v-list-item-subtitle>
+       <div v-if="item.images.length > 0">
+         <div v-for="(image, idx) in item.images" :key="idx" class="image-preview">
+           <img :src="image.url" alt="Imagem" class="item-image">
+         </div>
+       </div>
+       <v-btn @click="removeItem(index)" color="error" class="button">Remover</v-btn>
+      </v-list-item-content>
+     </v-list-item>
+    </v-list>
+   </v-container>
+  </v-app>
+ </div>
 
-                <label for="descricao">Descrição</label>
-                <input type="text" id="descricao" name="descricao" required>
-
-                <label for="preco">Preço</label>
-                <input type="number" id="preco" name="preco" required>
-
-                <label for="input-imagem">Imagem do produto</label>
-                <input type="file" id="input-imagem" accept="image/*">
-                <img id="preview-imagem" src="" alt="Preview da Imagem" style="max-width: 100px; height: auto; display: none; margin-bottom: 15px;">
-
-                <button type="button" onclick="cadastrarItem()">Cadastrar</button>
-            </form>
-        </div>
-
-        <div class="right-panel">
-            <ul class="cardapio-list" id="lista-cardapio">
-                <!-- Aqui será exibida a lista de itens do cardápio -->
-            </ul>
-        </div>
-    </div>
-
-    <script>
-        const inputImagem = document.getElementById('input-imagem');
-        const previewImagem = document.getElementById('preview-imagem');
-        const formCadastro = document.getElementById('cadastro-form');
-
-        inputImagem.addEventListener('change', function(event) {
-            const arquivo = event.target.files[0];
-
-            if (arquivo) {
-                const leitor = new FileReader();
-
-                leitor.onload = function(e) {
-                    previewImagem.src = e.target.result;
-                    previewImagem.style.display = 'block';
-                };
-
-                leitor.readAsDataURL(arquivo);
-            }
-        });
-
-        function cadastrarItem() {
-            const nomeProduto = document.getElementById('nome-produto').value;
-            const descricao = document.getElementById('descricao').value;
-            const preco = document.getElementById('preco').value;
-
-            const listaCardapio = document.getElementById('lista-cardapio');
-            const novoItem = document.createElement('li');
-            novoItem.innerHTML = `
-                <h3>${nomeProduto}</h3>
-                <p>${descricao}</p>
-                <p>R$ ${preco}</p>
-                <img src="${previewImagem.src}" alt="Imagem do produto" style="max-width: 100px; height: auto;">
-            `;
-            listaCardapio.appendChild(novoItem);
-
-            // Limpa os campos do formulário após o cadastro
-            formCadastro.reset();
-            previewImagem.src = '';
-            previewImagem.style.display = 'none';
-        }
-    </script>
+ <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.js"></script>
+ <script>
+  new Vue({
+   el: '#app',
+   vuetify: new Vuetify(),
+   data: {
+    itemName: '',
+    price: '',
+    images: [],
+    currentItem: null,
+    menuItems: []
+   },
+   methods: {
+    submitForm() {
+     if (this.itemName && this.price && this.images.length > 0 && this.images.length <= 3) {
+      const newItem = { 
+        name: this.itemName, 
+        price: parseFloat(this.price).toFixed(2),
+        images: this.images ? this.images.map(img => ({ url: URL.createObjectURL(img) })) : []
+      };
+      this.menuItems.push(newItem);
+      this.clearFields();
+     } else {
+      alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
+     }
+    },
+    clearFields() {
+      this.itemName = '';
+      this.price = '';
+      this.images = [];
+    },
+    attachImage() {
+      this.$refs.fileInput.click();
+    },
+    onFileChange(e) {
+      const files = e.target.files;
+      if (this.images.length + files.length > 3) {
+        alert('Você só pode escolher até 3 fotos.');
+        return;
+      }
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.images.push({ url: e.target.result });
+        };
+        reader.readAsDataURL(files[i]);
+      }
+    },
+    removeItem(index) {
+      this.menuItems.splice(index, 1);
+    },
+    visualizarCardapio() {
+      // Lógica para exibir o cardápio em outra página ou modal
+      console.log('Visualizar cardápio');
+    },
+    finalizarCadastro() {
+      // Lógica para finalizar o cadastro
+      console.log('Finalizar cadastro');
+    }
+   }
+  });
+ </script>
 </body>
 </html>
-
-
-
 
 
 
