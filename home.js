@@ -8,22 +8,18 @@ firebase.initializeApp({
   appId: "1:502925766451:web:52473d00da34033f789846"
 });
 
-// Importa a biblioteca JavaScript do Firebase
-importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js");
-
 // Observa o estado de autenticação do Firebase
 firebase.auth().onAuthStateChanged(user => {
   if (!user) {
     // Se não houver usuário autenticado, redirecione para a página de login
     window.location.href = "login.html";
   } else {
-    // Obtém o nome da empresa do perfil do usuário
-    const companyName = user.displayName;
+    // Obtém o nome da empresa do perfil do usuário ou do localStorage
+    const companyName = user.displayName || localStorage.getItem('companyName');
 
-    // Exibe o nome da empresa na página
+    // Exibe o nome da empresa na página, se estiver disponível
     const companyNameElement = document.querySelector('.company-name');
-    if (companyNameElement) {
+    if (companyNameElement && companyName) {
       companyNameElement.textContent = companyName;
     }
   }
