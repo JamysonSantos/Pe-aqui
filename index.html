@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Bem-vindo ao Peçaqui!</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* Estilos para o corpo da página */
         body {
@@ -58,6 +59,23 @@
         .button:hover {
             background-color: #FF814E;
         }
+		
+		/* Estilos para a animação da logo */
+    .logo {
+      animation: logo-zoom 2s ease infinite;
+    }
+
+    @keyframes logo-zoom {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.5);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
 		
     </style>
 </head>
