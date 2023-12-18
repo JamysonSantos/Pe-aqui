@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faça seu Pedido</title>
+    <title>McDonalds Order</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
@@ -139,16 +139,19 @@
                     // Início da escrita dos itens
                     let yOffset = 100;
                     this.order.forEach((item, index) => {
-                      ctx.fillText(item.name + " - R$ " + item.price.toFixed(2), 50, yOffset);
+                        ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)}`, 50, yOffset);
+                        yOffset += 40;
+                    });
+
                     // Informações do cliente e observação
-                    ctx.fillText(Nome: ${this.customerName}, 50, 800);
-                    ctx.fillText(Telefone: ${this.customerPhone}, 50, 840);
-                    ctx.fillText(Endereço: ${this.customerAddress}, 50, 880);
-                    ctx.fillText(Forma de Pagamento: ${this.paymentMethod}, 50, 920);
-                    ctx.fillText(Observação: ${this.observation}, 50, 960);
+                    ctx.fillText(`Nome: ${this.customerName}`, 50, 800);
+                    ctx.fillText(`Telefone: ${this.customerPhone}`, 50, 840);
+                    ctx.fillText(`Endereço: ${this.customerAddress}`, 50, 880);
+                    ctx.fillText(`Forma de Pagamento: ${this.paymentMethod}`, 50, 920);
+                    ctx.fillText(`Observação: ${this.observation}`, 50, 960);
 
                     // Valor total
-                    ctx.fillText(Total: R$ ${this.total.toFixed(2)}, 50, 1000);
+                    ctx.fillText(`Total: R$ ${this.total.toFixed(2)}`, 50, 1000);
 
                     const link = document.createElement('a');
                     link.href = canvas.toDataURL('image/jpeg');
@@ -163,3 +166,4 @@
     </script>
 </body>
 </html>
+
