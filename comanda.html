@@ -139,10 +139,7 @@
                     // Início da escrita dos itens
                     let yOffset = 100;
                     this.order.forEach((item, index) => {
-                        ctx.fillText(${item.name} - R$ ${item.price.toFixed(2)}, 50, yOffset);
-                        yOffset += 40;
-                    });
-
+                      ctx.fillText(item.name + " - R$ " + item.price.toFixed(2), 50, yOffset);
                     // Informações do cliente e observação
                     ctx.fillText(Nome: ${this.customerName}, 50, 800);
                     ctx.fillText(Telefone: ${this.customerPhone}, 50, 840);
