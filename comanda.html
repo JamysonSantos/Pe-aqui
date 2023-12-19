@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faça seu Pedido</title>
+    <title>McDonalds Order</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <body class="bg-gray-100">
     <div id="app" class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8">Faça seu pedido aqui!</h1>
+        <h1 class="text-4xl font-bold mb-8">Faça seu Pedido</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="showMenu = true">
@@ -26,7 +26,6 @@
                                         <h3 class="font-bold">{{ item.name }}</h3>
                                         <p class="text-gray-600">{{ item.description }}</p>
                                         <p class="text-lg font-bold">R$ {{ item.price.toFixed(2) }}</p>
-                                        <input type="number" v-model="item.quantity" min="0" class="border-2 border-gray-300 p-2 rounded" placeholder="Quantidade">
                                     </div>
                                 </div>
                                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="addItem(item)">
@@ -49,7 +48,6 @@
                             <div>
                                 <h3 class="font-bold">{{ item.name }}</h3>
                                 <p class="text-gray-600">{{ item.description }}</p>
-                                <p>Quantidade: {{ item.quantity }}</p>
                             </div>
                         </div>
                         <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="removeItem(index)">
@@ -77,7 +75,6 @@
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
                             <option value="Cartão de Débito">Cartão de Débito</option>
-                            <option value="Pix">Pix</option>
                         </select>
                     </div>
                     <div class="mb-4">
@@ -100,87 +97,72 @@
             data: {
                 showMenu: false,
                 menu: [
-                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
-                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150' },
+                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150' },
                 ],
                 order: [],
                 customerName: '',
                 customerPhone: '',
                 customerAddress: '',
-                paymentMethod: '',
+                paymentMethod: 'money',
                 observation: '',
             },
             computed: {
                 total() {
-                    return this.order.reduce((total, item) => total + item.price * item.quantity, 0);
+                    return this.order.reduce((total, item) => total + item.price, 0);
                 },
             },
             methods: {
                 addItem(item) {
-                    if (item.quantity > 0) {
-                        const newItem = { ...item }; // Cria uma cópia do objeto para evitar referências diretas
-                        newItem.quantity = item.quantity; // Define a quantidade selecionada para o novo item
-                        this.order.push(newItem); // Adiciona o item ao pedido
-                        this.showMenu = false;
-                        // Zera a quantidade após adicionar ao pedido
-                        item.quantity = 0;
-                    } else {
-                        alert('Selecione uma quantidade maior que zero.');
-                    }
+                    this.order.push(item);
+                    this.showMenu = false;
                 },
                 removeItem(index) {
                     this.order.splice(index, 1);
-                    
-               // Atualização da função generateImage para alterar o tamanho do canvas e centralizar textos
-        generateImage() {
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
+                },
+                generateImage() {
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
 
-            // Definição do tamanho do canvas
-            canvas.width = 360;
-            canvas.height = 640;
-            canvas.classList.remove('hidden');
+                    canvas.width = 1080;
+                    canvas.height = 1920;
+                    canvas.classList.remove('hidden');
 
-            // Background da comanda
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    // Background da comanda
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Estilo do texto centralizado
-            ctx.font = 'bold 20px Arial';
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'center'; // Centraliza o texto horizontalmente
+                    // Estilo do texto
+                    ctx.font = 'bold 30px Arial';
+                    ctx.fillStyle = '#000';
 
-            // Início da escrita dos itens
-            let yOffset = 100;
-            this.order.forEach((item, index) => {
-                ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)}`, canvas.width / 2, yOffset);
-                yOffset += 40;
-            });
+                    // Início da escrita dos itens
+                    let yOffset = 100;
+                    this.order.forEach((item, index) => {
+                        ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)}`, 50, yOffset);
+                        yOffset += 40;
+                    });
 
-            // Informações do cliente e observação
-            const customerInfo = [
-                `Nome: ${this.customerName}`,
-                `Telefone: ${this.customerPhone}`,
-                `Endereço: ${this.customerAddress}`,
-                `Forma de Pagamento: ${this.paymentMethod}`,
-                `Observação: ${this.observation}`,
-                `Total: R$ ${this.total.toFixed(2)}`
-            ];
+                    // Informações do cliente e observação
+                    ctx.fillText(`Nome: ${this.customerName}`, 50, 800);
+                    ctx.fillText(`Telefone: ${this.customerPhone}`, 50, 840);
+                    ctx.fillText(`Endereço: ${this.customerAddress}`, 50, 880);
+                    ctx.fillText(`Forma de Pagamento: ${this.paymentMethod}`, 50, 920);
+                    ctx.fillText(`Observação: ${this.observation}`, 50, 960);
 
-            ctx.fillText(customerInfo.join('\n'), canvas.width / 2, 500); // Texto centralizado
+                    // Valor total
+                    ctx.fillText(`Total: R$ ${this.total.toFixed(2)}`, 50, 1000);
 
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL('image/jpeg');
-            link.download = 'pedido.jpg';
-            link.click();
-            
-        submitOrder() {
-          this.generateImage();
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/jpeg');
+                    link.download = 'pedido.jpg';
+                    link.click();
+                },
+                submitOrder() {
+                    this.generateImage();
                 },
             },
         });
     </script>
 </body>
 </html>
-
-
