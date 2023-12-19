@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>McDonalds Order</title>
+    <title>Faça seu pedido</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <body class="bg-gray-100">
     <div id="app" class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8">Faça seu Pedido</h1>
+        <h1 class="text-4xl font-bold mb-8">Faça seu pedido aqui!</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="showMenu = true">
@@ -26,6 +26,7 @@
                                         <h3 class="font-bold">{{ item.name }}</h3>
                                         <p class="text-gray-600">{{ item.description }}</p>
                                         <p class="text-lg font-bold">R$ {{ item.price.toFixed(2) }}</p>
+                                        <input type="number" v-model="item.quantity" min="0" class="border-2 border-gray-300 p-2 rounded" placeholder="Quantidade">
                                     </div>
                                 </div>
                                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="addItem(item)">
@@ -48,6 +49,7 @@
                             <div>
                                 <h3 class="font-bold">{{ item.name }}</h3>
                                 <p class="text-gray-600">{{ item.description }}</p>
+                                <p>Quantidade: {{ item.quantity }}</p>
                             </div>
                         </div>
                         <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="removeItem(index)">
@@ -75,6 +77,7 @@
                             <option value="Dinheiro">Dinheiro</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
                             <option value="Cartão de Débito">Cartão de Débito</option>
+                            <option value="PIX">PIX</option>
                         </select>
                     </div>
                     <div class="mb-4">
@@ -97,25 +100,33 @@
             data: {
                 showMenu: false,
                 menu: [
-                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150' },
-                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150' },
+                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
                 ],
                 order: [],
                 customerName: '',
                 customerPhone: '',
                 customerAddress: '',
-                paymentMethod: 'money',
+                paymentMethod: '',
                 observation: '',
             },
             computed: {
                 total() {
-                    return this.order.reduce((total, item) => total + item.price, 0);
+                    return this.order.reduce((total, item) => total + item.price * item.quantity, 0);
                 },
             },
             methods: {
                 addItem(item) {
-                    this.order.push(item);
-                    this.showMenu = false;
+                    if (item.quantity > 0) {
+                        const newItem = { ...item }; // Cria uma cópia do objeto para evitar referências diretas
+                        newItem.quantity = item.quantity; // Define a quantidade selecionada para o novo item
+                        this.order.push(newItem); // Adiciona o item ao pedido
+                        this.showMenu = false;
+                        // Zera a quantidade após adicionar ao pedido
+                        item.quantity = 0;
+                    } else {
+                        alert('Selecione uma quantidade maior que zero.');
+                    }
                 },
                 removeItem(index) {
                     this.order.splice(index, 1);
@@ -124,8 +135,8 @@
                     const canvas = document.getElementById('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    canvas.width = 1080;
-                    canvas.height = 1920;
+                    canvas.width = 540;
+                    canvas.height = 960;
                     canvas.classList.remove('hidden');
 
                     // Background da comanda
@@ -133,13 +144,13 @@
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                     // Estilo do texto
-                    ctx.font = 'bold 30px Arial';
+                    ctx.font = 'bold 15px Arial';
                     ctx.fillStyle = '#000';
 
                     // Início da escrita dos itens
                     let yOffset = 100;
                     this.order.forEach((item, index) => {
-                        ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)}`, 50, yOffset);
+                        ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)} x${item.quantity}`, 50, yOffset);
                         yOffset += 40;
                     });
 
@@ -166,3 +177,4 @@
     </script>
 </body>
 </html>
+
