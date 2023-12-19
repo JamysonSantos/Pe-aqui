@@ -104,7 +104,7 @@
     <div id="app">
         <v-app>
             <v-container>
-                <v-form @submit.prevent="submitForm">
+                <v-form>
                     <v-row>
                         <v-col cols="12" sm="6">
                             <v-text-field v-model="itemName" label="Nome do Item" required></v-text-field>
@@ -117,7 +117,7 @@
                             <v-btn @click="attachImage" color="primary" v-if="images.length < 3" class="button">Anexar foto</v-btn>
                             <input ref="fileInput" type="file" @change="onFileChange" style="display: none;" accept="image/*" multiple v-if="images.length < 3">
                             <div v-if="images.length > 0">
-                                <div v-for="(image, index) in images" :key="index" class="image-preview">
+                                <div v-for="(image, index) in images" :key="index">
                                     <img :src="image.url" alt="Imagem" class="item-image">
                                 </div>
                             </div>
@@ -127,13 +127,12 @@
                         <v-col>
                             <v-btn @click="submitForm" class="button">Adicionar Item</v-btn>
                             <v-btn @click="visualizarCardapio" class="button">Visualizar cardápio</v-btn>
-                            <v-btn @click="finalizarCadastro" class="button">Finalizar cadastro</v-btn>
                         </v-col>
                     </v-row>
                 </v-form>
                 
                 <!-- Modal para exibir os itens salvos -->
-                <div id="itemModal" class="modal" v-show="showModal">
+                <div id="itemModal" class="modal" v-if="showModal">
                     <div class="modal-content">
                         <span class="close" @click="closeModal">&times;</span>
                         <h2 class="text-primary">Itens Salvos</h2>
@@ -144,7 +143,7 @@
                                     <v-list-item-title>{{ item.name }}</v-list-item-title>
                                     <v-list-item-subtitle>R$ {{ item.price }}</v-list-item-subtitle>
                                     <div v-if="item.images.length > 0">
-                                        <div v-for="(image, idx) in item.images" :key="idx" class="image-preview">
+                                        <div v-for="(image, idx) in item.images" :key="idx">
                                             <img :src="image.url" alt="Imagem" class="item-image">
                                         </div>
                                     </div>
@@ -169,7 +168,7 @@
                 images: [],
                 currentItem: null,
                 menuItems: [],
-                showModal: false // Adiciona essa variável para controlar a exibição do modal
+                showModal: false
             },
             methods: {
                 submitForm() {
@@ -208,14 +207,10 @@
                     }
                 },
                 visualizarCardapio() {
-                    this.showModal = true; // Abre o modal ao clicar em 'Visualizar cardápio'
+                    this.showModal = true;
                 },
                 closeModal() {
-                    this.showModal = false; // Fecha o modal
-                },
-                finalizarCadastro() {
-                    // Lógica para finalizar o cadastro
-                    console.log('Finalizar cadastro');
+                    this.showModal = false;
                 }
             }
         });
