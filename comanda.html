@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faça seu pedido</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faça seu pedido</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <body class="bg-gray-100">
-    <div id="app" class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8">Faça seu pedido aqui!</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="showMenu = true">
-                    Ver Cardápio
-                </button>
-                <div v-if="showMenu" class="fixed inset-0 flex items-center justify-center z-50">
+  <div id="app" class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8">Faça seu pedido aqui!</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="showMenu = true">
+          Ver Cardápio
+        </button>
+        <div v-if="showMenu" class="fixed inset-0 flex items-center justify-center z-50">
                     <div class="bg-white p-8 rounded-lg shadow-lg" @click.self="showMenu = false">
                         <h2 class="text-2xl font-bold mb-4">Cardápio</h2>
                         <div v-for="item in menu" :key="item.id">
@@ -41,28 +41,35 @@
                 </div>
             </div>
             <div>
-                <h2 class="text-2xl font-bold mb-4">Comanda</h2>
-                <div class="mb-4" v-for="(item, index) in order" :key="index">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
-                            <div>
-                                <h3 class="font-bold">{{ item.name }}</h3>
-                                <p class="text-gray-600">{{ item.description }}</p>
-                                <p>Quantidade: {{ item.quantity }}</p>
-                            </div>
-                        </div>
-                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="removeItem(index)">
-                            Excluir
-                        </button>
-                    </div>
-                </div>
-                <p class="text-right font-bold mb-4">Total: R$ {{ total.toFixed(2) }}</p>
-                <form>
-                    <div class="mb-4">
-                        <label for="name" class="block font-bold mb-2">Nome</label>
-                        <input type="text" id="name" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerName" required>
-                    </div>
+              <h2 class="text-2xl font-bold mb-4">Comanda</h2>
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4" @click="clearOrder">
+          Limpar Pedido
+        </button>
+        <h2 class="text-2xl font-bold mb-4">Resumo do Pedido</h2>
+        <div v-if="order.length === 0">
+          <p>Nenhum item adicionado ainda.</p>
+        </div>
+        <div v-else>
+          <div class="mb-4" v-for="(item, index) in order" :key="index">
+            <div class="flex items-center justify-between">
+              <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
+              <div>
+                <h3 class="font-bold">{{ item.name }}</h3>
+                <p class="text-gray-600">{{ item.description }}</p>
+                <p>Quantidade: {{ item.quantity }}</p>
+              </div>
+              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="removeItem(index)">
+                Excluir
+              </button>
+            </div>
+          </div>
+          <p class="text-right font-bold mb-4">Total: R$ {{ total.toFixed(2) }}</p>
+        </div>
+        <form>
+          <div class="mb-4">
+            <label for="name" class="block font-bold mb-2">Nome</label>
+            <input type="text" id="name" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerName" required>
+          </div>
                     <div class="mb-4">
                         <label for="phone" class="block font-bold mb-2">Telefone</label>
                         <input type="tel" id="phone" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerPhone" required>
@@ -88,9 +95,37 @@
                         Finalizar Pedido
                     </button>
                 </form>
-            </div>
-        </div>
+                    <div v-if="showConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50">
+  <div class="absolute inset-0 bg-black opacity-50"></div>
+  <div class="bg-white p-8 rounded-lg shadow-lg z-10">
+    <h2 class="text-2xl font-bold mb-4">Resumo do Pedido</h2>
+    <div v-if="order.length === 0">
+      <p>Nenhum item adicionado ainda.</p>
     </div>
+    <div v-else>
+      <div class="mb-4" v-for="(item, index) in order" :key="index">
+        <div class="flex items-center justify-between">
+          <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
+          <div>
+            <h3 class="font-bold">{{ item.name }}</h3>
+            <p class="text-gray-600">{{ item.description }}</p>
+            <p>Quantidade: {{ item.quantity }}</p>
+          </div>
+        </div>
+      </div>
+      <p class="text-right font-bold mb-4">Total: R$ {{ total.toFixed(2) }}</p>
+      <div class="flex justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="confirmOrder">
+          Confirmar Pedido
+        </button>
+        <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" @click="showConfirmationModal = false">
+          Editar Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <canvas id="canvas" class="hidden"></canvas>
 
@@ -109,6 +144,7 @@
                 customerAddress: '',
                 paymentMethod: '',
                 observation: '',
+				showConfirmationModal: false,
             },
             computed: {
                 total() {
@@ -130,6 +166,10 @@
                 },
                 removeItem(index) {
                     this.order.splice(index, 1);
+				
+				},
+                clearOrder() {
+                    this.order = []; // Limpar o pedido
                 },
                 generateImage() {
                     const canvas = document.getElementById('canvas');
@@ -170,7 +210,14 @@
                     link.click();
                 },
                 submitOrder() {
+                    // Exibir o modal de confirmação ao clicar em "Finalizar Pedido"
+                    this.showConfirmationModal = true;
+                },
+				confirmOrder() {
+                    // Confirmar o pedido e gerar a imagem da comanda
                     this.generateImage();
+                    // Fechar o modal de confirmação após confirmar o pedido
+                    this.showConfirmationModal = false;
                 },
             },
         });
