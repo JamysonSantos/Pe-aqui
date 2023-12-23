@@ -68,33 +68,50 @@
     </div>
 
     <div id="app">
-        <div class="menu-container">
-            <h1 style="color: var(--primary-color); text-align: center;">Cardápio</h1>
-            <div v-for="(item, index) in menuItems" :key="index" class="menu-item">
-                <div>
-                    <img :src="item.images.length > 0 ? item.images[0].url : 'placeholder.jpg'" alt="Imagem do Item">
-                    {{ item.name }}
-                </div>
-                <div>
-                    R$ {{ item.price }}
+        <div v-if="!isMenuEmpty">
+            <div v-for="category in uniqueCategories" :key="category" class="menu-container">
+                <h1 style="color: var(--primary-color); text-align: center;">{{ category }}</h1>
+                <div v-for="(item, index) in getMenuItemsByCategory(category)" :key="index" class="menu-item">
+                    <div>
+                        <img :src="item.images.length > 0 ? item.images[0].url : 'placeholder.jpg'" alt="Imagem do Item">
+                        {{ item.name }}
+                    </div>
+                    <div>
+                        R$ {{ item.price }}
+                    </div>
                 </div>
             </div>
+        </div>
+        <div v-else class="menu-container" style="text-align: center;">
+            <h2>Nenhum item no cardápio ainda.</h2>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script>
-    new Vue({
-        el: '#app',
-        data: {
-            menuItems: JSON.parse(localStorage.getItem('menuItems')) || [] // Recupera os itens do cardápio do localStorage
-        },
-        computed: {
-            isMenuEmpty() {
-                return this.menuItems.length === 0;
+        new Vue({
+            el: '#app',
+            data: {
+                menuItems: JSON.parse(localStorage.getItem('menuItems')) || [] // Recupera os itens do cardápio do localStorage
+            },
+            computed: {
+                isMenuEmpty() {
+                    return this.menuItems.length === 0;
+                },
+                uniqueCategories() {
+                    const categories = new Set();
+                    this.menuItems.forEach(item => {
+                        categories.add(item.category);
+                    });
+                    return Array.from(categories);
+                }
+            },
+            methods: {
+                getMenuItemsByCategory(category) {
+                    return this.menuItems.filter(item => item.category === category);
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 </html>
