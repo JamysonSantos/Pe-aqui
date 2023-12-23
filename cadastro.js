@@ -13,6 +13,7 @@ firebase.initializeApp(firebaseConfig);
 
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
+const database = firebase.database();
 
 // Adiciona um listener para o evento de submit no formulário de cadastro
 document.getElementById('signupForm').addEventListener('submit', function(event) {
@@ -67,7 +68,7 @@ function createUserWithEmailAndPassword(companyName, email, password) {
         displayName: companyName
       }).then(() => {
         // Redirecionamento após o cadastro bem-sucedido
-        localStorage.setItem('companyName', companyName); // Armazena o nome da empresa localmente
+        saveUserData(user.uid, companyName, email);
         window.location.href = 'poscadastro.html';
       }).catch((error) => {
         console.error("Erro ao atualizar o perfil do usuário:", error);
@@ -92,6 +93,21 @@ function createUserWithEmailAndPassword(companyName, email, password) {
       }
     });
 }
+
+function saveUserData(userId, companyName, email) {
+            const usersRef = database.ref('users/' + userId);
+            usersRef.set({
+                companyName: companyName,
+                email: email
+            }).then(() => {
+                alert("Usuário cadastrado com sucesso!");
+                window.location.href = 'index.html'; // Redireciona para a página inicial
+            }).catch((error) => {
+                console.error("Erro ao salvar os dados do usuário:", error);
+                alert("Usuário cadastrado, mas ocorreu um erro ao salvar os dados.");
+                window.location.href = 'index.html'; // Redireciona para a página inicial
+            });
+        }
 
 // Função para validar um e-mail
 function validateEmail(email) {
