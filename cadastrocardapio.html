@@ -171,7 +171,13 @@
                     window.location.href = 'vercadapio.html';
                 },
                 finalizarCadastro() {
-                    // Lógica para finalizar o cadastro (se necessário)
+            if (this.menuItems.length > 0) {
+                this.saveMenuItemsToLocal();
+                alert('Cardápio cadastrado!');
+                window.location.href = 'vercadapio.html'; // Redireciona para a página de visualização
+            } else {
+                alert('Por favor, cadastre itens no cardápio antes de finalizar.');
+            }
                 },
                 saveMenuItemsToLocal() {
                     localStorage.setItem('menuItems', JSON.stringify(this.menuItems));
