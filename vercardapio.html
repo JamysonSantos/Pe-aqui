@@ -87,10 +87,9 @@
         new Vue({
             el: '#app',
             data: {
-                menuItems: [] // Aqui você precisa adicionar os dados dos itens do cardápio
-                // Por exemplo: menuItems: [{ name: 'Nome do Item', price: 9.99, images: [{ url: 'imagem1.jpg' }] }, ...]
+                menuItems: JSON.parse(localStorage.getItem('menuItems')) || [] // Recupera os itens do cardápio do localStorage
             }
-            // Métodos relacionados à exibição dos itens, se necessário
+            // Outros métodos relacionados à exibição dos itens, se necessário
         });
     </script>
 </body>
