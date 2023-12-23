@@ -138,54 +138,47 @@
    },
    methods: {
     submitForm() {
-     if (this.itemName && this.price && this.images.length > 0 && this.images.length <= 3) {
-      const newItem = { 
-        name: this.itemName, 
-        price: parseFloat(this.price).toFixed(2),
-        images: this.images ? this.images.map(img => ({ url: img.url })) : [] // Manter apenas a referência da URL
-      };
-      this.menuItems.push(newItem);
-      this.clearFields();
-     } else {
-      alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
-     }
-    },
-    clearFields() {
-      this.itemName = '';
-      this.price = '';
-      this.images = [];
-    },
-    attachImage() {
-      this.$refs.fileInput.click();
-    },
-    onFileChange(e) {
-      const files = e.target.files;
-      if (this.images.length + files.length > 3) {
-        alert('Você só pode escolher até 3 fotos.');
-        return;
-      }
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.images.push({ url: e.target.result });
-        };
-        reader.readAsDataURL(files[i]);
-      }
-    },
-    removeItem(index) {
-      this.menuItems.splice(index, 1);
-    },
-    visualizarCardapio() {
-      // Lógica para exibir o cardápio em outra página ou modal
-      console.log('Visualizar cardápio');
-    },
-    finalizarCadastro() {
-      // Lógica para finalizar o cadastro
-      console.log('Finalizar cadastro');
-    }
-   }
-  });
- </script>
+                    if (this.itemName && this.price && this.images.length > 0 && this.images.length <= 3) {
+                        const newItem = {
+                            name: this.itemName,
+                            price: parseFloat(this.price).toFixed(2),
+                            images: this.images ? this.images.map(img => ({ url: img.url })) : []
+                        };
+                        this.menuItems.push(newItem);
+                        this.saveMenuItemsToLocal(); // Salva os itens no localStorage
+                        this.clearFields();
+                    } else {
+                        alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
+                    }
+                },
+                clearFields() {
+                    this.itemName = '';
+                    this.price = '';
+                    this.images = [];
+                },
+                attachImage() {
+                    this.$refs.fileInput.click();
+                },
+                onFileChange(e) {
+                    // Restante do seu código para adicionar imagens...
+                },
+                removeItem(index) {
+                    this.menuItems.splice(index, 1);
+                    this.saveMenuItemsToLocal(); // Após remover um item, atualiza o localStorage
+                },
+                visualizarCardapio() {
+                    // Lógica para redirecionar para a página de visualização do cardápio
+                    window.location.href = 'vercadapio.html';
+                },
+                finalizarCadastro() {
+                    // Lógica para finalizar o cadastro (se necessário)
+                },
+                saveMenuItemsToLocal() {
+                    localStorage.setItem('menuItems', JSON.stringify(this.menuItems));
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 
