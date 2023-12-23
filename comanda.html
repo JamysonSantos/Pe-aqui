@@ -12,7 +12,7 @@
     <h1 class="text-4xl font-bold mb-8">Faça seu pedido aqui!</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="showMenu = true">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="fetchMenuItems" = true">
           Ver Cardápio
         </button>
         <div v-if="showMenu" class="fixed inset-0 flex items-center justify-center z-50">
@@ -134,9 +134,8 @@
             el: '#app',
             data: {
                 showMenu: false,
-                menu: [
-                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
-                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                menu: [],
+                   
                 ],
                 order: [],
                 customerName: '',
@@ -144,7 +143,7 @@
                 customerAddress: '',
                 paymentMethod: '',
                 observation: '',
-				showConfirmationModal: false,
+	        showConfirmationModal: false,
             },
             computed: {
                 total() {
@@ -171,6 +170,17 @@
                 clearOrder() {
                     this.order = []; // Limpar o pedido
                 },
+
+		fetchMenuItems() {
+                    const storedMenuItems = JSON.parse(localStorage.getItem('menuItems'));
+                    if (storedMenuItems && storedMenuItems.length > 0) {
+                        this.menu = storedMenuItems; // Define os itens do cardápio recuperados do localStorage
+                        this.showMenu = true; // Mostra o cardápio
+                    } else {
+                        alert('Ainda não há itens cadastrados no cardápio.');
+                    }
+		},
+		    
                 generateImage() {
                   const canvas = document.getElementById('canvas');
                   const ctx = canvas.getContext('2d');
