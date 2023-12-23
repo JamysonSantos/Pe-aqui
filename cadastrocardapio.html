@@ -78,6 +78,8 @@
                 <v-form @submit.prevent="submitForm">
                     <v-row>
                         <v-col cols="12" sm="6">
+                            <v-text-field v-model="itemCategory" label="Categoria" required></v-text-field>
+                        <v-col cols="12" sm="6">
                             <v-text-field v-model="itemName" label="Nome do Item" required></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="4">
@@ -134,11 +136,13 @@
                 images: [],
                 currentItem: null,
                 menuItems: []
+                itemCategory: ''
             },
             methods: {
                 submitForm() {
-                    if (this.itemName && this.price && this.images.length > 0 && this.images.length <= 3) {
+                    if (this.itemCategory.trim() && this.itemName && this.price && this.images.length > 0 && this.images.length <= 3) {
                         const newItem = {
+                            category: this.itemCategory.trim()
                             name: this.itemName,
                             price: parseFloat(this.price).toFixed(2),
                             images: this.images ? this.images.map(img => ({ url: img.url })) : []
