@@ -97,6 +97,7 @@
                     <v-row>
                         <v-col>
                             <v-btn @click="submitForm" class="button">Adicionar Item</v-btn>
+                            <v-btn @click="visualizarCardapio" class="button">Visualizar cardápio</v-btn>
                             <v-btn @click="finalizarCadastro" class="button">Finalizar cadastro</v-btn>
                         </v-col>
                     </v-row>
@@ -174,7 +175,9 @@
                 removeItem(index) {
                     this.menuItems.splice(index, 1);
                     this.saveMenuItemsToLocal(); // Após remover um item, atualiza o localStorage
-               
+                },
+                visualizarCardapio() {
+                    window.location.href = 'vercadapio.html';      
                 },
                 finalizarCadastro() {
                     if (this.menuItems.length > 0) {
