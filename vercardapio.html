@@ -84,13 +84,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                menuItems: JSON.parse(localStorage.getItem('menuItems')) || [] // Recupera os itens do cardápio do localStorage
+    new Vue({
+        el: '#app',
+        data: {
+            menuItems: JSON.parse(localStorage.getItem('menuItems')) || [] // Recupera os itens do cardápio do localStorage
+        },
+        computed: {
+            isMenuEmpty() {
+                return this.menuItems.length === 0;
             }
-            // Outros métodos relacionados à exibição dos itens, se necessário
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>
