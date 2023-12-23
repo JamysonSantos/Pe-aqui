@@ -95,8 +95,8 @@ function createUserWithEmailAndPassword(companyName, email, password) {
 }
 
 function saveUserData(userId, companyName, email) {
-            const usersRef = database.ref('users/' + userId);
-            usersRef.set({
+  const usersRef = database.ref('users');
+            usersRef.push({
                 companyName: companyName,
                 email: email
             }).then(() => {
