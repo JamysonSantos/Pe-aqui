@@ -177,7 +177,14 @@
                     this.saveMenuItemsToLocal(); // Após remover um item, atualiza o localStorage
                 },
                 visualizarCardapio() {
-                    window.location.href = 'vercadapio.html';
+                    const storedMenuItems = JSON.parse(localStorage.getItem('menuItems'));
+    if (storedMenuItems && storedMenuItems.length > 0) {
+        // Redireciona para a página com a visualização do cardápio
+        // Você pode passar os dados do cardápio como parâmetro na URL ou usar outro método para transmitir os dados para a página de visualização
+        window.location.href = `vercardapio.html?menuItems=${JSON.stringify(storedMenuItems)}`;
+    } else {
+        alert('Ainda não há itens cadastrados no cardápio.');
+    }
                 },
                 finalizarCadastro() {
                     if (this.menuItems.length > 0) {
