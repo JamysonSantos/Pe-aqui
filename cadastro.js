@@ -1,6 +1,3 @@
-// Importa a biblioteca do Firebase
-import firebase from 'firebase/app';
-
 // Cole suas configurações do Firebase aqui
 const firebaseConfig = {
   apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
@@ -19,6 +16,8 @@ const auth = firebase.auth();
 
 // Referência para o Firestore
 const db = firebase.firestore();
+
+const firebase = require('firebase/app');
 
 // Adiciona um listener para o evento de submit no formulário de cadastro
 document.getElementById('signupForm').addEventListener('submit', function(event) {
