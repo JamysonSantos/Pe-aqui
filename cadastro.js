@@ -60,13 +60,25 @@ function createUserWithEmailAndPassword(companyName, email, password) {
     return;
   }
 
-  // Chama o método `createUserWithEmailAndPassword()` do Firebase
   auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Usuário criado com sucesso
-      const user = userCredential.user;
-      console.log(user);
+  .then((userCredential) => {
+    // Usuário criado com sucesso
+    const user = userCredential.user;
 
+    // Criar referência para o Firestore
+    const db = firebase.firestore();
+
+    // Salvar detalhes da empresa no Firestore
+    db.collection("Empresas").doc(user.uid).set({
+      nomeEmpresa: companyName,
+      nomeProprietario: '', // Adicione aqui o nome do proprietário
+      numero: '', // Adicione aqui o número para contato
+      endereco: {
+        ruaENumero: '', // Adicione aqui a rua e o número
+        bairro: '', // Adicione aqui o bairro
+        cidadeEstado: '' // Adicione aqui a cidade e estado
+      }
+    }).then(() => {
       // Atualiza o nome da empresa no perfil do usuário
       user.updateProfile({
         displayName: companyName
@@ -78,7 +90,12 @@ function createUserWithEmailAndPassword(companyName, email, password) {
         // Redirecionamento após o cadastro bem-sucedido, mesmo com erro ao atualizar o perfil
         window.location.href = 'poscadastro.html';
       });
-    })
+    }).catch((error) => {
+      console.error("Erro ao salvar detalhes da empresa:", error);
+      // Em caso de erro, redirecione para uma página de erro
+      window.location.href = 'erro.html';
+    });
+  })
     .catch((error) => {
       // Tratamento de erro
       const errorCode = error.code;
