@@ -14,7 +14,7 @@ firebase.initializeApp(firebaseConfig);
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
 
-/ Referência para o Firestore
+// Referência para o Firestore
 const db = firebase.firestore();
 
 // Adiciona um listener para o evento de submit no formulário de cadastro
