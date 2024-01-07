@@ -19,8 +19,13 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
   event.preventDefault(); // Evita o comportamento padrão do formulário
 
   const companyName = document.getElementById('companyName').value;
+  const ownerName = document.getElementById('ownerName').value;
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
+  const contactNumber = document.getElementById('contactNumber').value;
+  const addressLine = document.getElementById('addressLine').value;
+  const neighborhood = document.getElementById('neighborhood').value;
+  const cityState = document.getElementById('cityState').value;
 
   // Verifica se o dispositivo está conectado à internet
   if (navigator.onLine) {
