@@ -1,11 +1,11 @@
 // Cole suas configurações do Firebase aqui
 const firebaseConfig = {
- apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
- authDomain: "pecaqui-cc6c1.firebaseapp.com",
- projectId: "pecaqui-cc6c1",
- storageBucket: "pecaqui-cc6c1.appspot.com",
- messagingSenderId: "502925766451",
- appId: "1:502925766451:web:52473d00da34033f789846"
+  apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
+  authDomain: "pecaqui-cc6c1.firebaseapp.com",
+  projectId: "pecaqui-cc6c1",
+  storageBucket: "pecaqui-cc6c1.appspot.com",
+  messagingSenderId: "502925766451",
+  appId: "1:502925766451:web:52473d00da34033f789846"
 };
 
 // Inicialize o Firebase
@@ -16,23 +16,30 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 // Adiciona um listener para o evento de submit no formulário de cadastro
-document.getElementById('signupForm').addEventListener('submit', function(event) {
- event.preventDefault(); // Evita o comportamento padrão do formulário
+document.getElementById('signupForm').addEventListener('submit', function (event) {
+  event.preventDefault(); // Evita o comportamento padrão do formulário
 
- const companyName = document.getElementById('companyName').value;
- const email = document.getElementById('email').value;
- const password = document.getElementById('password').value;
- // Verifica se o dispositivo está conectado à internet
-if (navigator.onLine) {
-  // Chama o método `createUserWithEmailAndPassword()`
-  createUserWithEmailAndPassword(companyName, email, password);
-} else {
-  // Exiba uma mensagem de erro
-  alert("O dispositivo não está conectado à internet.");
-}
+  const companyName = document.getElementById('companyName').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const ownerName = document.getElementById('ownerName').value;
+  const contactNumber = document.getElementById('contactNumber').value;
+  const addressLine = document.getElementById('addressLine').value;
+  const neighborhood = document.getElementById('neighborhood').value;
+  const cityState = document.getElementById('cityState').value;
+
+  // Verifica se o dispositivo está conectado à internet
+  if (navigator.onLine) {
+    // Chama o método `createUserWithEmailAndPassword()`
+    createUserWithEmailAndPassword(companyName, email, password, ownerName, contactNumber, addressLine, neighborhood, cityState);
+  } else {
+    // Exiba uma mensagem de erro
+    alert("O dispositivo não está conectado à internet.");
+  }
+});
 
 // Função para criar um usuário com e-mail e senha
-function createUserWithEmailAndPassword(companyName, email, password) {
+function createUserWithEmailAndPassword(companyName, email, password, ownerName, contactNumber, addressLine, neighborhood, cityState) {
   // Valida o nome da empresa
   if (!companyName || companyName.trim().length === 0) {
     alert("O campo 'Nome da sua empresa' é obrigatório.");
@@ -57,6 +64,18 @@ function createUserWithEmailAndPassword(companyName, email, password) {
     return;
   }
 
+  // Cria um objeto com os dados da empresa
+  const empresaData = {
+    nomeEmpresa: companyName,
+    email: email,
+    proprietario: ownerName,
+    'numero de contato': contactNumber,
+    'rua e numero': addressLine,
+    bairro: neighborhood,
+    'Cidade/Estado': cityState,
+    'Crie sua Senha': password,
+  };
+
   // Chama o método `createUserWithEmailAndPassword()` do Firebase
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -75,18 +94,6 @@ function createUserWithEmailAndPassword(companyName, email, password) {
         // Redirecionamento após o cadastro bem-sucedido, mesmo com erro ao atualizar o perfil
         window.location.href = 'poscadastro.html';
       });
-
-      // Cria um objeto com os dados da empresa
-      const empresaData = {
-        nome: companyName,
-        email: email,
-        nomeProprietario: ownerName,
-	numero: contactNumber,
-	ruaeNumero: addressLine,
-	bairro: neighborhood,
-	cidadeEstado: cityState,
-	senha: password,
-      };
 
       // Adiciona um novo documento à coleção "Empresas"
       db.collection("Empresas").add(empresaData)
@@ -115,9 +122,11 @@ function createUserWithEmailAndPassword(companyName, email, password) {
         alert(errorMessage);
       }
     });
-	
+}
+
 // Função para validar um e-mail
 function validateEmail(email) {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regex.test(email);
 }
+
