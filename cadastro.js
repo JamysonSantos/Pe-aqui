@@ -28,16 +28,6 @@ document.getElementById('signupForm').addEventListener('submit', function (event
   const neighborhood = document.getElementById('neighborhood').value;
   const cityState = document.getElementById('cityState').value;
 
-  // Log dos valores para depuração
-  console.log('Nome da Empresa:', companyName);
-  console.log('Nome do Proprietário:', ownerName);
-  console.log('E-mail:', email);
-  console.log('Número de Contato:', contactNumber);
-  console.log('Rua e Número:', addressLine);
-  console.log('Bairro:', neighborhood);
-  console.log('Cidade/Estado:', cityState);
-  console.log('Senha:', password);
-
   // Verifica se o dispositivo está conectado à internet
   if (navigator.onLine) {
     // Chama o método `createUserWithEmailAndPassword()`
