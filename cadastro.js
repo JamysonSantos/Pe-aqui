@@ -1,11 +1,11 @@
 // Cole suas configurações do Firebase aqui
 const firebaseConfig = {
-  apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
-  authDomain: "pecaqui-cc6c1.firebaseapp.com",
-  projectId: "pecaqui-cc6c1",
-  storageBucket: "pecaqui-cc6c1.appspot.com",
-  messagingSenderId: "502925766451",
-  appId: "1:502925766451:web:52473d00da34033f789846"
+ apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
+ authDomain: "pecaqui-cc6c1.firebaseapp.com",
+ projectId: "pecaqui-cc6c1",
+ storageBucket: "pecaqui-cc6c1.appspot.com",
+ messagingSenderId: "502925766451",
+ appId: "1:502925766451:web:52473d00da34033f789846"
 };
 
 // Inicialize o Firebase
@@ -13,48 +13,45 @@ firebase.initializeApp(firebaseConfig);
 
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 // Adiciona um listener para o evento de submit no formulário de cadastro
 document.getElementById('signupForm').addEventListener('submit', function(event) {
-  event.preventDefault(); // Evita o comportamento padrão do formulário
+ event.preventDefault(); // Evita o comportamento padrão do formulário
 
-  const companyName = document.getElementById('companyName').value;
-  const ownerName = document.getElementById('ownerName').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const contactNumber = document.getElementById('contactNumber').value;
-  const addressLine = document.getElementById('addressLine').value;
-  const neighborhood = document.getElementById('neighborhood').value;
-  const cityState = document.getElementById('cityState').value;
+ const companyName = document.getElementById('companyName').value;
+ const email = document.getElementById('email').value;
+ const password = document.getElementById('password').value;
+ // Verifica se o dispositivo está conectado à internet
+if (navigator.onLine) {
+  // Chama o método `createUserWithEmailAndPassword()`
+  createUserWithEmailAndPassword(companyName, email, password);
+} else {
+  // Exiba uma mensagem de erro
+  alert("O dispositivo não está conectado à internet.");
+}
 
-  // Verifica se o dispositivo está conectado à internet
-  if (navigator.onLine) {
-    // Chama o método `createUserWithEmailAndPassword()`
-    createUserWithEmailAndPassword(companyName, email, password);
-  } else {
-    // Exiba uma mensagem de erro
-    alert("O dispositivo não está conectado à internet.");
-  }
-});
-
+// Função para criar um usuário com e-mail e senha
 function createUserWithEmailAndPassword(companyName, email, password) {
-  // Verifica se os dados do formulário são válidos
+  // Valida o nome da empresa
   if (!companyName || companyName.trim().length === 0) {
     alert("O campo 'Nome da sua empresa' é obrigatório.");
     return;
   }
 
+  // Valida o e-mail
   if (!email || email.trim().length === 0) {
     alert("O campo 'E-mail' é obrigatório.");
     return;
   }
 
+  // Valida a senha
   if (!password || password.trim().length === 0) {
     alert("O campo 'Crie sua Senha' é obrigatório.");
     return;
   }
 
-  // Valida o e-mail
+  // Valida o formato do e-mail
   if (!validateEmail(email)) {
     alert("O e-mail fornecido é inválido.");
     return;
@@ -78,6 +75,30 @@ function createUserWithEmailAndPassword(companyName, email, password) {
         // Redirecionamento após o cadastro bem-sucedido, mesmo com erro ao atualizar o perfil
         window.location.href = 'poscadastro.html';
       });
+
+      // Cria um objeto com os dados da empresa
+      const empresaData = {
+        nome: companyName,
+        email: email,
+        nomeProprietario: ownerName,
+		    numero: contactNumber,
+		    ruaeNumero: addressLine,
+		    bairro: neighborhood,
+		    cidadeEstado: cityState,
+		    senha: password,
+      };
+
+      // Adiciona um novo documento à coleção "Empresas"
+      db.collection("Empresas").add(empresaData)
+        .then(() => {
+          // Dados da empresa salvos com sucesso!
+          // ... // Redirecione para a página de sucesso ou faça outras ações
+        })
+        .catch((error) => {
+          // Erro ao salvar dados da empresa
+          console.error("Erro ao adicionar documento:", error);
+        });
+
     })
     .catch((error) => {
       // Tratamento de erro
