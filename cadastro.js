@@ -138,28 +138,17 @@ function createUserWithEmailAndPassword(companyName, email, password, ownerName,
       console.log(user);
 
       // Atualiza o nome da empresa no perfil do usuário
-      user.updateProfile({
+      return user.updateProfile({
         displayName: companyName
-      }).then(() => {
-        // Redirecionamento após o cadastro bem-sucedido
-        window.location.href = 'poscadastro.html';
-      }).catch((error) => {
-        console.error("Erro ao atualizar o perfil do usuário:", error);
-        // Redirecionamento após o cadastro bem-sucedido, mesmo com erro ao atualizar o perfil
-        window.location.href = 'poscadastro.html';
       });
-
+    })
+    .then(() => {
       // Adiciona um novo documento à coleção "Empresas"
-      db.collection("Empresas").add(empresaData)
-        .then(() => {
-          // Dados da empresa salvos com sucesso!
-          // ... // Redirecione para a página de sucesso ou faça outras ações
-        })
-        .catch((error) => {
-          // Erro ao salvar dados da empresa
-          console.error("Erro ao adicionar documento:", error);
-        });
-
+      return db.collection("Empresas").add(empresaData);
+    })
+    .then(() => {
+      // Redirecionamento após o cadastro bem-sucedido
+      window.location.href = 'poscadastro.html';
     })
     .catch((error) => {
       // Tratamento de erro
@@ -183,4 +172,5 @@ function validateEmail(email) {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regex.test(email);
 }
+
 
