@@ -81,11 +81,11 @@ function createUserWithEmailAndPassword(companyName, email, password) {
         nome: companyName,
         email: email,
         nomeProprietario: ownerName,
-		    numero: contactNumber,
-		    ruaeNumero: addressLine,
-		    bairro: neighborhood,
-		    cidadeEstado: cityState,
-		    senha: password,
+	numero: contactNumber,
+	ruaeNumero: addressLine,
+	bairro: neighborhood,
+	cidadeEstado: cityState,
+	senha: password,
       };
 
       // Adiciona um novo documento à coleção "Empresas"
