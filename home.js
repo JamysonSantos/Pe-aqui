@@ -54,15 +54,15 @@ firebase.auth().onAuthStateChanged(user => {
             // Cria um canvas para redimensionar a imagem
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = 720;
-            canvas.height = 1280;
+            canvas.width = 180;
+            canvas.height = 320;
 
             // Cria uma nova imagem no canvas com as dimensões desejadas
             const image = new Image();
             image.src = imgSrc;
 
             // Desenha a imagem no canvas
-            ctx.drawImage(image, 0, 0, 720, 1280);
+            ctx.drawImage(image, 0, 0, 180, 320);
 
             // Obtém a versão redimensionada da imagem como um data URL
             const resizedImgSrc = canvas.toDataURL('image/jpeg', 0.7); // Qualidade JPEG de 70%
