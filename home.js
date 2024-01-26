@@ -99,5 +99,30 @@ window.addEventListener("load", function() {
   });
 });
 
+// Função para deslogar o usuário
+function logout() {
+  firebase.auth().signOut().then(function() {
+    // Logout com sucesso
+    window.location.href = 'login.html'; // Redirecionar para a página de login
+  }).catch(function(error) {
+    // Ocorreu um erro ao fazer logout
+    console.log(error.message);
+  });
+}
+
+// Adiciona evento de clique ao botão "Cadastrar Cardápio"
+document.querySelector(".button-cadastrar").addEventListener("click", function() {
+  // Redireciona o usuário para a página de cadastro de cardápio
+  window.location.href = "cadastrocardapio.html";
+});
+
+// Adiciona um evento de load à página
+window.addEventListener("load", function() {
+  // Verifica se o usuário está logado
+  if (!firebase.auth().currentUser) {
+    // Redirecione para a página de login se o usuário não estiver logado
+    window.location.href = "login.html";
+  }
+});
 
 
