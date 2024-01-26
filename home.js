@@ -50,7 +50,25 @@ firebase.auth().onAuthStateChanged(user => {
           reader.onload = function (event) {
             const imgSrc = event.target.result;
             const img = document.createElement('img');
-            img.src = imgSrc;
+
+            // Cria um canvas para redimensionar a imagem
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 400;
+            canvas.height = 400;
+
+            // Cria uma nova imagem no canvas com as dimensões desejadas
+            const image = new Image();
+            image.src = imgSrc;
+
+            // Desenha a imagem no canvas
+            ctx.drawImage(image, 0, 0, 400, 400);
+
+            // Obtém a versão redimensionada da imagem como um data URL
+            const resizedImgSrc = canvas.toDataURL('image/jpeg', 0.7); // Qualidade JPEG de 70%
+
+            // Configura a nova imagem
+            img.src = resizedImgSrc;
             img.classList.add('resized-image', 'rounded-md');
 
             // Se o item for arrastado de outra área, remove o item original
@@ -90,6 +108,7 @@ document.querySelector(".button-cadastrar").addEventListener("click", function()
   // Redireciona o usuário para a página de cadastro de cardápio
   window.location.href = "cadastrocardapio.html";
 });
+
 
 
 
