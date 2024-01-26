@@ -22,6 +22,55 @@ firebase.auth().onAuthStateChanged(user => {
     if (companyNameElement) {
       companyNameElement.textContent = companyName;
     }
+
+    // Adiciona funcionalidade de arrastar e soltar imagens nas colunas do Kanban
+    const fileDropContainers = document.querySelectorAll('.kanban-column');
+
+    let draggedItem = null;
+
+    fileDropContainers.forEach((dropArea) => {
+      dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.style.border = '2px dashed #4F46E5';
+      });
+
+      dropArea.addEventListener('dragleave', () => {
+        dropArea.style.border = '1px solid #ccc';
+      });
+
+      dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.style.border = '1px solid #ccc';
+
+        const file = e.dataTransfer.files[0];
+
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+
+          reader.onload = function (event) {
+            const imgSrc = event.target.result;
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.classList.add('resized-image', 'rounded-md');
+
+            // Se o item for arrastado de outra área, remove o item original
+            if (draggedItem) {
+              draggedItem.remove();
+              draggedItem = null;
+            }
+
+            // Adiciona a imagem à nova área
+            dropArea.appendChild(img);
+          };
+
+          reader.readAsDataURL(file);
+        }
+      });
+
+      dropArea.addEventListener('dragstart', () => {
+        draggedItem = dropArea.querySelector('img');
+      });
+    });
   }
 });
 
@@ -42,87 +91,5 @@ document.querySelector(".button-cadastrar").addEventListener("click", function()
   window.location.href = "cadastrocardapio.html";
 });
 
-// Adiciona um evento de load à página
-window.addEventListener("load", function() {
-  // Verifica se o usuário está logado
-  if (!firebase.auth().currentUser) {
-    // Redirecione para a página de login se o usuário não estiver logado
-    window.location.href = "login.html";
-  }
-
-  const fileDropContainers = document.querySelectorAll('.kanban-column');
-
-  let draggedItem = null;
-
-  fileDropContainers.forEach((dropArea) => {
-    dropArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropArea.style.border = '2px dashed #4F46E5';
-    });
-
-    dropArea.addEventListener('dragleave', () => {
-      dropArea.style.border = '1px solid #ccc';
-    });
-
-    dropArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropArea.style.border = '1px solid #ccc';
-
-      const file = e.dataTransfer.files[0];
-
-      if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-
-        reader.onload = function (event) {
-          const imgSrc = event.target.result;
-          const img = document.createElement('img');
-          img.src = imgSrc;
-          img.classList.add('resized-image', 'rounded-md');
-
-          // Se o item for arrastado de outra área, remove o item original
-          if (draggedItem) {
-            draggedItem.remove();
-            draggedItem = null;
-          }
-
-          // Adiciona a imagem à nova área
-          dropArea.appendChild(img);
-        };
-
-        reader.readAsDataURL(file);
-      }
-    });
-
-    dropArea.addEventListener('dragstart', () => {
-      draggedItem = dropArea.querySelector('img');
-    });
-  });
-});
-
-// Função para deslogar o usuário
-function logout() {
-  firebase.auth().signOut().then(function() {
-    // Logout com sucesso
-    window.location.href = 'login.html'; // Redirecionar para a página de login
-  }).catch(function(error) {
-    // Ocorreu um erro ao fazer logout
-    console.log(error.message);
-  });
-}
-
-// Adiciona evento de clique ao botão "Cadastrar Cardápio"
-document.querySelector(".button-cadastrar").addEventListener("click", function() {
-  // Redireciona o usuário para a página de cadastro de cardápio
-  window.location.href = "cadastrocardapio.html";
-});
-
-// Adiciona um evento de load à página
-window.addEventListener("load", function() {
-  // Verifica se o usuário está logado
-  if (!firebase.auth().currentUser) {
-    // Redirecione para a página de login se o usuário não estiver logado
-    window.location.href = "login.html";
-  }
-});
 
 
