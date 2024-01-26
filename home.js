@@ -62,7 +62,7 @@ firebase.auth().onAuthStateChanged(user => {
             image.src = imgSrc;
 
             // Desenha a imagem no canvas
-            ctx.drawImage(image, 0, 0, 100, 100);
+            ctx.drawImage(image, 0, 0, 80, 80);
 
             // Obtém a versão redimensionada da imagem como um data URL
             const resizedImgSrc = canvas.toDataURL('image/jpeg', 0.7); // Qualidade JPEG de 70%
