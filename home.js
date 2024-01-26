@@ -45,6 +45,7 @@ document.querySelector(".button-cadastrar").addEventListener("click", function()
   // Redireciona o usuário para a página de cadastro de cardápio
   window.location.href = "cadastrocardapio.html";
 });
+
 // Adiciona um evento de load à página
 window.addEventListener("load", function() {
   // Verifica se o usuário está logado
@@ -101,6 +102,5 @@ window.addEventListener("load", function() {
     });
   });
 });
-
 
 
