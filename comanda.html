@@ -148,22 +148,22 @@
     <canvas id="canvas" class="hidden"></canvas>
 	
     </script>
-	
-      new Vue({
-        el: '#app',
-        data: {
-          showMenu: false,
-          menu: [
-            { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
-            { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
-          ],
-          order: [],
-          customerName: '',
-          customerPhone: '',
-          customerAddress: '',
-          paymentMethod: '',
-          observation: '',
-          showConfirmationModal: false,
+	<script>
+        new Vue({
+            el: '#app',
+            data: {
+                showMenu: false,
+                menu: [
+                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                ],
+                order: [],
+                customerName: '',
+                customerPhone: '',
+                customerAddress: '',
+                paymentMethod: '',
+                observation: '',
+	        showConfirmationModal: false,
         },
         computed: {
           total() {
