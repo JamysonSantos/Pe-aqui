@@ -115,6 +115,9 @@
                     <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" @click="submitOrder">
                         Finalizar Pedido
                     </button>
+					<div v-if="showConfirmationModal">
+                    <button type="button" @click="close()">Fechar</button>
+                    </div>
                 </form>
                     <div v-if="showConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50">
   <div class="absolute inset-0 bg-black opacity-50"></div>
@@ -151,6 +154,4 @@
     </div>
   </div>
 </body>
-
 </html>
-
