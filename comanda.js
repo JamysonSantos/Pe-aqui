@@ -134,4 +134,3 @@ const app = new Vue({
     this.showConfirmationModal = false;
   },
 }
-
