@@ -130,6 +130,8 @@ const app = new Vue({
       this.observation = '';
       this.showConfirmationModal = false;
     },
+	close() {
+    this.showConfirmationModal = false;
   },
 });
 
