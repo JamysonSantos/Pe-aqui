@@ -107,7 +107,7 @@ const app = new Vue({
             ctx.font = 'bold 20px Arial';
             ctx.fillText(`Total: R$ ${this.total.toFixed(2)}`, 40, yOffset + 240)
 
-      const storage = firebase.storage();
+       const storage = firebase.storage();
       const imageRef = storage.ref(`/pedidos/${this.order[0].id}`);
       const data = canvas.toDataURL('image/jpeg');
       imageRef.putString(data, 'data_url').then(() => {
@@ -130,7 +130,5 @@ const app = new Vue({
       this.observation = '';
       this.showConfirmationModal = false;
     },
-    close() {
-    this.showConfirmationModal = false;
   },
-}
+});
