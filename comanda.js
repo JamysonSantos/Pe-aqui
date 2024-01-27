@@ -42,11 +42,70 @@ const app = new Vue({
       const canvas = document.getElementById('canvas');
       const ctx = canvas.getContext('2d');
 
-      // Configuração para se ajustar à visualização em telas de 15/16 polegadas de notebooks e telas de celular
-      canvas.width = 720; // Aumentando a largura para ajustar melhor os elementos
-      canvas.height = 1280; // Aumentando a altura para ter espaço suficiente
+            // Configuração para se ajustar à visualização em telas de 15/16 polegadas de notebooks e telas de celular
+            canvas.width = 720; // Aumentando a largura para ajustar melhor os elementos
+            canvas.height = 1280; // Aumentando a altura para ter espaço suficiente
 
-      // ... (restante do código para gerar a imagem na tela)
+            // Background da comanda
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Títulos
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText('Pedido', 20, 40);
+
+            // Linha divisória após o título
+            ctx.beginPath();
+            ctx.moveTo(20, 60);
+            ctx.lineTo(canvas.width - 20, 60);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+                  ctx.stroke();
+
+            // Itens do Pedido
+            ctx.font = 'bold 18px Arial';
+            let yOffset = 100;
+            this.order.forEach((item, index) => {
+            ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)} x${item.quantity}`, 40, yOffset);
+            yOffset += 30;
+
+            // Linha divisória entre os itens selecionados
+            ctx.beginPath();
+            ctx.moveTo(20, yOffset - 10);
+            ctx.lineTo(canvas.width - 20, yOffset - 10);
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+         });
+
+            // Linha divisória após os itens do pedido
+            ctx.beginPath();
+            ctx.moveTo(20, yOffset + 10);
+            ctx.lineTo(canvas.width - 20, yOffset + 10);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();     
+
+            // Informações do Cliente
+            ctx.font = '16px Arial';
+            ctx.fillText(`Nome: ${this.customerName}`, 40, yOffset + 50);
+            ctx.fillText(`Telefone: ${this.customerPhone}`, 40, yOffset + 80);
+            ctx.fillText(`Endereço: ${this.customerAddress}`, 40, yOffset + 110);
+            ctx.fillText(`Forma de Pagamento: ${this.paymentMethod}`, 40, yOffset + 140);
+            ctx.fillText(`Observação: ${this.observation}`, 40, yOffset + 170);
+
+            // Linha divisória após as informações do cliente
+            ctx.beginPath();
+            ctx.moveTo(20, yOffset + 200);
+            ctx.lineTo(canvas.width - 20, yOffset + 200);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Total
+            ctx.font = 'bold 20px Arial';
+            ctx.fillText(`Total: R$ ${this.total.toFixed(2)}`, 40, yOffset + 240)
 
       const storage = firebase.storage();
       const imageRef = storage.ref(`/pedidos/${this.order[0].id}`);
@@ -73,3 +132,4 @@ const app = new Vue({
     },
   },
 });
+
