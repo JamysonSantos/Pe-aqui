@@ -6,27 +6,6 @@
   <title>Faça seu pedido</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-  <script type="module" src="comanda.js"></script>
-  <!-- Adicione as importações para a versão 10 do Firebase -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js';
-    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js';
-    import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-storage.js';
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
-      authDomain: "pecaqui-cc6c1.firebaseapp.com",
-      projectId: "pecaqui-cc6c1",
-      storageBucket: "pecaqui-cc6c1.appspot.com",
-      messagingSenderId: "502925766451",
-      appId: "1:502925766451:web:52473d00da34033f789846"
-    };
-
-    // Inicialize a instância do Firebase e torne-a global
-      window.firebaseApp = initializeApp(firebaseConfig);
-      window.auth = getAuth(window.firebaseApp);
-      window.storage = getStorage(window.firebaseApp);
-    </script>
 </head>
 <body class="bg-gray-100">
   <div id="app" class="container mx-auto px-4 py-8">
@@ -115,9 +94,6 @@
                     <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" @click="submitOrder">
                         Finalizar Pedido
                     </button>
-					<div v-if="showConfirmationModal">
-                    <button type="button" @click="close()">Fechar</button>
-                    </div>
                 </form>
                     <div v-if="showConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50">
   <div class="absolute inset-0 bg-black opacity-50"></div>
@@ -150,8 +126,137 @@
   </div>
 </div>
 
+
     <canvas id="canvas" class="hidden"></canvas>
-    </div>
-  </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showMenu: false,
+                menu: [
+                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                ],
+                order: [],
+                customerName: '',
+                customerPhone: '',
+                customerAddress: '',
+                paymentMethod: '',
+                observation: '',
+				showConfirmationModal: false,
+            },
+            computed: {
+                total() {
+                    return this.order.reduce((total, item) => total + item.price * item.quantity, 0);
+                },
+            },
+            methods: {
+                addItem(item) {
+                    if (item.quantity > 0) {
+                        const newItem = { ...item }; // Cria uma cópia do objeto para evitar referências diretas
+                        newItem.quantity = item.quantity; // Define a quantidade selecionada para o novo item
+                        this.order.push(newItem); // Adiciona o item ao pedido
+                        this.showMenu = false;
+                        // Zera a quantidade após adicionar ao pedido
+                        item.quantity = 0;
+                    } else {
+                        alert('Selecione uma quantidade maior que zero.');
+                    }
+                },
+                removeItem(index) {
+                    this.order.splice(index, 1);
+				
+				},
+                clearOrder() {
+                    this.order = []; // Limpar o pedido
+                },
+                generateImage() {
+                  const canvas = document.getElementById('canvas');
+                  const ctx = canvas.getContext('2d');
+
+                  // Configuração para se ajustar à visualização em telas de 15/16 polegadas de notebooks e telas de celular
+                  canvas.width = 720; // Aumentando a largura para ajustar melhor os elementos
+                  canvas.height = 1280; // Aumentando a altura para ter espaço suficiente
+
+                  // Background da comanda
+                  ctx.fillStyle = '#fff';
+                  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                  // Títulos
+                  ctx.fillStyle = '#000';
+                  ctx.font = 'bold 24px Arial';
+                  ctx.fillText('Pedido', 20, 40);
+
+                  // Linha divisória após o título
+                  ctx.beginPath();
+                  ctx.moveTo(20, 60);
+                  ctx.lineTo(canvas.width - 20, 60);
+                  ctx.strokeStyle = '#000';
+                  ctx.lineWidth = 2;
+                  ctx.stroke();
+
+                  // Itens do Pedido
+                  ctx.font = 'bold 18px Arial';
+                  let yOffset = 100;
+                  this.order.forEach((item, index) => {
+                  ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)} x${item.quantity}`, 40, yOffset);
+                  yOffset += 30;
+
+                  // Linha divisória entre os itens selecionados
+                  ctx.beginPath();
+                  ctx.moveTo(20, yOffset - 10);
+                  ctx.lineTo(canvas.width - 20, yOffset - 10);
+                  ctx.strokeStyle = '#ccc';
+                  ctx.lineWidth = 1;
+                  ctx.stroke();
+                });
+
+                  // Linha divisória após os itens do pedido
+                  ctx.beginPath();
+                  ctx.moveTo(20, yOffset + 10);
+                  ctx.lineTo(canvas.width - 20, yOffset + 10);
+                  ctx.strokeStyle = '#000';
+                  ctx.lineWidth = 2;
+                  ctx.stroke();
+
+                  // Informações do Cliente
+                  ctx.font = '16px Arial';
+                  ctx.fillText(`Nome: ${this.customerName}`, 40, yOffset + 50);
+                  ctx.fillText(`Telefone: ${this.customerPhone}`, 40, yOffset + 80);
+                  ctx.fillText(`Endereço: ${this.customerAddress}`, 40, yOffset + 110);
+                  ctx.fillText(`Forma de Pagamento: ${this.paymentMethod}`, 40, yOffset + 140);
+                  ctx.fillText(`Observação: ${this.observation}`, 40, yOffset + 170);
+
+                  // Linha divisória após as informações do cliente
+                  ctx.beginPath();
+                  ctx.moveTo(20, yOffset + 200);
+                  ctx.lineTo(canvas.width - 20, yOffset + 200);
+                  ctx.strokeStyle = '#000';
+                  ctx.lineWidth = 2;
+                  ctx.stroke();
+
+                  // Total
+                  ctx.font = 'bold 20px Arial';
+                  ctx.fillText(`Total: R$ ${this.total.toFixed(2)}`, 40, yOffset + 240)
+
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/jpeg');
+                    link.download = 'pedido.jpg';
+                    link.click();
+                },
+                submitOrder() {
+                    // Exibir o modal de confirmação ao clicar em "Finalizar Pedido"
+                    this.showConfirmationModal = true;
+                },
+				confirmOrder() {
+                    // Confirmar o pedido e gerar a imagem da comanda
+                    this.generateImage();
+                    // Fechar o modal de confirmação após confirmar o pedido
+                    this.showConfirmationModal = false;
+                },
+            },
+        });
+    </script>
 </body>
 </html>
