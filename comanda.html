@@ -100,23 +100,22 @@
         ];
 
         // Estado da aplicação
-        let showMenu = showMenu || false;
-        let order = order || [];
-        let customerName = customerName || '';
-        let customerPhone = customerPhone || '';
-        let customerStreet = customerStreet || '';
-        let customerNeighborhood = customerNeighborhood || '';
-        let customerLandmark = customerLandmark || '';
-        let paymentMethod = paymentMethod || '';
-        let observation = observation || '';
-        let showConfirmationModal = showConfirmationModal || false;
+        let isMenuVisible = false;
+        let order = [];
+        let customerName = '';
+        let customerPhone = '';
+        let customerStreet = '';
+        let customerNeighborhood = '';
+        let customerLandmark = '';
+        let paymentMethod = '';
+        let observation = '';
+        let isConfirmationModalVisible = false;
 
-        // Função para exibir o menu
+        // Depois
         function showMenu() {
-          showMenu = true;
+          isMenuVisible = true;
           renderMenu();
         }
-
         // Função para ocultar o menu
         function hideMenu() {
           showMenu = false;
