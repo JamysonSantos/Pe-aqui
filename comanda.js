@@ -133,5 +133,5 @@ const app = new Vue({
 	close() {
     this.showConfirmationModal = false;
   },
-});
+};
 
