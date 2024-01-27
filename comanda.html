@@ -6,6 +6,25 @@
   <title>Faça seu pedido</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <!-- Adicione as importações para a versão 10 do Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js';
+    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js';
+    import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-storage.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
+      authDomain: "pecaqui-cc6c1.firebaseapp.com",
+      projectId: "pecaqui-cc6c1",
+      storageBucket: "pecaqui-cc6c1.appspot.com",
+      messagingSenderId: "502925766451",
+      appId: "1:502925766451:web:52473d00da34033f789846"
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+    const auth = getAuth(firebaseApp);
+    const storage = getStorage(firebaseApp);
+</script>
 </head>
 <body class="bg-gray-100">
   <div id="app" class="container mx-auto px-4 py-8">
@@ -127,23 +146,9 @@
 </div>
 
     <canvas id="canvas" class="hidden"></canvas>
-
-    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-storage.js"></script>
-
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
-        authDomain: "pecaqui-cc6c1.firebaseapp.com",
-        projectId: "pecaqui-cc6c1",
-        storageBucket: "pecaqui-cc6c1.appspot.com",
-        messagingSenderId: "502925766451",
-        appId: "1:502925766451:web:52473d00da34033f789846"
-      };
-
-      firebase.initializeApp(firebaseConfig);
-
+	
+    </script>
+	
       new Vue({
         el: '#app',
         data: {
@@ -185,7 +190,7 @@
           },
           generateImage() {
             const canvas = document.getElementById('canvas');
-                  const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d');
 
                   // Configuração para se ajustar à visualização em telas de 15/16 polegadas de notebooks e telas de celular
                   canvas.width = 720; // Aumentando a largura para ajustar melhor os elementos
@@ -281,3 +286,4 @@
   </div>
 </body>
 </html>
+
