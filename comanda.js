@@ -1,6 +1,12 @@
+// Importa o Vue e o componente Comanda
+import Vue from "vue";
+import Comanda from "./components/Comanda";
 // Criação da instância Vue fora do template
 const app = new Vue({
   el: '#app',
+  components: {
+    Comanda,
+  },
   data: {
     showMenu: false,
     menu: [
