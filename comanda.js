@@ -253,4 +253,3 @@ function submitOrder() {
 // Inicializar a renderização do menu e resumo do pedido
 renderMenu();
 renderOrderSummary();
-
