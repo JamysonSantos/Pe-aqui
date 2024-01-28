@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Faça seu pedido</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <body class="bg-gray-100">
   <div id="app" class="container mx-auto px-4 py-8">
@@ -14,85 +15,248 @@
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="showMenu = true">
           Ver Cardápio
         </button>
-        <div id="menu" class="fixed inset-0 flex items-center justify-center z-50 hidden" onclick="hideMenu()">
-          <div class="bg-white p-8 rounded-lg shadow-lg" onclick="event.stopPropagation()">
-            <h2 class="text-2xl font-bold mb-4">Cardápio</h2>
-            <div id="menuItems"></div>
-            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-              onclick="hideMenu()">Fechar Cardápio</button>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h2 class="text-2xl font-bold mb-4">Comanda</h2>
-        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4" onclick="clearOrder()">
+        <div v-if="showMenu" class="fixed inset-0 flex items-center justify-center z-50">
+                    <div class="bg-white p-8 rounded-lg shadow-lg" @click.self="showMenu = false">
+                        <h2 class="text-2xl font-bold mb-4">Cardápio</h2>
+                        <div v-for="item in menu" :key="item.id">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
+                                    <div>
+                                        <h3 class="font-bold">{{ item.name }}</h3>
+                                        <p class="text-gray-600">{{ item.description }}</p>
+                                        <p class="text-lg font-bold">R$ {{ item.price.toFixed(2) }}</p>
+                                        <input type="number" v-model="item.quantity" min="0" class="border-2 border-gray-300 p-2 rounded" placeholder="Quantidade">
+                                    </div>
+                                </div>
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="addItem(item)">
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                        <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" @click="showMenu = false">
+                            Fechar Cardápio
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold mb-4">Comanda</h2>
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4" @click="clearOrder">
           Limpar Pedido
         </button>
         <h2 class="text-2xl font-bold mb-4">Resumo do Pedido</h2>
-        <div id="orderSummary" class="mb-4">
+        <div v-if="order.length === 0">
           <p>Nenhum item adicionado ainda.</p>
+        </div>
+        <div v-else>
+          <div class="mb-4" v-for="(item, index) in order" :key="index">
+            <div class="flex items-center justify-between">
+              <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
+              <div>
+                <h3 class="font-bold">{{ item.name }}</h3>
+                <p class="text-gray-600">{{ item.description }}</p>
+                <p>Quantidade: {{ item.quantity }}</p>
+              </div>
+              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="removeItem(index)">
+                Excluir
+              </button>
+            </div>
+          </div>
+          <p class="text-right font-bold mb-4">Total: R$ {{ total.toFixed(2) }}</p>
         </div>
         <form>
           <div class="mb-4">
             <label for="name" class="block font-bold mb-2">Nome</label>
-            <input type="text" id="name" class="w-full border-2 border-gray-300 p-2 rounded" required>
+            <input type="text" id="name" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerName" required>
           </div>
-          <div class="mb-4">
-            <label for="phone" class="block font-bold mb-2">Telefone</label>
-            <input type="tel" id="phone" class="w-full border-2 border-gray-300 p-2 rounded" required>
-          </div>
-          <div class="mb-4">
-            <label for="street" class="block font-bold mb-2">Rua e Número</label>
-            <input type="text" id="street" class="w-full border-2 border-gray-300 p-2 rounded" required>
-          </div>
-          <div class="mb-4">
-            <label for="neighborhood" class="block font-bold mb-2">Bairro</label>
-            <input type="text" id="neighborhood" class="w-full border-2 border-gray-300 p-2 rounded" required>
-          </div>
-          <div class="mb-4">
-            <label for="landmark" class="block font-bold mb-2">Ponto de Referência</label>
-            <input type="text" id="landmark" class="w-full border-2 border-gray-300 p-2 rounded" required>
-          </div>
-          <div class="mb-4">
-            <label for="payment" class="block font-bold mb-2">Forma de Pagamento</label>
-            <select id="payment" class="w-full border-2 border-gray-300 p-2 rounded" required>
-              <option value="Dinheiro">Dinheiro</option>
-              <option value="Cartão de Crédito">Cartão de Crédito</option>
-              <option value="Cartão de Débito">Cartão de Débito</option>
-              <option value="PIX">PIX</option>
-            </select>
-          </div>
-          <div class="mb-4">
-            <label for="observation" class="block font-bold mb-2">Observação</label>
-            <textarea id="observation" class="w-full border-2 border-gray-300 p-2 rounded" rows="4"></textarea>
-          </div>
-          <button type="button"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-            onclick="submitOrder()">Finalizar Pedido</button>
-        </form>
-        <div id="confirmationModal" class="fixed inset-0 flex items-center justify-center z-50 hidden"
-          onclick="hideConfirmationModal()">
-          <div class="absolute inset-0 bg-black opacity-50"></div>
-          <div class="bg-white p-8 rounded-lg shadow-lg z-10" onclick="event.stopPropagation()">
-            <h2 class="text-2xl font-bold mb-4">Resumo do Pedido</h2>
-            <div id="confirmationItems">
-              <p>Nenhum item adicionado ainda.</p>
-            </div>
-            <div class="flex justify-between">
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onclick="confirmOrder()">Confirmar Pedido</button>
-              <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-                onclick="hideConfirmationModal()">Editar Pedido</button>
-            </div>
+                    <div class="mb-4">
+                        <label for="phone" class="block font-bold mb-2">Telefone</label>
+                        <input type="tel" id="phone" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerPhone" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="address" class="block font-bold mb-2">Endereço</label>
+                        <input type="text" id="address" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerAddress" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="payment" class="block font-bold mb-2">Forma de Pagamento</label>
+                        <select id="payment" v-model="paymentMethod" class="w-full border-2 border-gray-300 p-2 rounded" required>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cartão de Débito">Cartão de Débito</option>
+                            <option value="PIX">PIX</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="observation" class="block font-bold mb-2">Observação</label>
+                        <textarea id="observation" v-model="observation" class="w-full border-2 border-gray-300 p-2 rounded" rows="4"></textarea>
+                    </div>
+                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" @click="submitOrder">
+                        Finalizar Pedido
+                    </button>
+                </form>
+                    <div v-if="showConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50">
+  <div class="absolute inset-0 bg-black opacity-50"></div>
+  <div class="bg-white p-8 rounded-lg shadow-lg z-10">
+    <h2 class="text-2xl font-bold mb-4">Resumo do Pedido</h2>
+    <div v-if="order.length === 0">
+      <p>Nenhum item adicionado ainda.</p>
+    </div>
+    <div v-else>
+      <div class="mb-4" v-for="(item, index) in order" :key="index">
+        <div class="flex items-center justify-between">
+          <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
+          <div>
+            <h3 class="font-bold">{{ item.name }}</h3>
+            <p class="text-gray-600">{{ item.description }}</p>
+            <p>Quantidade: {{ item.quantity }}</p>
           </div>
         </div>
       </div>
-
-     <canvas id="canvas" class="hidden"></canvas>
-
-      <script src="comanda.js"></script>
+      <p class="text-right font-bold mb-4">Total: R$ {{ total.toFixed(2) }}</p>
+      <div class="flex justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="confirmOrder">
+          Confirmar Pedido
+        </button>
+        <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" @click="showConfirmationModal = false">
+          Editar Pedido
+        </button>
+      </div>
     </div>
   </div>
-</body>
+</div>
 
+
+    <canvas id="canvas" class="hidden"></canvas>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showMenu: false,
+                menu: [
+                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
+                ],
+                order: [],
+                customerName: '',
+                customerPhone: '',
+                customerAddress: '',
+                paymentMethod: '',
+                observation: '',
+				showConfirmationModal: false,
+            },
+            computed: {
+                total() {
+                    return this.order.reduce((total, item) => total + item.price * item.quantity, 0);
+                },
+            },
+            methods: {
+                addItem(item) {
+                    if (item.quantity > 0) {
+                        const newItem = { ...item }; // Cria uma cópia do objeto para evitar referências diretas
+                        newItem.quantity = item.quantity; // Define a quantidade selecionada para o novo item
+                        this.order.push(newItem); // Adiciona o item ao pedido
+                        this.showMenu = false;
+                        // Zera a quantidade após adicionar ao pedido
+                        item.quantity = 0;
+                    } else {
+                        alert('Selecione uma quantidade maior que zero.');
+                    }
+                },
+                removeItem(index) {
+                    this.order.splice(index, 1);
+				
+				},
+                clearOrder() {
+                    this.order = []; // Limpar o pedido
+                },
+                generateImage() {
+                  const canvas = document.getElementById('canvas');
+                  const ctx = canvas.getContext('2d');
+
+                  // Configuração para se ajustar à visualização em telas de 15/16 polegadas de notebooks e telas de celular
+                  canvas.width = 720; // Aumentando a largura para ajustar melhor os elementos
+                  canvas.height = 1280; // Aumentando a altura para ter espaço suficiente
+
+                  // Background da comanda
+                  ctx.fillStyle = '#fff';
+                  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                  // Títulos
+                  ctx.fillStyle = '#000';
+                  ctx.font = 'bold 24px Arial';
+                  ctx.fillText('Pedido', 20, 40);
+
+                  // Linha divisória após o título
+                  ctx.beginPath();
+                  ctx.moveTo(20, 60);
+                  ctx.lineTo(canvas.width - 20, 60);
+                  ctx.strokeStyle = '#000';
+                  ctx.lineWidth = 2;
+                  ctx.stroke();
+
+                  // Itens do Pedido
+                  ctx.font = 'bold 18px Arial';
+                  let yOffset = 100;
+                  this.order.forEach((item, index) => {
+                  ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)} x${item.quantity}`, 40, yOffset);
+                  yOffset += 30;
+
+                  // Linha divisória entre os itens selecionados
+                  ctx.beginPath();
+                  ctx.moveTo(20, yOffset - 10);
+                  ctx.lineTo(canvas.width - 20, yOffset - 10);
+                  ctx.strokeStyle = '#ccc';
+                  ctx.lineWidth = 1;
+                  ctx.stroke();
+                });
+
+                  // Linha divisória após os itens do pedido
+                  ctx.beginPath();
+                  ctx.moveTo(20, yOffset + 10);
+                  ctx.lineTo(canvas.width - 20, yOffset + 10);
+                  ctx.strokeStyle = '#000';
+                  ctx.lineWidth = 2;
+                  ctx.stroke();
+
+                  // Informações do Cliente
+                  ctx.font = '16px Arial';
+                  ctx.fillText(`Nome: ${this.customerName}`, 40, yOffset + 50);
+                  ctx.fillText(`Telefone: ${this.customerPhone}`, 40, yOffset + 80);
+                  ctx.fillText(`Endereço: ${this.customerAddress}`, 40, yOffset + 110);
+                  ctx.fillText(`Forma de Pagamento: ${this.paymentMethod}`, 40, yOffset + 140);
+                  ctx.fillText(`Observação: ${this.observation}`, 40, yOffset + 170);
+
+                  // Linha divisória após as informações do cliente
+                  ctx.beginPath();
+                  ctx.moveTo(20, yOffset + 200);
+                  ctx.lineTo(canvas.width - 20, yOffset + 200);
+                  ctx.strokeStyle = '#000';
+                  ctx.lineWidth = 2;
+                  ctx.stroke();
+
+                  // Total
+                  ctx.font = 'bold 20px Arial';
+                  ctx.fillText(`Total: R$ ${this.total.toFixed(2)}`, 40, yOffset + 240)
+
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/jpeg');
+                    link.download = 'pedido.jpg';
+                    link.click();
+                },
+                submitOrder() {
+                    // Exibir o modal de confirmação ao clicar em "Finalizar Pedido"
+                    this.showConfirmationModal = true;
+                },
+				confirmOrder() {
+                    // Confirmar o pedido e gerar a imagem da comanda
+                    this.generateImage();
+                    // Fechar o modal de confirmação após confirmar o pedido
+                    this.showConfirmationModal = false;
+                },
+            },
+        });
+    </script>
+</body>
 </html>
