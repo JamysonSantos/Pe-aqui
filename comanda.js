@@ -137,7 +137,7 @@ function hideConfirmationModal() {
   renderConfirmationModal();
 }
 
-/ Função para renderizar o modal de confirmação dinamicamente
+// Função para renderizar o modal de confirmação dinamicamente
 function renderConfirmationModal() {
   const confirmationModalContainer = document.getElementById('confirmationModal');
   confirmationModalContainer.innerHTML = '';
