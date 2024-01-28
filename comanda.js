@@ -14,7 +14,7 @@ let paymentMethod = '';
 let observation = '';
 let isConfirmationModalVisible = false;
 
-/ Depois
+// Depois
 function showMenu() {
   isMenuVisible = true;
   renderMenu();
