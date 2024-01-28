@@ -24,7 +24,7 @@ function hideMenu() {
   isMenuVisible = false;
   renderMenu();
 }
-/ Função para renderizar o menu dinamicamente
+// Função para renderizar o menu dinamicamente
 function renderMenu() {
   const menuContainer = document.getElementById('menuItems');
   menuContainer.innerHTML = '';
