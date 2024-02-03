@@ -89,6 +89,24 @@ firebase.auth().onAuthStateChanged(user => {
         draggedItem = dropArea.querySelector('img');
       });
     });
+
+    // Atualiza o link do cardápio com base no ID do usuário
+    const copiarLinkBtn = document.getElementById('copiar-link');
+    copiarLinkBtn.addEventListener('click', () => {
+      const userID = user.uid;
+      const linkToCopy = `comanda.html?userID=${userID}`;
+      
+      // Cria um elemento de input para copiar o texto
+      const inputElement = document.createElement('input');
+      inputElement.value = linkToCopy;
+      document.body.appendChild(inputElement);
+      inputElement.select();
+      document.execCommand('copy');
+      document.body.removeChild(inputElement);
+
+      // Exibe a mensagem de "Link Copiado!"
+      document.getElementById('copyLinkMessage').textContent = 'Link Copiado!';
+    });
   }
 });
 
@@ -108,6 +126,7 @@ document.querySelector(".button-cadastrar").addEventListener("click", function()
   // Redireciona o usuário para a página de cadastro de cardápio
   window.location.href = "cadastrocardapio.html";
 });
+
 
 
 
