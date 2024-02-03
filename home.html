@@ -41,8 +41,8 @@
             font-weight: bold;
         }
 
-        /* Estilos para o botão "Cadastre seu cardápio" */
-        .button-cadastrar {
+        /* Estilos para o botão "Copiar link" */
+        #copiar-link {
             background-color: #FF5733;
             color: white;
             border: none;
@@ -53,7 +53,7 @@
             transition: background-color 0.3s ease;
         }
 
-        .button-cadastrar:hover {
+        #copiar-link:hover {
             background-color: #FF814E;
         }
 
@@ -113,7 +113,7 @@
             .company-info {
                 font-size: 14px;
             }
-            .button-cadastrar {
+            #copiar-link {
                 padding: 8px 16px;
                 font-size: 14px;
             }
@@ -158,34 +158,33 @@
 
     <p id="copyLinkMessage"></p>
     
-<script>
-   const botaoCopiarLink = document.getElementById('copiar-link');
+    <script>
+        const botaoCopiarLink = document.getElementById('copiar-link');
 
-botaoCopiarLink.addEventListener('click', () => {
-  // Obtém o código da página
-  const codigoPagina = document.documentElement.outerHTML;
+        botaoCopiarLink.addEventListener('click', () => {
+            // Obtém o código da página
+            const codigoPagina = document.documentElement.outerHTML;
 
-  // Cria um elemento de texto para armazenar o código
-  const elementoTexto = document.createElement('textarea');
-  elementoTexto.value = codigoPagina;
+            // Cria um elemento de texto para armazenar o código
+            const elementoTexto = document.createElement('textarea');
+            elementoTexto.value = codigoPagina;
 
-  // Adiciona o elemento de texto ao corpo da página (temporariamente)
-  document.body.appendChild(elementoTexto);
+            // Adiciona o elemento de texto ao corpo da página (temporariamente)
+            document.body.appendChild(elementoTexto);
 
-  // Seleciona o texto do elemento
-  elementoTexto.select();
+            // Seleciona o texto do elemento
+            elementoTexto.select();
 
-  // Copia o texto para a área de transferência
-  document.execCommand('copy');
+            // Copia o texto para a área de transferência
+            document.execCommand('copy');
 
-  // Remove o elemento de texto do corpo da página
-  document.body.removeChild(elementoTexto);
+            // Remove o elemento de texto do corpo da página
+            document.body.removeChild(elementoTexto);
 
-  // Mostra uma mensagem de confirmação
-  alert('Link do cardápio copiado para a área de transferência!');
-});
-    
-</script>
+            // Mostra uma mensagem de confirmação
+            alert('Link do cardápio copiado para a área de transferência!');
+        });
+    </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth-compat.js"></script>
@@ -193,6 +192,7 @@ botaoCopiarLink.addEventListener('click', () => {
     <script src="guarda.js"></script>
 </body>
 </html>
+
 
 
 
