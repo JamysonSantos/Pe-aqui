@@ -132,7 +132,7 @@
             <img src="icon128.png" alt="Logo da Empresa" class="logo">
             <span class="company-name">Nome da Empresa</span>
         </div>
-        <button id="copyLinkBtn" class="button-cadastrar">Clique aqui para copiar o link do seu cardápio</button>
+        <button id="copiar-link">Clique aqui para copiar o link do seu cardápio</button>
         <a href="cadastrocardapio.html" class="button-cadastrar">Cadastre seu cardápio</a>
         <a href="login.html" class="button-sair" onclick="logout()">Sair</a>
     </div>
@@ -159,23 +159,31 @@
     <p id="copyLinkMessage"></p>
     
 <script>
-    document.getElementById('copyLinkBtn').addEventListener('click', function() {
-        const linkToCopy = "comanda.html"; // Substitua pelo link desejado
+   const botaoCopiarLink = document.getElementById('copiar-link');
 
-        // Cria um elemento de input para copiar o texto
-        const inputElement = document.createElement('input');
-        inputElement.value = linkToCopy;
-        document.body.appendChild(inputElement);
-        inputElement.select();
-        document.execCommand('copy');
-        document.body.removeChild(inputElement);
+botaoCopiarLink.addEventListener('click', () => {
+  // Obtém o código da página
+  const codigoPagina = document.documentElement.outerHTML;
 
-        // Exibe a mensagem de "Link Copiado!"
-        alert('Link Copiado!');
+  // Cria um elemento de texto para armazenar o código
+  const elementoTexto = document.createElement('textarea');
+  elementoTexto.value = codigoPagina;
 
-        // Evita que o evento de redirecionamento seja acionado
-        return false;
-    });
+  // Adiciona o elemento de texto ao corpo da página (temporariamente)
+  document.body.appendChild(elementoTexto);
+
+  // Seleciona o texto do elemento
+  elementoTexto.select();
+
+  // Copia o texto para a área de transferência
+  document.execCommand('copy');
+
+  // Remove o elemento de texto do corpo da página
+  document.body.removeChild(elementoTexto);
+
+  // Mostra uma mensagem de confirmação
+  alert('Link do cardápio copiado para a área de transferência!');
+});
     
 </script>
 
