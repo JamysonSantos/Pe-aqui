@@ -151,29 +151,38 @@
     <script>
         const botaoCopiarLink = document.getElementById('copiar-link');
 
-        botaoCopiarLink.addEventListener('click', () => {
-            // Obtém o código da página
-            const codigoPagina = document.documentElement.outerHTML;
+botaoCopiarLink.addEventListener('click', () => {
+    // Obtém o nome do arquivo HTML atual (pode precisar ajustar se o caminho for diferente)
+    const paginaAtual = window.location.pathname.split('/').pop();
 
-            // Cria um elemento de texto para armazenar o código
-            const elementoTexto = document.createElement('textarea');
-            elementoTexto.value = codigoPagina;
+    // Cria o link base para a página "comanda.html"
+    const linkBase = `https://seusite.com/comanda.html`;
 
-            // Adiciona o elemento de texto ao corpo da página (temporariamente)
-            document.body.appendChild(elementoTexto);
+    // Adiciona parâmetros específicos da página comanda.html (pode ajustar conforme necessário)
+    const parametros = `param1=valor1&param2=valor2`;
 
-            // Seleciona o texto do elemento
-            elementoTexto.select();
+    // Constrói o link final
+    const linkFinal = `${linkBase}?${parametros}`;
 
-            // Copia o texto para a área de transferência
-            document.execCommand('copy');
+    // Cria um elemento de texto para armazenar o link
+    const elementoTexto = document.createElement('textarea');
+    elementoTexto.value = linkFinal;
 
-            // Remove o elemento de texto do corpo da página
-            document.body.removeChild(elementoTexto);
+    // Adiciona o elemento de texto ao corpo da página (temporariamente)
+    document.body.appendChild(elementoTexto);
 
-            // Mostra uma mensagem de confirmação
-            alert('Link do cardápio copiado para a área de transferência!');
-        });
+    // Seleciona o texto do elemento
+    elementoTexto.select();
+
+    // Copia o texto para a área de transferência
+    document.execCommand('copy');
+
+    // Remove o elemento de texto do corpo da página
+    document.body.removeChild(elementoTexto);
+
+    // Mostra uma mensagem de confirmação
+    alert('Link do cardápio copiado para a área de transferência!');
+});
     </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
