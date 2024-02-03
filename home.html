@@ -132,7 +132,6 @@
             <img src="icon128.png" alt="Logo da Empresa" class="logo">
             <span class="company-name">Nome da Empresa</span>
         </div>
-        <p id="copyLinkMessage"></p> <!-- Elemento para exibir mensagem de cópia do link -->
         <button id="copyLinkBtn" class="button-cadastrar">Clique aqui para copiar o link do seu cardápio</button>
         <a href="cadastrocardapio.html" class="button-cadastrar">Cadastre seu cardápio</a>
         <a href="login.html" class="button-sair" onclick="logout()">Sair</a>
@@ -168,9 +167,6 @@
             inputElement.select();
             document.execCommand('copy');
             document.body.removeChild(inputElement);
-
-            // Exibe a mensagem de "Link Copiado!" no parágrafo
-            document.getElementById('copyLinkMessage').textContent = 'Link Copiado!';
         });
     </script>
 
