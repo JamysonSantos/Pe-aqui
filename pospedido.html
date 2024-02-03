@@ -12,7 +12,7 @@
         <p class="text-center text-gray-600 mb-4">Muito obrigado!</p>
         <div class="mb-4">
             <h2 class="text-lg font-bold mb-2">Resumo do Pedido</h2>
-            <p class="text-gray-600">[Resumo do pedido aqui]</p>
+            <div id="order-summary-placeholder" class="text-gray-600">[Resumo do pedido aqui]</div>
         </div>
         <div class="mb-4">
             <h2 class="text-lg font-bold mb-2">Estimativa de Entrega</h2>
@@ -28,5 +28,25 @@
         </div>
         <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-orange-600 w-full">CONFIRMAR ENTREGA</button>
     </div>
+
+    <script>
+        // Recuperar o elemento de resumo do pedido
+        const orderSummaryPlaceholder = document.getElementById('order-summary-placeholder');
+
+        // Verificar se há itens para exibir
+        if (items.length > 0) {
+            // Criar uma string HTML para os itens do pedido
+            const orderSummaryHTML = items.map(item => {
+                return `<p>${item.name}: ${item.quantity} x ${item.price.toFixed(2)} = ${item.total.toFixed(2)}</p>`;
+            }).join('');
+
+            // Preencher o elemento de resumo do pedido com a string HTML
+            orderSummaryPlaceholder.innerHTML = orderSummaryHTML;
+        } else {
+            // Se não houver itens, exibir uma mensagem padrão
+            orderSummaryPlaceholder.innerHTML = '<p>Nenhum item selecionado</p>';
+        }
+    </script>
 </body>
 </html>
+
