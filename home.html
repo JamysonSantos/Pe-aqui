@@ -161,11 +161,12 @@
 
         botaoCopiarLink.addEventListener('click', () => {
             // Obtém o código da página
-            const codigoPagina = document.documentElement.outerHTML;
+            const userId = firebase.auth().currentUser.uid; // Substitua pelo método real de obter o ID do usuário
+            const linkPersonalizado = `comanda-${userId}.html`; // Personalize o link conforme necessário
 
-            // Cria um elemento de texto para armazenar o código
+            // Cria um elemento de texto para armazenar o link
             const elementoTexto = document.createElement('textarea');
-            elementoTexto.value = codigoPagina;
+            elementoTexto.value = linkPersonalizado;
 
             // Adiciona o elemento de texto ao corpo da página (temporariamente)
             document.body.appendChild(elementoTexto);
@@ -190,6 +191,7 @@
     <script src="guarda.js"></script>
 </body>
 </html>
+
 
 
 
