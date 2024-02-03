@@ -1,262 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faça seu pedido</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faça seu pedido</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            background: linear-gradient(45deg, #ffffff, #ffffcc);
+        }
+
+        .header {
+            font-size: 2rem;
+            text-align: center;
+            padding: 1rem;
+            color: #cc6600;
+        }
+
+        #view-menu,
+        #close-popup,
+        #finish-order,
+        #confirm-order,
+        #continue-order,
+        #add-item {
+            width: 100%;
+        }
+
+        #total {
+            border-radius: 8px;
+            border: 2px solid #d2d6dc;
+            padding: 8px;
+            text-align: right;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .summary-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        /* Cor laranja para os botões "Adicionar" */
+        #menu-popup .bg-orange-500,
+        #menu-popup .hover\:bg-orange-700 {
+            background-color: #ff9900;
+        }
+
+        /* Estilo para os botões de quantidade */
+        .quantity-button {
+            width: 30px;
+            height: 30px;
+            background-color: #ff0000; /* Vermelho para "-" */
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .quantity-button.increase {
+            background-color: #00ff00; /* Verde para "+" */
+        }
+
+        /* Botões da tela de resumo do pedido */
+        #confirm-order,
+        #continue-order {
+            width: 48%;
+        }
+
+        /* Cores dos botões de pedido */
+        #confirm-order {
+            background-color: #00ff00; /* Verde */
+        }
+
+        #continue-order {
+            background-color: #ff9900; /* Laranja */
+        }
+
+        /* Estilo para o popup de pedido */
+        #order-popup {
+            margin: auto;
+        }
+
+        #order-popup .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        /* Centralizar o popup */
+        #order-popup-content {
+            text-align: center;
+        }
+
+    </style>
 </head>
-<body class="bg-gray-100">
-  <div id="app" class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold mb-8">Faça seu pedido aqui!</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="showMenu = true">
-          Ver Cardápio
-        </button>
-        <div v-if="showMenu" class="fixed inset-0 flex items-center justify-center z-50">
-                    <div class="bg-white p-8 rounded-lg shadow-lg" @click.self="showMenu = false">
-                        <h2 class="text-2xl font-bold mb-4">Cardápio</h2>
-                        <div v-for="item in menu" :key="item.id">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center">
-                                    <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
-                                    <div>
-                                        <h3 class="font-bold">{{ item.name }}</h3>
-                                        <p class="text-gray-600">{{ item.description }}</p>
-                                        <p class="text-lg font-bold">R$ {{ item.price.toFixed(2) }}</p>
-                                        <input type="number" v-model="item.quantity" min="0" class="border-2 border-gray-300 p-2 rounded" placeholder="Quantidade">
-                                    </div>
-                                </div>
-                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="addItem(item)">
-                                    Adicionar
-                                </button>
-                            </div>
-                        </div>
-                        <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" @click="showMenu = false">
-                            Fechar Cardápio
-                        </button>
-                    </div>
+
+<body class="min-h-screen flex flex-col items-center justify-center">
+    <div class="header bg-orange-500">Peçaqui seu pedido</div>
+    <button id="view-menu" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">Ver cardápio</button>
+    <div id="menu-popup" class="hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg">
+            <h2 class="text-2xl font-bold mb-4">Cardápio</h2>
+            <div class="mb-4">
+                <label for="calabresa" class="block text-gray-700 text-sm font-bold mb-2">Pizza calabresa R$ 29,90</label>
+                <div class="flex items-center mb-2">
+                    <input type="button" class="quantity-button mr-2" value="-" onclick="decreaseQuantity('calabresa')">
+                    <input type="number" id="calabresa" class="w-16 mr-4" value="0">
+                    <input type="button" class="quantity-button increase" value="+" onclick="increaseQuantity('calabresa')">
                 </div>
+                <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded" onclick="addItem('Pizza calabresa', 29.9, 'calabresa')">Adicionar</button>
             </div>
-            <div>
-              <h2 class="text-2xl font-bold mb-4">Comanda</h2>
-        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4" @click="clearOrder">
-          Limpar Pedido
-        </button>
-        <h2 class="text-2xl font-bold mb-4">Resumo do Pedido</h2>
-        <div v-if="order.length === 0">
-          <p>Nenhum item adicionado ainda.</p>
-        </div>
-        <div v-else>
-          <div class="mb-4" v-for="(item, index) in order" :key="index">
-            <div class="flex items-center justify-between">
-              <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
-              <div>
-                <h3 class="font-bold">{{ item.name }}</h3>
-                <p class="text-gray-600">{{ item.description }}</p>
-                <p>Quantidade: {{ item.quantity }}</p>
-              </div>
-              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="removeItem(index)">
-                Excluir
-              </button>
+            <div class="mb-4">
+                <label for="mussarela" class="block text-gray-700 text-sm font-bold mb-2">Pizza de Mussarela R$ 25,90</label>
+                <div class="flex items-center mb-2">
+                    <input type="button" class="quantity-button mr-2" value="-" onclick="decreaseQuantity('mussarela')">
+                    <input type="number" id="mussarela" class="w-16 mr-4" value="0">
+                    <input type="button" class="quantity-button increase" value="+" onclick="increaseQuantity('mussarela')">
+                </div>
+                <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded" onclick="addItem('Pizza de Mussarela', 25.9, 'mussarela')">Adicionar</button>
             </div>
-          </div>
-          <p class="text-right font-bold mb-4">Total: R$ {{ total.toFixed(2) }}</p>
+            <button id="close-popup" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Fechar Cardápio</button>
         </div>
-        <form>
-          <div class="mb-4">
-            <label for="name" class="block font-bold mb-2">Nome</label>
-            <input type="text" id="name" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerName" required>
-          </div>
-                    <div class="mb-4">
-                        <label for="phone" class="block font-bold mb-2">Telefone</label>
-                        <input type="tel" id="phone" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerPhone" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="address" class="block font-bold mb-2">Endereço</label>
-                        <input type="text" id="address" class="w-full border-2 border-gray-300 p-2 rounded" v-model="customerAddress" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="payment" class="block font-bold mb-2">Forma de Pagamento</label>
-                        <select id="payment" v-model="paymentMethod" class="w-full border-2 border-gray-300 p-2 rounded" required>
-                            <option value="Dinheiro">Dinheiro</option>
-                            <option value="Cartão de Crédito">Cartão de Crédito</option>
-                            <option value="Cartão de Débito">Cartão de Débito</option>
-                            <option value="PIX">PIX</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="observation" class="block font-bold mb-2">Observação</label>
-                        <textarea id="observation" v-model="observation" class="w-full border-2 border-gray-300 p-2 rounded" rows="4"></textarea>
-                    </div>
-                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" @click="submitOrder">
-                        Finalizar Pedido
-                    </button>
-                </form>
-                    <div v-if="showConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50">
-  <div class="absolute inset-0 bg-black opacity-50"></div>
-  <div class="bg-white p-8 rounded-lg shadow-lg z-10">
-    <h2 class="text-2xl font-bold mb-4">Resumo do Pedido</h2>
-    <div v-if="order.length === 0">
-      <p>Nenhum item adicionado ainda.</p>
     </div>
-    <div v-else>
-      <div class="mb-4" v-for="(item, index) in order" :key="index">
-        <div class="flex items-center justify-between">
-          <img :src="item.image" :alt="item.name" class="w-12 h-12 mr-4">
-          <div>
-            <h3 class="font-bold">{{ item.name }}</h3>
-            <p class="text-gray-600">{{ item.description }}</p>
-            <p>Quantidade: {{ item.quantity }}</p>
-          </div>
+    <div class="mt-8 text-2xl font-bold summary-title">Resumo do seu Pedido</div>
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg mt-4">
+        <div id="order-summary" class="mb-4"></div>
+        <div id="total"></div>
+    </div>
+    <form class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg mt-4">
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nome:</label>
+            <input type="text" id="name" class="w-full">
         </div>
-      </div>
-      <p class="text-right font-bold mb-4">Total: R$ {{ total.toFixed(2) }}</p>
-      <div class="flex justify-between">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="confirmOrder">
-          Confirmar Pedido
-        </button>
-        <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" @click="showConfirmationModal = false">
-          Editar Pedido
-        </button>
-      </div>
+        <div class="mb-4">
+            <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Telefone:</label>
+            <input type="text" id="phone" class="w-full">
+        </div>
+        <div class="mb-4">
+            <label for="address" class="block text-gray-700 text-sm font-bold mb-2">Rua e Número:</label>
+            <input type="text" id="address" class="w-full">
+        </div>
+        <div class="mb-4">
+            <label for="neighborhood" class="block text-gray-700 text-sm font-bold mb-2">Bairro:</label>
+            <input type="text" id="neighborhood" class="w-full">
+        </div>
+        <div class="mb-4">
+            <label for="landmark" class="block text-gray-700 text-sm font-bold mb-2">Ponto de referência:</label>
+            <input type="text" id="landmark" class="w-full">
+        </div>
+        <div class="mb-4">
+            <label for="payment" class="block text-gray-700 text-sm font-bold mb-2">Forma de pagamento:</label>
+            <select id="payment" class="w-full">
+                <option value="dinheiro">Dinheiro</option>
+                <option value="credito">Cartão de Crédito</option>
+                <option value="debito">Cartão de Débito</option>
+                <option value="pix">PIX</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label for="observations" class="block text-gray-700 text-sm font-bold mb-2">Observações:</label>
+            <textarea id="observations" class="w-full"></textarea>
+        </div>
+    </form>
+    
+    <button id="finish-order" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="menu-popup()">Finalizar Pedido</button>
+    <div id="order-popup" class="hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg" id="order-popup-content">
+            <h2 class="text-2xl font-bold mb-4">Itens selecionados</h2>
+            <div id="order-summary-popup" class="mb-4"></div>
+            <div class="button-container">
+                <button id="confirm-order" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="generateImage()">Confirmar Pedido</button>
+                <button id="continue-order" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded" onclick="continueOrder()">Editar Pedido</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
-
-    <canvas id="canvas" class="hidden"></canvas>
 
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                showMenu: false,
-                menu: [
-                    { id: 1, name: 'Big Mac', description: 'Hambúrguer de alta qualidade', price: 10.99, image: 'https://via.placeholder.com/150', quantity: 0 },
-                    { id: 2, name: 'McChicken', description: 'Frango no pão de bacon', price: 12.99, image: 'https://via.placeholder.com/150', quantity: 0 },
-                ],
-                order: [],
-                customerName: '',
-                customerPhone: '',
-                customerAddress: '',
-                paymentMethod: '',
-                observation: '',
-				showConfirmationModal: false,
-            },
-            computed: {
-                total() {
-                    return this.order.reduce((total, item) => total + item.price * item.quantity, 0);
-                },
-            },
-            methods: {
-                addItem(item) {
-                    if (item.quantity > 0) {
-                        const newItem = { ...item }; // Cria uma cópia do objeto para evitar referências diretas
-                        newItem.quantity = item.quantity; // Define a quantidade selecionada para o novo item
-                        this.order.push(newItem); // Adiciona o item ao pedido
-                        this.showMenu = false;
-                        // Zera a quantidade após adicionar ao pedido
-                        item.quantity = 0;
-                    } else {
-                        alert('Selecione uma quantidade maior que zero.');
-                    }
-                },
-                removeItem(index) {
-                    this.order.splice(index, 1);
-				
-				},
-                clearOrder() {
-                    this.order = []; // Limpar o pedido
-                },
-                generateImage() {
-                  const canvas = document.getElementById('canvas');
-                  const ctx = canvas.getContext('2d');
+	
+    // View Menu Popup
+    const viewMenu = document.getElementById('view-menu');
+    const menuPopup = document.getElementById('menu-popup');
+    viewMenu.addEventListener('click', () => {
+        menuPopup.classList.remove('hidden');
+    });
 
-                  // Configuração para se ajustar à visualização em telas de 15/16 polegadas de notebooks e telas de celular
-                  canvas.width = 720; // Aumentando a largura para ajustar melhor os elementos
-                  canvas.height = 1280; // Aumentando a altura para ter espaço suficiente
+    // Close Menu Popup
+    const closePopup = document.getElementById('close-popup');
+    closePopup.addEventListener('click', () => {
+        menuPopup.classList.add('hidden');
+    });
 
-                  // Background da comanda
-                  ctx.fillStyle = '#fff';
-                  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Calcular Total e Mostrar Itens Selecionados
+    const total = document.getElementById('total');
+    const orderSummary = document.getElementById('order-summary');
+    const orderSummaryPopup = document.getElementById('order-summary-popup');
+    const items = [];
 
-                  // Títulos
-                  ctx.fillStyle = '#000';
-                  ctx.font = 'bold 24px Arial';
-                  ctx.fillText('Pedido', 20, 40);
+    function addItem(name, price, id) {
+        const itemQuantity = parseFloat(document.getElementById(id).value);
 
-                  // Linha divisória após o título
-                  ctx.beginPath();
-                  ctx.moveTo(20, 60);
-                  ctx.lineTo(canvas.width - 20, 60);
-                  ctx.strokeStyle = '#000';
-                  ctx.lineWidth = 2;
-                  ctx.stroke();
+        if (itemQuantity > 0) {
+            const totalAmount = itemQuantity * price;
+            items.push({ name, quantity: itemQuantity, price, total: totalAmount });
+            updateOrderSummary();
+            updateTotal();
+            clearQuantity(id);
+        }
+    }
 
-                  // Itens do Pedido
-                  ctx.font = 'bold 18px Arial';
-                  let yOffset = 100;
-                  this.order.forEach((item, index) => {
-                  ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)} x${item.quantity}`, 40, yOffset);
-                  yOffset += 30;
+    function updateOrderSummary() {
+        orderSummary.innerHTML = '';
+        orderSummaryPopup.innerHTML = '';
+        items.forEach((item) => {
+            const newItem = document.createElement('div');
+            newItem.innerHTML = `<p>${item.name}: ${item.quantity} x ${item.price.toFixed(2)} = ${item.total.toFixed(2)}</p>`;
+            orderSummary.appendChild(newItem);
 
-                  // Linha divisória entre os itens selecionados
-                  ctx.beginPath();
-                  ctx.moveTo(20, yOffset - 10);
-                  ctx.lineTo(canvas.width - 20, yOffset - 10);
-                  ctx.strokeStyle = '#ccc';
-                  ctx.lineWidth = 1;
-                  ctx.stroke();
-                });
-
-                  // Linha divisória após os itens do pedido
-                  ctx.beginPath();
-                  ctx.moveTo(20, yOffset + 10);
-                  ctx.lineTo(canvas.width - 20, yOffset + 10);
-                  ctx.strokeStyle = '#000';
-                  ctx.lineWidth = 2;
-                  ctx.stroke();
-
-                  // Informações do Cliente
-                  ctx.font = '16px Arial';
-                  ctx.fillText(`Nome: ${this.customerName}`, 40, yOffset + 50);
-                  ctx.fillText(`Telefone: ${this.customerPhone}`, 40, yOffset + 80);
-                  ctx.fillText(`Endereço: ${this.customerAddress}`, 40, yOffset + 110);
-                  ctx.fillText(`Forma de Pagamento: ${this.paymentMethod}`, 40, yOffset + 140);
-                  ctx.fillText(`Observação: ${this.observation}`, 40, yOffset + 170);
-
-                  // Linha divisória após as informações do cliente
-                  ctx.beginPath();
-                  ctx.moveTo(20, yOffset + 200);
-                  ctx.lineTo(canvas.width - 20, yOffset + 200);
-                  ctx.strokeStyle = '#000';
-                  ctx.lineWidth = 2;
-                  ctx.stroke();
-
-                  // Total
-                  ctx.font = 'bold 20px Arial';
-                  ctx.fillText(`Total: R$ ${this.total.toFixed(2)}`, 40, yOffset + 240)
-
-                    const link = document.createElement('a');
-                    link.href = canvas.toDataURL('image/jpeg');
-                    link.download = 'pedido.jpg';
-                    link.click();
-                },
-                submitOrder() {
-                    // Exibir o modal de confirmação ao clicar em "Finalizar Pedido"
-                    this.showConfirmationModal = true;
-                },
-				confirmOrder() {
-                    // Confirmar o pedido e gerar a imagem da comanda
-                    this.generateImage();
-                    // Fechar o modal de confirmação após confirmar o pedido
-                    this.showConfirmationModal = false;
-                },
-            },
+            const newItemPopup = document.createElement('div');
+            newItemPopup.innerHTML = `<p>${item.name}: ${item.quantity} x ${item.price.toFixed(2)} = ${item.total.toFixed(2)}</p>`;
+            orderSummaryPopup.appendChild(newItemPopup);
         });
-    </script>
+    }
+
+    function updateTotal() {
+        let sum = 0;
+        items.forEach((item) => {
+            sum += item.total;
+        });
+        total.textContent = `Total: R$ ${sum.toFixed(2)}`;
+    }
+
+    function clearQuantity(id) {
+        document.getElementById(id).value = '0';
+    }
+
+    // Finish Order Popup
+    const finishOrderButton = document.getElementById('finish-order');
+    finishOrderButton.addEventListener('click', () => {
+        // Atualizar resumo do pedido no popup de confirmação
+        updateOrderSummary();
+        document.getElementById('order-popup').classList.remove('hidden');
+    });
+
+    // Confirm Order Function
+    const confirmOrder = () => {
+        // Adicionar lógica para confirmar o pedido
+        document.getElementById('order-popup').classList.add('hidden');
+        alert('Pedido confirmado!');
+    }
+
+    // Continue Order Function
+    const continueOrder = () => {
+        // Adicionar lógica para continuar o pedido
+        document.getElementById('order-popup').classList.add('hidden');
+    }
+
+    // Função para aumentar a quantidade
+    function increaseQuantity(itemId) {
+        const itemInput = document.getElementById(itemId);
+        itemInput.value = parseInt(itemInput.value) + 1;
+    }
+
+    // Função para diminuir a quantidade
+    function decreaseQuantity(itemId) {
+        const itemInput = document.getElementById(itemId);
+        const currentValue = parseInt(itemInput.value);
+        itemInput.value = currentValue > 0 ? currentValue - 1 : 0;
+    }
+
+    function generateImage() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Configuração do canvas
+        canvas.width = 720;
+        canvas.height = 1280;
+
+        // Background da comanda
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Títulos
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 24px Arial';
+        ctx.fillText('Pedido', 20, 40);
+
+        // Linha divisória após o título
+        ctx.beginPath();
+        ctx.moveTo(20, 60);
+        ctx.lineTo(canvas.width - 20, 60);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Itens do Pedido
+        ctx.font = 'bold 18px Arial';
+        let yOffset = 100;
+        items.forEach((item, index) => {
+            ctx.fillText(`${item.name} - R$ ${item.price.toFixed(2)} x${item.quantity}`, 40, yOffset);
+            yOffset += 30;
+
+            // Linha divisória entre os itens selecionados
+            ctx.beginPath();
+            ctx.moveTo(20, yOffset - 10);
+            ctx.lineTo(canvas.width - 20, yOffset - 10);
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        });
+
+        // Linha divisória após os itens do pedido
+        ctx.beginPath();
+        ctx.moveTo(20, yOffset + 10);
+        ctx.lineTo(canvas.width - 20, yOffset + 10);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Informações do Cliente
+        ctx.font = '16px Arial';
+        ctx.fillText(`Nome: ${document.getElementById('name').value}`, 40, yOffset + 50);
+        ctx.fillText(`Telefone: ${document.getElementById('phone').value}`, 40, yOffset + 80);
+        ctx.fillText(`Endereço: ${document.getElementById('address').value}`, 40, yOffset + 110);
+        ctx.fillText(`Forma de Pagamento: ${document.getElementById('payment').value}`, 40, yOffset + 140);
+        ctx.fillText(`Observação: ${document.getElementById('observations').value}`, 40, yOffset + 170);
+
+        // Linha divisória após as informações do cliente
+        ctx.beginPath();
+        ctx.moveTo(20, yOffset + 200);
+        ctx.lineTo(canvas.width - 20, yOffset + 200);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Total
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText(`Total: R$ ${getTotalAmount().toFixed(2)}`, 40, yOffset + 240);
+
+        // Criação do link de download
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/jpeg');
+        link.download = 'pedido.jpg';
+        link.click();
+    }
+
+    // Função auxiliar para calcular o total
+    function getTotalAmount() {
+        let sum = 0;
+        items.forEach((item) => {
+            sum += item.total;
+        });
+        return sum;
+    }
+	
+</script>   
 </body>
+
 </html>
