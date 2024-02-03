@@ -157,14 +157,8 @@
     </div>
 
     <p id="copyLinkMessage"></p>
+    
 <script>
-    // Se o elemento não existir, cria ele
-    if (!document.getElementById('copyLinkMessage')) {
-        const copyLinkMessageElement = document.createElement('p');
-        copyLinkMessageElement.id = 'copyLinkMessage';
-        document.body.appendChild(copyLinkMessageElement);
-    }
-
     document.getElementById('copyLinkBtn').addEventListener('click', function() {
         const linkToCopy = "comanda.html"; // Substitua pelo link desejado
 
@@ -177,11 +171,12 @@
         document.body.removeChild(inputElement);
 
         // Exibe a mensagem de "Link Copiado!"
-        document.getElementById('copyLinkMessage').textContent = 'Link Copiado!';
+        alert('Link Copiado!');
 
         // Evita que o evento de redirecionamento seja acionado
         return false;
     });
+    
 </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
