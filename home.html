@@ -41,8 +41,8 @@
             font-weight: bold;
         }
 
-        /* Estilos para o botão "Copiar link" */
-        #copiar-link {
+        /* Estilos para os botões */
+        .button {
             background-color: #FF5733;
             color: white;
             border: none;
@@ -51,9 +51,10 @@
             text-decoration: none;
             font-size: 16px;
             transition: background-color 0.3s ease;
+            cursor: pointer;
         }
 
-        #copiar-link:hover {
+        .button:hover {
             background-color: #FF814E;
         }
 
@@ -63,22 +64,6 @@
             justify-content: space-around;
             margin: 20px;
             border-radius: 10px; /* Adiciona bordas arredondadas */
-        }
-
-        /* Estilos para o botão "Sair" */
-        .button-sair {
-            background-color: #ec3517;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .button-sair:hover {
-            background-color: #FF814E;
         }
 
         /* Estilos para as colunas do kanban */
@@ -113,7 +98,7 @@
             .company-info {
                 font-size: 14px;
             }
-            #copiar-link {
+            .button {
                 padding: 8px 16px;
                 font-size: 14px;
             }
@@ -132,9 +117,9 @@
             <img src="icon128.png" alt="Logo da Empresa" class="logo">
             <span class="company-name">Nome da Empresa</span>
         </div>
-        <button id="copiar-link">Clique aqui para copiar o link do seu cardápio</button>
-        <a href="cadastrocardapio.html" class="button-cadastrar">Cadastre seu cardápio</a>
-        <a href="login.html" class="button-sair" onclick="logout()">Sair</a>
+        <button id="copiar-link" class="button">Clique aqui para copiar o link do seu cardápio</button>
+        <button class="button" onclick="window.location.href='cadastrocardapio.html'">Cadastrar Cardápio</button>
+        <a href="login.html" class="button" onclick="logout()">Sair</a>
     </div>
 
     <div class="kanban-container">
@@ -161,12 +146,11 @@
 
         botaoCopiarLink.addEventListener('click', () => {
             // Obtém o código da página
-            const userId = firebase.auth().currentUser.uid; // Substitua pelo método real de obter o ID do usuário
-            const linkPersonalizado = `comanda-${userId}.html`; // Personalize o link conforme necessário
+            const codigoPagina = document.documentElement.outerHTML;
 
-            // Cria um elemento de texto para armazenar o link
+            // Cria um elemento de texto para armazenar o código
             const elementoTexto = document.createElement('textarea');
-            elementoTexto.value = linkPersonalizado;
+            elementoTexto.value = codigoPagina;
 
             // Adiciona o elemento de texto ao corpo da página (temporariamente)
             document.body.appendChild(elementoTexto);
@@ -191,6 +175,7 @@
     <script src="guarda.js"></script>
 </body>
 </html>
+
 
 
 
