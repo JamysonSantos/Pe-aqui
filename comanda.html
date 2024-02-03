@@ -249,17 +249,25 @@
 
     // Confirm Order Function
     const confirmOrder = () => {
-        // Adicionar lógica para confirmar o pedido
-        document.getElementById('order-popup').classList.add('hidden');
-        generateImage(); // Chama a função para gerar a imagem
-        window.location.href = 'pospedido.html'; // Redireciona para a página de agradecimento
+    // Adicionar lógica para confirmar o pedido
+    document.getElementById('order-popup').classList.add('hidden');
+    generateImage(); // Chama a função para gerar a imagem
+    window.location.href = 'pospedido.html'; // Redireciona para a página de agradecimento
     }
 
     // Continue Order Function
     const continueOrder = () => {
-        // Adicionar lógica para continuar o pedido
-        document.getElementById('order-popup').classList.add('hidden');
+    // Adicionar lógica para continuar o pedido
+    document.getElementById('order-popup').classList.add('hidden');
     }
+
+    // Botão "Confirmar Pedido"
+    const confirmOrderButton = document.getElementById('confirm-order');
+confirmOrderButton.addEventListener('click', confirmOrder);
+
+// Botão "Editar Pedido"
+const continueOrderButton = document.getElementById('continue-order');
+continueOrderButton.addEventListener('click', continueOrder);
 
     // Função para aumentar a quantidade
     function increaseQuantity(itemId) {
