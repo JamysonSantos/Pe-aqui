@@ -12,7 +12,7 @@
         <p class="text-center text-gray-600 mb-4">Muito obrigado!</p>
         <div class="mb-4">
             <h2 class="text-lg font-bold mb-2">Resumo do Pedido</h2>
-            <div id="order-summary-placeholder" class="text-gray-600">[Resumo do pedido aqui]</div>
+            <div id="order-summary-placeholder" class="text-gray-600">Aguarde enquanto carregamos o resumo do seu pedido...</div>
         </div>
         <div class="mb-4">
             <h2 class="text-lg font-bold mb-2">Estimativa de Entrega</h2>
@@ -34,7 +34,7 @@
         const orderSummaryPlaceholder = document.getElementById('order-summary-placeholder');
 
         // Verificar se há itens para exibir
-        if (items.length > 0) {
+        if (typeof items !== 'undefined' && items.length > 0) {
             // Criar uma string HTML para os itens do pedido
             const orderSummaryHTML = items.map(item => {
                 return `<p>${item.name}: ${item.quantity} x ${item.price.toFixed(2)} = ${item.total.toFixed(2)}</p>`;
@@ -49,4 +49,5 @@
     </script>
 </body>
 </html>
+
 
