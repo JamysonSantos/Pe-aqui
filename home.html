@@ -149,40 +149,24 @@
     </div>
     
     <script>
-        const botaoCopiarLink = document.getElementById('copiar-link');
+        // Atualiza o link do cardápio com base no ID do usuário
+const copiarLinkBtn = document.getElementById('copiar-link');
+copiarLinkBtn.addEventListener('click', () => {
+  // Altere a lógica aqui para o link normal da página 'comanda.html'
+  const linkToCopy = 'https://pecaqui.netlify.app/comanda.html';
+  
+  // Cria um elemento de input para copiar o texto
+  const inputElement = document.createElement('input');
+  inputElement.value = linkToCopy;
+  document.body.appendChild(inputElement);
+  inputElement.select();
+  document.execCommand('copy');
+  document.body.removeChild(inputElement);
 
-botaoCopiarLink.addEventListener('click', () => {
-    // Obtém o nome do arquivo HTML atual (pode precisar ajustar se o caminho for diferente)
-    const paginaAtual = window.location.pathname.split('/').pop();
-
-    // Cria o link base para a página "comanda.html"
-    const linkBase = `https://seusite.com/comanda.html`;
-
-    // Adiciona parâmetros específicos da página comanda.html (pode ajustar conforme necessário)
-    const parametros = `param1=valor1&param2=valor2`;
-
-    // Constrói o link final
-    const linkFinal = `${linkBase}?${parametros}`;
-
-    // Cria um elemento de texto para armazenar o link
-    const elementoTexto = document.createElement('textarea');
-    elementoTexto.value = linkFinal;
-
-    // Adiciona o elemento de texto ao corpo da página (temporariamente)
-    document.body.appendChild(elementoTexto);
-
-    // Seleciona o texto do elemento
-    elementoTexto.select();
-
-    // Copia o texto para a área de transferência
-    document.execCommand('copy');
-
-    // Remove o elemento de texto do corpo da página
-    document.body.removeChild(elementoTexto);
-
-    // Mostra uma mensagem de confirmação
-    alert('Link do cardápio copiado para a área de transferência!');
+  // Exibe a mensagem de "Link Copiado!"
+  document.getElementById('copyLinkMessage').textContent = 'Link Copiado!';
 });
+        
     </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
