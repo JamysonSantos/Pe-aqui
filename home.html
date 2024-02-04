@@ -127,15 +127,17 @@
 
         /* Estilos para a notificação "Link Copiado!" */
         #copyLinkMessage {
-            color: #4CAF50;
-            font-weight: bold;
-            margin-top: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        #copyLinkMessage.show {
-            opacity: 1;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+            /* Inicialmente oculto */
         }
     </style>
 </head>
@@ -152,7 +154,7 @@
     </div>
 
     <!-- Notificação "Link Copiado!" -->
-    <div id="copyLinkMessage" class="show">Link Copiado!</div>
+    <div id="copyLinkMessage">Link Copiado!</div>
 
     <div class="kanban-container">
         <div class="kanban-column">
@@ -176,8 +178,6 @@
     <script>
         // Atualiza o link do cardápio com base no ID do usuário
         const copiarLinkBtn = document.getElementById('copiar-link');
-        const copyLinkMessage = document.getElementById('copyLinkMessage');
-
         copiarLinkBtn.addEventListener('click', () => {
             // Alterado para o link padrão sem o parâmetro userID
             const linkToCopy = 'https://pecaqui.netlify.app/comanda.html';
@@ -190,12 +190,13 @@
             document.execCommand('copy');
             document.body.removeChild(inputElement);
 
-            // Exibe a mensagem de "Link Copiado!"
-            copyLinkMessage.classList.add('show');
+            // Exibe a notificação "Link Copiado!"
+            const copyLinkMessage = document.getElementById('copyLinkMessage');
+            copyLinkMessage.style.display = 'block';
 
-            // Adiciona um temporizador para remover a classe após alguns segundos
+            // Adiciona um temporizador para ocultar a notificação após alguns segundos
             setTimeout(() => {
-                copyLinkMessage.classList.remove('show');
+                copyLinkMessage.style.display = 'none';
             }, 3000); // 3000 milissegundos = 3 segundos
         });
     </script>
@@ -207,6 +208,7 @@
 </body>
 
 </html>
+
 
 
 
