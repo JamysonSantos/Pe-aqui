@@ -93,8 +93,8 @@ firebase.auth().onAuthStateChanged(user => {
     // Atualiza o link do cardápio com base no ID do usuário
     const copiarLinkBtn = document.getElementById('copiar-link');
     copiarLinkBtn.addEventListener('click', () => {
-      const userID = user.uid;
-      const linkToCopy = `comanda.html?userID=${userID}`;
+      // Alterado para o link padrão sem o parâmetro userID
+      const linkToCopy = 'https://pecaqui.netlify.app/comanda.html';
       
       // Cria um elemento de input para copiar o texto
       const inputElement = document.createElement('input');
