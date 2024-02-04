@@ -137,25 +137,7 @@
             border-radius: 5px;
             padding: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            animation: fadeInOut 6s ease;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% {
-                opacity: 1;
-            }
-            25%, 75% {
-                opacity: 0;
-            }
-        }
-
-        .notification-popup .close-button {
-            cursor: pointer;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 14px;
-            color: #666;
+            z-index: 999;
         }
     </style>
 </head>
@@ -171,9 +153,7 @@
         <a href="login.html" class="button" onclick="logout()">Sair</a>
     </div>
 
-    <!-- Adicione a linha abaixo para exibir a mensagem "Link Copiado!" -->
     <div id="copyLinkMessage" class="notification-popup" style="color: green; font-weight: bold;">
-        <button class="close-button" onclick="closeNotificationPopup()">×</button>
         <span class="text-green-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 class="h-6 w-6">
@@ -181,10 +161,8 @@
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </span>
-        <div class="flex-1">
-            <strong class="block font-medium text-gray-900"> Link Copiado! </strong>
-            <p class="mt-1 text-sm text-gray-700">O link do seu cardápio foi copiado com sucesso.</p>
-        </div>
+        <strong class="block font-medium text-gray-900"> Link Copiado! </strong>
+        <p class="mt-1 text-sm text-gray-700">O link do seu cardápio foi copiado com sucesso.</p>
     </div>
 
     <div class="kanban-container">
@@ -221,10 +199,12 @@
             document.execCommand('copy');
             document.body.removeChild(inputElement);
 
-            // Exibe a mensagem de "Link Copiado!"
-            const copyLinkMessage = document.getElementById('copyLinkMessage');
+            // Exibe a notificação do navegador
+            showNotification();
+        });
 
-            // Verifica se o elemento existe antes de tentar modificá-lo
+        function showNotification() {
+            const copyLinkMessage = document.getElementById('copyLinkMessage');
             if (copyLinkMessage) {
                 copyLinkMessage.style.display = 'block';
 
@@ -232,13 +212,6 @@
                 setTimeout(() => {
                     copyLinkMessage.style.display = 'none';
                 }, 6000); // 6000 milissegundos = 6 segundos
-            }
-        });
-
-        function closeNotificationPopup() {
-            const copyLinkMessage = document.getElementById('copyLinkMessage');
-            if (copyLinkMessage) {
-                copyLinkMessage.style.display = 'none';
             }
         }
     </script>
@@ -250,6 +223,7 @@
 </body>
 
 </html>
+
 
 
 
