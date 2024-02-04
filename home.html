@@ -162,28 +162,32 @@
 
     <script>
         // Atualiza o link do cardápio com base no ID do usuário
-        const copiarLinkBtn = document.getElementById('copiar-link');
-        copiarLinkBtn.addEventListener('click', () => {
-            // Alterado para o link padrão sem o parâmetro userID
-            const linkToCopy = 'https://pecaqui.netlify.app/comanda.html';
+const copiarLinkBtn = document.getElementById('copiar-link');
+copiarLinkBtn.addEventListener('click', () => {
+  // Alterado para o link padrão sem o parâmetro userID
+  const linkToCopy = 'https://pecaqui.netlify.app/comanda.html';
 
-            // Cria um elemento de input para copiar o texto
-            const inputElement = document.createElement('input');
-            inputElement.value = linkToCopy;
-            document.body.appendChild(inputElement);
-            inputElement.select();
-            document.execCommand('copy');
-            document.body.removeChild(inputElement);
+  // Cria um elemento de input para copiar o texto
+  const inputElement = document.createElement('input');
+  inputElement.value = linkToCopy;
+  document.body.appendChild(inputElement);
+  inputElement.select();
+  document.execCommand('copy');
+  document.body.removeChild(inputElement);
 
-            // Exibe a mensagem de "Link Copiado!"
-            const copyLinkMessage = document.getElementById('copyLinkMessage');
-            copyLinkMessage.textContent = 'Link Copiado!';
+  // Exibe a mensagem de "Link Copiado!"
+  const copyLinkMessage = document.getElementById('copyLinkMessage');
 
-            // Adiciona um temporizador para limpar a mensagem após alguns segundos
-            setTimeout(() => {
-                copyLinkMessage.textContent = '';
-            }, 3000); // 3000 milissegundos = 3 segundos
-        });
+  // Verifica se o elemento existe antes de tentar modificá-lo
+  if (copyLinkMessage) {
+    copyLinkMessage.textContent = 'Link Copiado!';
+
+    // Adiciona um temporizador para limpar a mensagem após alguns segundos
+    setTimeout(() => {
+      copyLinkMessage.textContent = '';
+    }, 3000); // 3000 milissegundos = 3 segundos
+  }
+});
     </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
