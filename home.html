@@ -129,8 +129,9 @@
         .notification-popup {
             display: none;
             position: fixed;
-            top: 10px;
-            right: 10px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -140,14 +141,14 @@
 
         .notification-popup.show {
             display: block;
-            animation: fadeInOut 4s ease;
+            animation: fadeInOut 6s ease;
         }
 
         @keyframes fadeInOut {
             0%, 100% {
                 opacity: 1;
             }
-            10%, 90% {
+            25%, 75% {
                 opacity: 0;
             }
         }
@@ -234,7 +235,7 @@
                 // Adiciona um temporizador para remover a mensagem após alguns segundos
                 setTimeout(() => {
                     copyLinkMessage.classList.remove('show');
-                }, 30000); // 30000 milissegundos = 30 segundos
+                }, 8000); // 8000 milissegundos = 8 segundos
             }
         });
 
@@ -253,6 +254,7 @@
 </body>
 
 </html>
+
 
 
 
