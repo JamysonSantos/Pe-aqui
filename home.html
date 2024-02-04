@@ -138,16 +138,6 @@
             padding: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 999;
-            animation: fadeOut 3s ease;
-        }
-
-        @keyframes fadeOut {
-            0%, 100% {
-                opacity: 1;
-            }
-            25%, 75% {
-                opacity: 0;
-            }
         }
     </style>
 </head>
@@ -163,7 +153,6 @@
         <a href="login.html" class="button" onclick="logout()">Sair</a>
     </div>
 
-    <!-- Adicione a linha abaixo para exibir a mensagem "Link Copiado!" -->
     <div id="copyLinkMessage" class="notification-popup" style="color: green; font-weight: bold;">
         <span class="text-green-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -172,10 +161,8 @@
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </span>
-        <div class="flex-1">
-            <strong class="block font-medium text-gray-900"> Link Copiado! </strong>
-            <p class="mt-1 text-sm text-gray-700">O link do seu cardápio foi copiado com sucesso.</p>
-        </div>
+        <strong class="block font-medium text-gray-900"> Link Copiado! </strong>
+        <p class="mt-1 text-sm text-gray-700">O link do seu cardápio foi copiado com sucesso.</p>
     </div>
 
     <div class="kanban-container">
@@ -223,12 +210,7 @@
 
                 // Adiciona um temporizador para remover a mensagem após alguns segundos
                 setTimeout(() => {
-                    copyLinkMessage.style.opacity = 0;
-
-                    // Aguarda o término do efeito de fade-out para esconder a mensagem
-                    setTimeout(() => {
-                        copyLinkMessage.style.display = 'none';
-                    }, 1000); // 1000 milissegundos = 1 segundo (tempo do efeito de fade-out)
+                    copyLinkMessage.style.display = 'none';
                 }, 3000); // 3000 milissegundos = 3 segundos
             }
         }
@@ -241,6 +223,7 @@
 </body>
 
 </html>
+
 
 
 
