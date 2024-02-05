@@ -66,6 +66,12 @@
             background-color: #ec3517;
         }
 
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
         hr {
             border: 1px solid #ddd;
             margin: 2rem 0;
@@ -119,7 +125,7 @@
                     <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple>
                     <div id="imagePreview"></div>
                 </div>
-                <div>
+                <div class="button-container">
                     <button onclick="submitForm()">Adicionar Item</button>
                     <button onclick="visualizarCardapio()">Visualizar cardápio</button>
                     <button onclick="finalizarCadastro()">Finalizar cadastro</button>
@@ -136,6 +142,7 @@
     <script src="cadastrocardapio.js"></script>
 </body>
 </html>
+
 
 
 
