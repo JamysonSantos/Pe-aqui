@@ -2,209 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.min.css" rel="stylesheet">
-    <style>
-        /* Paleta de cores laranja */
-        :root {
-            --primary-color: #FF5733; /* Define a cor primária */
-            --secondary-color: #FF814E; /* Define a cor secundária */
-        }
-
-        /* Estilos para as imagens do cardápio */
-        .item-image {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        .image-preview {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .image-preview img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        /* Estilos para a barra laranja */
-        .orange-bar {
-            background: linear-gradient(to right, #ec3517, #ffffff);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            color: white;
-        }
-
-        .button-voltar {
-            background-color: #ec3517;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Aplica a paleta de cores laranja */
-        body {
-            background-color: #f0f0f0; /* Cor de fundo */
-            margin: 0; /* Removendo margens padrão do body */
-        }
-        .text-primary {
-            color: var(--primary-color); /* Cor do texto primário */
-        }
-        .button {
-            background-color: var(--primary-color); /* Cor de fundo dos botões */
-            color: #fff; /* Cor do texto dos botões */
-        }
-        /* Estiliza outros elementos conforme necessário */
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
-<body>
-    <div class="orange-bar">
-        <a href="#" onclick="history.back();" class="button-voltar">Voltar</a>
+<body class="bg-gray-200">
+    <div class="bg-gradient-to-r from-red-600 to-white p-4 flex justify-between items-center">
+        <a href="#" onclick="history.back();" class="text-white">Voltar</a>
     </div>
 
-    <div id="app">
-        <v-app>
-            <v-container>
-                <h1 class="text-center text-primary">Cadastro de Cardápio</h1>
-                <v-form @submit.prevent="submitForm">
-                    <v-row>
-                        <v-col cols="12" sm="6">
-                            <v-text-field v-model="itemName" label="Nome do Item" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                            <v-text-field v-model="description" label="Descrição do Produto" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="4">
-                            <v-text-field v-model="price" label="Preço" type="number" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                            <v-text-field v-model="itemCategory" label="Categoria" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                            <span v-if="images.length < 3" class="text-caption text-primary">Você pode escolher até 3 fotos do seu produto</span>
-                            <v-btn @click="attachImage" color="primary" v-if="images.length < 3" class="button">Anexar foto</v-btn>
-                            <input ref="fileInput" type="file" @change="onFileChange" style="display: none;" accept="image/*" multiple v-if="images.length < 3">
-                            <div v-if="images.length > 0">
-                                <div v-for="(image, index) in images" :key="index" class="image-preview">
-                                    <img :src="image.url" alt="Imagem" class="item-image">
-                                </div>
-                            </div>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col>
-                            <v-btn @click="submitForm" class="button">Adicionar Item</v-btn>
-                            <v-btn @click="visualizarCardapio" class="button">Visualizar cardápio</v-btn>
-                            <v-btn @click="finalizarCadastro" class="button">Finalizar cadastro</v-btn>
-                        </v-col>
-                    </v-row>
-                </v-form>
-                <v-divider class="my-4"></v-divider>
-                <h2 class="text-primary">Itens do Cardápio</h2>
-                <v-list dense>
-                    <v-list-item v-for="(item, index) in menuItems" :key="index">
-                        <v-list-item-content>
-                            <v-list-item-title>{{ item.name }}</v-list-item-title>
-                            <v-list-item-subtitle>R$ {{ item.price }}</v-list-item-subtitle>
-                            <div v-if="item.images.length > 0">
-                                <div v-for="(image, idx) in item.images" :key="idx" class="image-preview">
-                                    <img :src="image.url" alt="Imagem" class="item-image">
-                                </div>
-                            </div>
-                            <v-btn @click="removeItem(index)" color="error" class="button">Remover</v-btn>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-            </v-container>
-        </v-app>
+    <div id="app-container" class="max-w-2xl mx-auto my-8 p-4 bg-white rounded shadow-lg">
+        <div id="app">
+            <div>
+                <h1 class="text-center text-orange-600 text-2xl font-bold mb-4">Cadastro de Cardápio</h1>
+                <div class="mb-4">
+                    <label for="itemName" class="block text-gray-700">Nome do Item</label>
+                    <input type="text" id="itemName" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700">Descrição do Produto</label>
+                    <input type="text" id="description" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="price" class="block text-gray-700">Preço</label>
+                    <input type="number" id="price" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="itemCategory" class="block text-gray-700">Categoria</label>
+                    <input type="text" id="itemCategory" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <span id="imageCaption" class="text-gray-700 block">Você pode escolher até 3 fotos do seu produto</span>
+                    <button onclick="attachImage()" class="bg-orange-600 text-white py-2 px-4 rounded">Anexar foto</button>
+                    <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple>
+                    <div id="imagePreview" class="flex flex-wrap mt-2"></div>
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="submitForm()" class="bg-orange-600 text-white py-2 px-4 rounded">Adicionar Item</button>
+                    <button onclick="visualizarCardapio()" class="bg-orange-600 text-white py-2 px-4 rounded">Visualizar cardápio</button>
+                    <button onclick="finalizarCadastro()" class="bg-orange-600 text-white py-2 px-4 rounded">Finalizar cadastro</button>
+                </div>
+                <hr class="my-4 border-t-2 border-gray-300">
+                <h2 class="text-orange-600 text-xl font-bold mb-2">Itens do Cardápio</h2>
+                <ul id="menuItemsList"></ul>
+            </div>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.js"></script>
-    <script>
-        new Vue({
-            el: '#app',
-            vuetify: new Vuetify(),
-            data: {
-                itemName: '',
-                price: '',
-                itemCategory: '', // Campo de categoria adicionado
-                images: [],
-                currentItem: null,
-                menuItems: []
-            },
-            methods: {
-                submitForm() {
-                    if (this.itemName && this.price && this.images.length > 0 && this.images.length <= 3 && this.itemCategory) {
-                        const newItem = {
-                            name: this.itemName,
-                            price: parseFloat(this.price).toFixed(2),
-                            category: this.itemCategory, // Adiciona a categoria ao novo item
-                            images: this.images ? this.images.map(img => ({ url: img.url })) : []
-                        };
-                        this.menuItems.push(newItem);
-                        this.saveMenuItemsToLocal(); // Salva os itens no localStorage
-                        this.clearFields();
-                    } else {
-                        alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
-                    }
-                },
-                clearFields() {
-                    this.itemName = '';
-                    this.price = '';
-                    this.itemCategory = ''; // Limpa o campo de categoria após adicionar o item
-                    this.images = [];
-                },
-                attachImage() {
-                    this.$refs.fileInput.click();
-                },
-                onFileChange(e) {
-                    const files = e.target.files;
-                    if (this.images.length + files.length > 3) {
-                        alert('Você só pode escolher até 3 fotos.');
-                        return;
-                    }
-                    for (let i = 0; i < files.length; i++) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            this.images.push({ url: e.target.result });
-                        };
-                        reader.readAsDataURL(files[i]);
-                    }
-                },
-                removeItem(index) {
-                    this.menuItems.splice(index, 1);
-                    this.saveMenuItemsToLocal(); // Após remover um item, atualiza o localStorage
-                },
-                visualizarCardapio() {
-                    window.location.href = 'vercadapio.html';      
-                },
-                finalizarCadastro() {
-                    if (this.menuItems.length > 0) {
-                        this.saveMenuItemsToLocal();
-                        alert('Cardápio cadastrado!');
-                        window.location.href = 'vercardapio.html';
-                    } else {
-                        alert('Por favor, cadastre itens no cardápio antes de finalizar.');
-                    }
-                },
-                saveMenuItemsToLocal() {
-                    localStorage.setItem('menuItems', JSON.stringify(this.menuItems));
-                }
-            }
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.5.0/dist/firebase-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.5.0/dist/firebase-firestore.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
