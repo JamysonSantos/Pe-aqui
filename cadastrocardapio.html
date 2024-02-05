@@ -24,7 +24,7 @@
         }
 
         #app-container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 8rem auto;
             padding: 2rem;
             background-color: white;
@@ -92,6 +92,22 @@
         li {
             margin-bottom: 0.5rem;
         }
+
+        #previewContainer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .previewImage {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -123,10 +139,11 @@
                     <span id="imageCaption">Você pode escolher até 3 fotos do seu produto</span>
                     <button onclick="attachImage()">Anexar foto</button>
                     <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple>
-                    <div id="imagePreview"></div>
+                    <div id="previewContainer"></div>
                 </div>
                 <div class="button-container">
                     <button onclick="submitForm()">Adicionar Item</button>
+                    <button onclick="finalizarCadastro()">Finalizar cadastro</button>
                 </div>
                 <hr>
                 <h2>Itens do Cardápio</h2>
@@ -138,6 +155,39 @@
     <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.2/dist/firebase-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.2/dist/firebase-firestore.js"></script>
     <script src="cadastrocardapio.js"></script>
+    <script>
+        function attachImage() {
+            const fileInput = document.getElementById("fileInput");
+            fileInput.click();
+        }
+
+        function onFileChange(e) {
+            const files = e.target.files;
+            const previewContainer = document.getElementById("previewContainer");
+            const imageCaption = document.getElementById("imageCaption");
+
+            if (previewContainer.childElementCount + files.length > 3) {
+                alert('Você só pode escolher até 3 fotos.');
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.alt = "Imagem";
+                    img.className = "previewImage";
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+
+            imageCaption.style.display = "none";
+        }
+
+        document.getElementById("fileInput").addEventListener("change", onFileChange);
+    </script>
 </body>
 </html>
 
