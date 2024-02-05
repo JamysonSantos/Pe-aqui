@@ -13,6 +13,11 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // Funções JavaScript
+document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById("fileInput");
+    fileInput.addEventListener('change', onFileChange);
+});
+
 function attachImage() {
     const fileInput = document.getElementById("fileInput");
     fileInput.click();
@@ -48,6 +53,7 @@ function submitForm() {
     const description = document.getElementById("description").value;
     const price = document.getElementById("price").value;
     const itemCategory = document.getElementById("itemCategory").value;
+    const imagePreview = document.getElementById("imagePreview");
 
     if (itemName && price && imagePreview.childElementCount > 0 && imagePreview.childElementCount <= 3 && itemCategory) {
         const newItem = {
@@ -58,7 +64,11 @@ function submitForm() {
             images: Array.from(imagePreview.children).map(img => ({ url: img.src }))
         };
 
-        db.collection('empresas').doc('ID_DA_SUA_EMPRESA').collection('cardapio').add(newItem)
+        // Obtenha o ID da sua empresa (substitua 'ID_DA_SUA_EMPRESA' pelo código real)
+        const empresaId = 'ID_DA_SUA_EMPRESA';
+
+        // Adicione o item ao Firestore
+        db.collection('empresas').doc(empresaId).collection('cardapio').add(newItem)
             .then((docRef) => {
                 console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
             })
@@ -66,6 +76,7 @@ function submitForm() {
                 console.error('Erro ao adicionar item ao Firestore:', error);
             });
 
+        // Adicione o item à lista na página
         const menuItemsList = document.getElementById("menuItemsList");
         const li = document.createElement("li");
         li.innerHTML = `<strong>${newItem.name}</strong> - R$ ${newItem.price} <button onclick="removeItem(this)" class="bg-red-600 text-white py-1 px-2 rounded">Remover</button>`;
@@ -99,3 +110,4 @@ function visualizarCardapio() {
 function finalizarCadastro() {
     alert('Implemente a lógica para finalizar o cadastro');
 }
+
