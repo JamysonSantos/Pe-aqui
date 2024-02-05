@@ -30,10 +30,11 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
 
         h1 {
-            text-align: center;
             color: #FF5733;
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
@@ -67,8 +68,7 @@
         }
 
         .button-container {
-            display: flex;
-            justify-content: space-between;
+            align-self: flex-end;
             margin-top: 1rem;
         }
 
@@ -127,8 +127,6 @@
                 </div>
                 <div class="button-container">
                     <button onclick="submitForm()">Adicionar Item</button>
-                    <button onclick="visualizarCardapio()">Visualizar cardápio</button>
-                    <button onclick="finalizarCadastro()">Finalizar cadastro</button>
                 </div>
                 <hr>
                 <h2>Itens do Cardápio</h2>
@@ -142,6 +140,7 @@
     <script src="cadastrocardapio.js"></script>
 </body>
 </html>
+
 
 
 
