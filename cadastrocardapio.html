@@ -238,7 +238,7 @@
                 const empresaId = 'mCw3txtk3JCUCrnaIRA3';
 
                 // Adicione o item ao Firestore
-                db.collection('empresas').doc(empresaId).collection('cardapio').add(newItem)
+                db.collection('empresas').doc(mCw3txtk3JCUCrnaIRA3).collection('cardapio').add(newItem)
                     .then((docRef) => {
                         console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
                     })
