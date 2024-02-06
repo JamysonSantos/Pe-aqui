@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <style>
@@ -46,7 +47,8 @@
             margin-bottom: 0.5rem;
         }
 
-        input, textarea {
+        input,
+        textarea {
             width: 100%;
             padding: 0.5rem;
             border: 1px solid #ccc;
@@ -108,8 +110,14 @@
             margin-right: 10px;
             margin-bottom: 10px;
         }
+
+        .menu-preview {
+            max-width: 300px;
+            margin-left: 2rem;
+        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <a href="#" onclick="history.back();">Voltar</a>
@@ -149,14 +157,14 @@
                 <h2>Itens do Cardápio</h2>
                 <ul id="menuItemsList"></ul>
             </div>
+            <div class="menu-preview" id="menuPreviewContainer"></div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.2/dist/firebase-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.2/dist/firebase-firestore.js"></script>
     <script src="cadastrocardapio.js"></script>
-</body>
-     <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             const fileInput = document.getElementById("fileInput");
             fileInput.addEventListener('change', onFileChange);
@@ -191,10 +199,35 @@
 
             imageCaption.style.display = "none";
         }
+
+        function finalizarCadastro() {
+            // Lógica para finalizar o cadastro e exibir o cardápio
+            const menuPreviewContainer = document.getElementById("menuPreviewContainer");
+            menuPreviewContainer.innerHTML = ""; // Limpa o conteúdo anterior
+
+            // Obtém os itens do Firestore e exibe no menuPreviewContainer
+            db.collection('empresas').doc('ID_DA_SUA_EMPRESA').collection('cardapio').get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const item = doc.data();
+                        const div = document.createElement("div");
+                        div.innerHTML = `<strong>${item.name}</strong> - R$ ${item.price}`;
+                        menuPreviewContainer.appendChild(div);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Erro ao obter itens do Firestore:', error);
+                });
+
+            // Navega até o menuPreviewContainer
+            const yOffset = -menuPreviewContainer.offsetTop;
+            window.scrollTo(0, yOffset);
+        }
     </script>
 </body>
+
 </html>
-</html>
+
 
 
 
