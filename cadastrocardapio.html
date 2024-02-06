@@ -235,7 +235,7 @@
                 };
 
                 // Substitua 'ID_DA_SUA_EMPRESA' pelo código real da sua empresa
-                const empresaId = 'ID_DA_SUA_EMPRESA';
+                const empresaId = 'mCw3txtk3JCUCrnaIRA3';
 
                 // Adicione o item ao Firestore
                 db.collection('empresas').doc(empresaId).collection('cardapio').add(newItem)
@@ -279,7 +279,7 @@
             menuPreviewContainer.innerHTML = ""; // Limpa o conteúdo anterior
 
             // Obtém os itens do Firestore e exibe no menuPreviewContainer
-            db.collection('empresas').doc('ID_DA_SUA_EMPRESA').collection('cardapio').get()
+            db.collection('empresas').doc('mCw3txtk3JCUCrnaIRA3').collection('cardapio').get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         const item = doc.data();
