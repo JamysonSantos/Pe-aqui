@@ -156,6 +156,44 @@
     <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.2/dist/firebase-firestore.js"></script>
     <script src="cadastrocardapio.js"></script>
 </body>
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.getElementById("fileInput");
+            fileInput.addEventListener('change', onFileChange);
+        });
+
+        function attachImage() {
+            const fileInput = document.getElementById("fileInput");
+            fileInput.click();
+        }
+
+        function onFileChange(e) {
+            const files = e.target.files;
+            const previewContainer = document.getElementById("previewContainer");
+            const imageCaption = document.getElementById("imageCaption");
+
+            if (previewContainer.childElementCount + files.length > 3) {
+                alert('Você só pode escolher até 3 fotos.');
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.alt = "Imagem";
+                    img.className = "previewImage";
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+
+            imageCaption.style.display = "none";
+        }
+    </script>
+</body>
+</html>
 </html>
 
 
