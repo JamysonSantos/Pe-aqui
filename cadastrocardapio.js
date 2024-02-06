@@ -25,10 +25,10 @@ function attachImage() {
 
 function onFileChange(e) {
     const files = e.target.files;
-    const imagePreview = document.getElementById("imagePreview");
+    const previewContainer = document.getElementById("previewContainer");
     const imageCaption = document.getElementById("imageCaption");
 
-    if (imagePreview.childElementCount + files.length > 3) {
+    if (previewContainer.childElementCount + files.length > 3) {
         alert('Você só pode escolher até 3 fotos.');
         return;
     }
@@ -39,8 +39,8 @@ function onFileChange(e) {
             const img = document.createElement("img");
             img.src = e.target.result;
             img.alt = "Imagem";
-            img.className = "item-image rounded-full mr-2 mb-2";
-            imagePreview.appendChild(img);
+            img.className = "previewImage";
+            previewContainer.appendChild(img);
         };
         reader.readAsDataURL(files[i]);
     }
@@ -53,7 +53,7 @@ function submitForm() {
     const description = document.getElementById("description").value;
     const price = document.getElementById("price").value;
     const itemCategory = document.getElementById("itemCategory").value;
-    const previewContainer = document.getElementById("imagePreview");
+    const previewContainer = document.getElementById("previewContainer");
 
     if (itemName && price && previewContainer.childElementCount > 0 && previewContainer.childElementCount <= 3 && itemCategory) {
         const newItem = {
@@ -86,5 +86,28 @@ function submitForm() {
     } else {
         alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
     }
+}
+
+function clearFields() {
+    document.getElementById("itemName").value = '';
+    document.getElementById("description").value = '';
+    document.getElementById("price").value = '';
+    document.getElementById("itemCategory").value = '';
+    document.getElementById("fileInput").value = '';
+    document.getElementById("previewContainer").innerHTML = '';
+    document.getElementById("imageCaption").style.display = "block";
+}
+
+function removeItem(button) {
+    const li = button.parentNode;
+    li.parentNode.removeChild(li);
+}
+
+function visualizarCardapio() {
+    window.location.href = 'vercadapio.html';
+}
+
+function finalizarCadastro() {
+    alert('Implemente a lógica para finalizar o cadastro');
 }
 
