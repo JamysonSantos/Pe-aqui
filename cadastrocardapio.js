@@ -53,18 +53,18 @@ function submitForm() {
     const description = document.getElementById("description").value;
     const price = document.getElementById("price").value;
     const itemCategory = document.getElementById("itemCategory").value;
-    const imagePreview = document.getElementById("imagePreview");
+    const previewContainer = document.getElementById("imagePreview");
 
-    if (itemName && price && imagePreview.childElementCount > 0 && imagePreview.childElementCount <= 3 && itemCategory) {
+    if (itemName && price && previewContainer.childElementCount > 0 && previewContainer.childElementCount <= 3 && itemCategory) {
         const newItem = {
             name: itemName,
             description: description,
             price: parseFloat(price).toFixed(2),
             category: itemCategory,
-            images: Array.from(imagePreview.children).map(img => ({ url: img.src }))
+            images: Array.from(previewContainer.children).map(img => ({ url: img.src }))
         };
 
-        // Obtenha o ID da sua empresa (substitua 'ID_DA_SUA_EMPRESA' pelo código real)
+        // Substitua 'ID_DA_SUA_EMPRESA' pelo código real da sua empresa
         const empresaId = 'ID_DA_SUA_EMPRESA';
 
         // Adicione o item ao Firestore
@@ -86,28 +86,5 @@ function submitForm() {
     } else {
         alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
     }
-}
-
-function clearFields() {
-    document.getElementById("itemName").value = '';
-    document.getElementById("description").value = '';
-    document.getElementById("price").value = '';
-    document.getElementById("itemCategory").value = '';
-    document.getElementById("fileInput").value = '';
-    document.getElementById("imagePreview").innerHTML = '';
-    document.getElementById("imageCaption").style.display = "block";
-}
-
-function removeItem(button) {
-    const li = button.parentNode;
-    li.parentNode.removeChild(li);
-}
-
-function visualizarCardapio() {
-    window.location.href = 'vercadapio.html';
-}
-
-function finalizarCadastro() {
-    alert('Implemente a lógica para finalizar o cadastro');
 }
 
