@@ -238,7 +238,7 @@
                 const empresaId = 'mCw3txtk3JCUCrnaIRA3';
 
                 // Adicione o item ao Firestore
-                db.collection('empresas').doc(mCw3txtk3JCUCrnaIRA3).collection('cardapio').add(newItem)
+                db.collection('Empresas').doc(mCw3txtk3JCUCrnaIRA3).collection('Cardápio').add(newItem)
                     .then((docRef) => {
                         console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
                     })
@@ -279,7 +279,7 @@
             menuPreviewContainer.innerHTML = ""; // Limpa o conteúdo anterior
 
             // Obtém os itens do Firestore e exibe no menuPreviewContainer
-            db.collection('empresas').doc('mCw3txtk3JCUCrnaIRA3').collection('cardapio').get()
+            db.collection('Empresas').doc('mCw3txtk3JCUCrnaIRA3').collection('Cardápio').get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         const item = doc.data();
