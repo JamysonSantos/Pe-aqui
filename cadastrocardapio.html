@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        /* Seu estilo aqui */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f0f0f0;
@@ -26,14 +25,23 @@
         }
 
         #app-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
             max-width: 800px;
             margin: 8rem auto;
             padding: 2rem;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
+        }
+
+        #form-container {
+            grid-column: 1 / 2;
+        }
+
+        #preview-container {
+            grid-column: 2 / 3;
         }
 
         h1 {
@@ -125,7 +133,7 @@
     </div>
 
     <div id="app-container">
-        <div id="app">
+        <div id="form-container">
             <div>
                 <h1>Cadastro de Cardápio</h1>
                 <div>
@@ -158,7 +166,10 @@
                 <h2>Itens do Cardápio</h2>
                 <ul id="menuItemsList"></ul>
             </div>
-            <div class="menu-preview" id="menuPreviewContainer"></div>
+        </div>
+        <div id="preview-container" class="menu-preview">
+            <h2>Cardápio em Construção</h2>
+            <div id="menuPreviewContainer"></div>
         </div>
     </div>
 
@@ -238,7 +249,7 @@
                 const empresaId = 'mCw3txtk3JCUCrnaIRA3';
 
                 // Adicione o item ao Firestore
-                db.collection('Empresas').doc(mCw3txtk3JCUCrnaIRA3).collection('Cardápio').add(newItem)
+                db.collection('Empresas').doc(empresaId).collection('Cardápio').add(newItem)
                     .then((docRef) => {
                         console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
                     })
