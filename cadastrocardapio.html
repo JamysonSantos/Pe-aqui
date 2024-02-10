@@ -1,38 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Paleta de cores laranja */
-        :root {
-            --primary-color: #FF5733; /* Define a cor primária */
-            --secondary-color: #FF814E; /* Define a cor secundária */
-        }
-
-        /* Estilos para as imagens do cardápio */
-        .item-image {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        .image-preview {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .image-preview img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
         /* Estilos para a barra laranja */
         .orange-bar {
-            background-color: var(--primary-color);
+            background-color: #FFA500; /* Laranja claro */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -51,159 +28,186 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Aplica a paleta de cores laranja */
-        body {
-            background-color: #f0f0f0; /* Cor de fundo */
-            margin: 0; /* Removendo margens padrão do body */
+        /* Estilos para a pré-visualização de fotos */
+        .preview-image {
+            max-width: 200px; /* Largura máxima desejada */
+            max-height: 200px; /* Altura máxima desejada */
         }
-        .text-primary {
-            color: var(--primary-color); /* Cor do texto primário */
-        }
-        .button {
-            background-color: var(--primary-color); /* Cor de fundo dos botões */
-            color: #fff; /* Cor do texto dos botões */
-        }
-        /* Estiliza outros elementos conforme necessário */
+
     </style>
 </head>
-<body>
-    <div class="orange-bar">
-        <a href="#" onclick="history.back();" class="button-voltar">Voltar</a>
+
+<body class="bg-gray-100 font-sans">
+
+    <!-- Barra Superior -->
+    <header class="orange-bar">
+        <!-- Botão Voltar -->
+        <button class="button-voltar" onclick="window.history.back()">Voltar</button>
+        <!-- Título -->
+        <h1 class="text-2xl font-bold">Cadastre seu Cardápio</h1>
+        <!-- Espaço em Branco -->
+        <div></div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto flex justify-center mt-8">
+
+        <!-- Formulário de Cadastro -->
+        <div class="w-1/2 p-8">
+            <h2 class="text-lg font-bold mb-4">Adicionar Novo Item</h2>
+            <form id="addItemForm">
+                <div class="mb-4">
+                    <label for="item-nome" class="block mb-2">Nome do Item:</label>
+                    <input type="text" id="item-nome" name="item-nome" class="w-full rounded-md border-gray-300 px-3 py-2">
+                </div>
+                <div class="mb-4">
+                    <label for="item-descricao" class="block mb-2">Descrição:</label>
+                    <textarea id="item-descricao" name="item-descricao" class="w-full rounded-md border-gray-300 px-3 py-2"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
+                        Preço
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                            R$
+                        </span>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pl-8" id="price" type="text" placeholder="0,00">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="item-categoria" class="block mb-2">Categoria:</label>
+                    <input id="item-categoria" name="item-categoria" class="w-full rounded-md border-gray-300 px-3 py-2">
+                </div>
+                <h2 class="text-lg font-bold mb-4">Adicionar Fotos</h2>
+                <input type="file" id="fileInput" accept="image/*" multiple style="display: none;" onchange="onFileChange(event)">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="attachImage()">Anexar Fotos</button>
+                <div id="previewContainer" class="mt-4 grid grid-cols-3 gap-4"></div>
+                <div>
+                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="addItem()">Adicionar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Lista de Itens Cadastrados -->
+        <div class="w-1/2 p-8">
+            <h2 class="text-lg font-bold mb-4">Itens Cadastrados</h2>
+            <div id="itemsList" class="overflow-y-auto max-h-96 border rounded-md px-4 py-2">
+                <!-- Itens serão adicionados dinamicamente aqui -->
+            </div>
+        </div>
+
     </div>
 
-    <div id="app">
-        <v-app>
-            <v-container>
-                <h1 class="text-center text-primary">Cadastro de Cardápio</h1>
-                <v-form @submit.prevent="submitForm">
-                    <v-row>
-                        <v-col cols="12" sm="6">
-                            <v-text-field v-model="itemName" label="Nome do Item" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                            <v-text-field v-model="description" label="Descrição do Produto" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="4">
-                            <v-text-field v-model="price" label="Preço" type="number" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                            <v-text-field v-model="itemCategory" label="Categoria" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                            <span v-if="images.length < 3" class="text-caption text-primary">Você pode escolher até 3 fotos do seu produto</span>
-                            <v-btn @click="attachImage" color="primary" v-if="images.length < 3" class="button">Anexar foto</v-btn>
-                            <input ref="fileInput" type="file" @change="onFileChange" style="display: none;" accept="image/*" multiple v-if="images.length < 3">
-                            <div v-if="images.length > 0">
-                                <div v-for="(image, index) in images" :key="index" class="image-preview">
-                                    <img :src="image.url" alt="Imagem" class="item-image">
-                                </div>
-                            </div>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col>
-                            <v-btn @click="submitForm" class="button">Adicionar Item</v-btn>
-                            <v-btn @click="visualizarCardapio" class="button">Visualizar cardápio</v-btn>
-                            <v-btn @click="finalizarCadastro" class="button">Finalizar cadastro</v-btn>
-                        </v-col>
-                    </v-row>
-                </v-form>
-                <v-divider class="my-4"></v-divider>
-                <h2 class="text-primary">Itens do Cardápio</h2>
-                <v-list dense>
-                    <v-list-item v-for="(item, index) in menuItems" :key="index">
-                        <v-list-item-content>
-                            <v-list-item-title>{{ item.name }}</v-list-item-title>
-                            <v-list-item-subtitle>R$ {{ item.price }}</v-list-item-subtitle>
-                            <div v-if="item.images.length > 0">
-                                <div v-for="(image, idx) in item.images" :key="idx" class="image-preview">
-                                    <img :src="image.url" alt="Imagem" class="item-image">
-                                </div>
-                            </div>
-                            <v-btn @click="removeItem(index)" color="error" class="button">Remover</v-btn>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-            </v-container>
-        </v-app>
+    <!-- Detailed View Modal -->
+    <div id="detail-modal" class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-md">
+            <h2 class="text-lg font-bold mb-4">Detalhes do Item</h2>
+            <p>Nome: Nome do Item</p>
+            <p>Descrição: Breve descrição do item.</p>
+            <p>Preço: R$ 10.00</p>
+            <p>Categoria: Categoria</p>
+            <button id="close-modal" class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded mt-4" onclick="closeDetailModal()">Fechar</button>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.js"></script>
     <script>
-        new Vue({
-            el: '#app',
-            vuetify: new Vuetify(),
-            data: {
-                itemName: '',
-                price: '',
-                itemCategory: '', // Campo de categoria adicionado
-                images: [],
-                currentItem: null,
-                menuItems: []
-            },
-            methods: {
-                submitForm() {
-                    if (this.itemName && this.price && this.images.length > 0 && this.images.length <= 3 && this.itemCategory) {
-                        const newItem = {
-                            name: this.itemName,
-                            price: parseFloat(this.price).toFixed(2),
-                            category: this.itemCategory, // Adiciona a categoria ao novo item
-                            images: this.images ? this.images.map(img => ({ url: img.url })) : []
-                        };
-                        this.menuItems.push(newItem);
-                        this.saveMenuItemsToLocal(); // Salva os itens no localStorage
-                        this.clearFields();
-                    } else {
-                        alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
-                    }
-                },
-                clearFields() {
-                    this.itemName = '';
-                    this.price = '';
-                    this.itemCategory = ''; // Limpa o campo de categoria após adicionar o item
-                    this.images = [];
-                },
-                attachImage() {
-                    this.$refs.fileInput.click();
-                },
-                onFileChange(e) {
-                    const files = e.target.files;
-                    if (this.images.length + files.length > 3) {
-                        alert('Você só pode escolher até 3 fotos.');
-                        return;
-                    }
-                    for (let i = 0; i < files.length; i++) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            this.images.push({ url: e.target.result });
-                        };
-                        reader.readAsDataURL(files[i]);
-                    }
-                },
-                removeItem(index) {
-                    this.menuItems.splice(index, 1);
-                    this.saveMenuItemsToLocal(); // Após remover um item, atualiza o localStorage
-                },
-                visualizarCardapio() {
-                    window.location.href = 'vercadapio.html';      
-                },
-                finalizarCadastro() {
-                    if (this.menuItems.length > 0) {
-                        this.saveMenuItemsToLocal();
-                        alert('Cardápio cadastrado!');
-                        window.location.href = 'vercardapio.html';
-                    } else {
-                        alert('Por favor, cadastre itens no cardápio antes de finalizar.');
-                    }
-                },
-                saveMenuItemsToLocal() {
-                    localStorage.setItem('menuItems', JSON.stringify(this.menuItems));
-                }
+        // Function to show detailed view modal
+        function showDetailModal() {
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        // Function to close detailed view modal
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+
+        // Function to attach image input
+        function attachImage() {
+            const fileInput = document.getElementById("fileInput");
+            fileInput.click();
+        }
+
+        // Function to handle file input change
+        function onFileChange(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById("previewContainer");
+
+            if (previewContainer.childElementCount + files.length > 3) {
+                alert('Você só pode escolher até 3 fotos.');
+                return;
             }
-        });
+
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement("img");
+                    const canvas = document.createElement("canvas"); // Elemento canvas para redimensionamento
+                    const ctx = canvas.getContext("2d");
+                    img.onload = () => {
+                        const MAX_WIDTH = 200; // Largura máxima desejada
+                        const MAX_HEIGHT = 200; // Altura máxima desejada
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const dataUrl = canvas.toDataURL('image/jpeg'); // Convertendo a imagem redimensionada para base64
+                        img.src = dataUrl;
+                    };
+                    img.src = e.target.result;
+                    img.alt = "Imagem";
+                    img.className = "preview-image";
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        // Função para lidar com a submissão do formulário
+        function addItem() {
+            const itemName = document.getElementById("item-nome").value;
+            const itemDescription = document.getElementById("item-descricao").value;
+            const itemPrice = document.getElementById("price").value;
+            const itemCategory = document.getElementById("item-categoria").value;
+
+            // Criar elemento HTML para o item
+            const itemElement = document.createElement("div");
+            itemElement.classList.add("mb-2");
+            itemElement.innerHTML = `
+                <h3 class="font-bold">${itemName}</h3>
+                <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
+                <div class="mt-2">
+                    <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
+                </div>
+            `;
+
+            // Adicionar item à lista
+            document.getElementById("itemsList").appendChild(itemElement);
+
+            // Limpar formulário
+            document.getElementById("addItemForm").reset();
+        }
     </script>
+
 </body>
+
 </html>
 
 
