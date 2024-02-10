@@ -1,324 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
+        /* Paleta de cores laranja */
+        :root {
+            --primary-color: #FF5733; /* Define a cor primária */
+            --secondary-color: #FF814E; /* Define a cor secundária */
         }
 
-        .header {
-            background: linear-gradient(to right, #ec3517, #ffffff);
-            padding: 1rem 2rem;
+        /* Estilos para as imagens do cardápio */
+        .item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .image-preview {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            margin-bottom: 10px;
         }
-
-        .header a {
-            text-decoration: none;
-            color: white;
-            font-size: 16px;
-        }
-
-        #app-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 800px;
-            margin: 8rem auto;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #form-container {
-            grid-column: 1 / 2;
-        }
-
-        #preview-container {
-            grid-column: 2 / 3;
-        }
-
-        h1 {
-            color: #FF5733;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-
-        button {
-            background-color: #FF5733;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #ec3517;
-        }
-
-        .button-container {
-            align-self: flex-end;
-            margin-top: 1rem;
-        }
-
-        hr {
-            border: 1px solid #ddd;
-            margin: 2rem 0;
-        }
-
-        h2 {
-            color: #FF5733;
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        ul {
-            list-style-type: disc;
-            padding-left: 2rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        #previewContainer {
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-
-        .previewImage {
-            width: 100px;
-            height: 100px;
+        .image-preview img {
+            width: 50px;
+            height: 50px;
             object-fit: cover;
             border-radius: 5px;
             margin-right: 10px;
-            margin-bottom: 10px;
         }
 
-        .menu-preview {
-            max-width: 300px;
-            margin-left: 2rem;
+        /* Estilos para a barra laranja */
+        .orange-bar {
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            color: white;
         }
+
+        .button-voltar {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Aplica a paleta de cores laranja */
+        body {
+            background-color: #f0f0f0; /* Cor de fundo */
+            margin: 0; /* Removendo margens padrão do body */
+        }
+        .text-primary {
+            color: var(--primary-color); /* Cor do texto primário */
+        }
+        .button {
+            background-color: var(--primary-color); /* Cor de fundo dos botões */
+            color: #fff; /* Cor do texto dos botões */
+        }
+        /* Estiliza outros elementos conforme necessário */
     </style>
 </head>
-
 <body>
-    <div class="header">
-        <a href="#" onclick="history.back();">Voltar</a>
+    <div class="orange-bar">
+        <a href="#" onclick="history.back();" class="button-voltar">Voltar</a>
     </div>
 
-    <div id="app-container">
-        <div id="form-container">
-            <div>
-                <h1>Cadastro de Cardápio</h1>
-                <div>
-                    <label for="itemName">Nome do Item</label>
-                    <input type="text" id="itemName" required>
-                </div>
-                <div>
-                    <label for="description">Descrição do Produto</label>
-                    <textarea id="description" rows="3" required></textarea>
-                </div>
-                </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
-            Preço
-          </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-              R$
-            </span>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pl-8" id="price" type="text" placeholder="0,00">
-          </div>
-                <div>
-                    <label for="itemCategory">Categoria</label>
-                    <input type="text" id="itemCategory" required>
-                </div>
-                <div>
-                    <span id="imageCaption">Você pode escolher até 3 fotos do seu produto</span>
-                    <button onclick="attachImage()">Adicionar foto</button>
-                    <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple>
-                    <div id="previewContainer"></div>
-                </div>
-                <div class="button-container">
-                    <button onclick="submitForm()">Adicionar Item</button>
-                    <button onclick="finalizarCadastro()">Finalizar cadastro</button>
-                </div>
-                <hr>
-                <h2>Itens do Cardápio</h2>
-                <ul id="menuItemsList"></ul>
-            </div>
-        </div>
-        <div id="preview-container" class="menu-preview">
-            <h2>Seu Cardápio</h2>
-            <div id="menuPreviewContainer"></div>
-        </div>
+    <div id="app">
+        <v-app>
+            <v-container>
+                <h1 class="text-center text-primary">Cadastro de Cardápio</h1>
+                <v-form @submit.prevent="submitForm">
+                    <v-row>
+                        <v-col cols="12" sm="6">
+                            <v-text-field v-model="itemName" label="Nome do Item" required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="2">
+                            <v-text-field v-model="description" label="Descrição do Produto" required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="4">
+                            <v-text-field v-model="price" label="Preço" type="number" required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="2">
+                            <v-text-field v-model="itemCategory" label="Categoria" required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="2">
+                            <span v-if="images.length < 3" class="text-caption text-primary">Você pode escolher até 3 fotos do seu produto</span>
+                            <v-btn @click="attachImage" color="primary" v-if="images.length < 3" class="button">Anexar foto</v-btn>
+                            <input ref="fileInput" type="file" @change="onFileChange" style="display: none;" accept="image/*" multiple v-if="images.length < 3">
+                            <div v-if="images.length > 0">
+                                <div v-for="(image, index) in images" :key="index" class="image-preview">
+                                    <img :src="image.url" alt="Imagem" class="item-image">
+                                </div>
+                            </div>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-btn @click="submitForm" class="button">Adicionar Item</v-btn>
+                            <v-btn @click="visualizarCardapio" class="button">Visualizar cardápio</v-btn>
+                            <v-btn @click="finalizarCadastro" class="button">Finalizar cadastro</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-form>
+                <v-divider class="my-4"></v-divider>
+                <h2 class="text-primary">Itens do Cardápio</h2>
+                <v-list dense>
+                    <v-list-item v-for="(item, index) in menuItems" :key="index">
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.name }}</v-list-item-title>
+                            <v-list-item-subtitle>R$ {{ item.price }}</v-list-item-subtitle>
+                            <div v-if="item.images.length > 0">
+                                <div v-for="(image, idx) in item.images" :key="idx" class="image-preview">
+                                    <img :src="image.url" alt="Imagem" class="item-image">
+                                </div>
+                            </div>
+                            <v-btn @click="removeItem(index)" color="error" class="button">Remover</v-btn>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+            </v-container>
+        </v-app>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/firebase@10.8.0/dist/firebase-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/firebase@10.8.0/dist/firebase-firestore.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.js"></script>
     <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
-            authDomain: "pecaqui-cc6c1.firebaseapp.com",
-            projectId: "pecaqui-cc6c1",
-            storageBucket: "pecaqui-cc6c1.appspot.com",
-            messagingSenderId: "502925766451",
-            appId: "1:502925766451:web:52473d00da34033f789846"
-        };
-
-        // Inicializa o Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-    </script>
-
-    <script>
-        // Funções JavaScript
-        document.addEventListener('DOMContentLoaded', function () {
-            const fileInput = document.getElementById("fileInput");
-            fileInput.addEventListener('change', onFileChange);
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                itemName: '',
+                price: '',
+                itemCategory: '', // Campo de categoria adicionado
+                images: [],
+                currentItem: null,
+                menuItems: []
+            },
+            methods: {
+                submitForm() {
+                    if (this.itemName && this.price && this.images.length > 0 && this.images.length <= 3 && this.itemCategory) {
+                        const newItem = {
+                            name: this.itemName,
+                            price: parseFloat(this.price).toFixed(2),
+                            category: this.itemCategory, // Adiciona a categoria ao novo item
+                            images: this.images ? this.images.map(img => ({ url: img.url })) : []
+                        };
+                        this.menuItems.push(newItem);
+                        this.saveMenuItemsToLocal(); // Salva os itens no localStorage
+                        this.clearFields();
+                    } else {
+                        alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
+                    }
+                },
+                clearFields() {
+                    this.itemName = '';
+                    this.price = '';
+                    this.itemCategory = ''; // Limpa o campo de categoria após adicionar o item
+                    this.images = [];
+                },
+                attachImage() {
+                    this.$refs.fileInput.click();
+                },
+                onFileChange(e) {
+                    const files = e.target.files;
+                    if (this.images.length + files.length > 3) {
+                        alert('Você só pode escolher até 3 fotos.');
+                        return;
+                    }
+                    for (let i = 0; i < files.length; i++) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.images.push({ url: e.target.result });
+                        };
+                        reader.readAsDataURL(files[i]);
+                    }
+                },
+                removeItem(index) {
+                    this.menuItems.splice(index, 1);
+                    this.saveMenuItemsToLocal(); // Após remover um item, atualiza o localStorage
+                },
+                visualizarCardapio() {
+                    window.location.href = 'vercadapio.html';      
+                },
+                finalizarCadastro() {
+                    if (this.menuItems.length > 0) {
+                        this.saveMenuItemsToLocal();
+                        alert('Cardápio cadastrado!');
+                        window.location.href = 'vercardapio.html';
+                    } else {
+                        alert('Por favor, cadastre itens no cardápio antes de finalizar.');
+                    }
+                },
+                saveMenuItemsToLocal() {
+                    localStorage.setItem('menuItems', JSON.stringify(this.menuItems));
+                }
+            }
         });
-
-        function attachImage() {
-            const fileInput = document.getElementById("fileInput");
-            fileInput.click();
-        }
-
-        function onFileChange(e) {
-            const files = e.target.files;
-            const previewContainer = document.getElementById("previewContainer");
-            const imageCaption = document.getElementById("imageCaption");
-
-            if (previewContainer.childElementCount + files.length > 3) {
-                alert('Você só pode escolher até 3 fotos.');
-                return;
-            }
-
-            for (let i = 0; files && i < files.length; i++) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.alt = "Imagem";
-                    img.className = "previewImage";
-                    previewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(files[i]);
-            }
-
-            imageCaption.style.display = "none";
-        }
-
-        function submitForm() {
-            const itemName = document.getElementById("itemName").value;
-            const description = document.getElementById("description").value;
-            const price = document.getElementById("price").value;
-            const itemCategory = document.getElementById("itemCategory").value;
-            const previewContainer = document.getElementById("previewContainer");
-
-            if (itemName && price && previewContainer.childElementCount > 0 && previewContainer.childElementCount <= 3 && itemCategory) {
-                const newItem = {
-                    name: itemName,
-                    description: description,
-                    price: parseFloat(price).toFixed(2),
-                    category: itemCategory,
-                    images: Array.from(previewContainer.children).map(img => ({ url: img.src }))
-                };
-
-                // Substitua 'ID_DA_SUA_EMPRESA' pelo código real da sua empresa
-                const empresaId = 'mCw3txtk3JCUCrnaIRA3';
-
-                // Adicione o item ao Firestore
-                db.collection('Empresas').doc(empresaId).collection('Cardápio').add(newItem)
-                    .then((docRef) => {
-                        console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao adicionar item ao Firestore:', error);
-                    });
-
-                // Adicione o item à lista na página
-                const menuItemsList = document.getElementById("menuItemsList");
-                const li = document.createElement("li");
-                li.innerHTML = `<strong>${newItem.name}</strong> - R$ ${newItem.price} <button onclick="removeItem(this)" class="bg-red-600 text-white py-1 px-2 rounded">Remover</button>`;
-                menuItemsList.appendChild(li);
-
-                clearFields();
-            } else {
-                alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
-            }
-        }
-
-        function clearFields() {
-            document.getElementById("itemName").value = '';
-            document.getElementById("description").value = '';
-            document.getElementById("price").value = '';
-            document.getElementById("itemCategory").value = '';
-            document.getElementById("fileInput").value = '';
-            document.getElementById("previewContainer").innerHTML = '';
-            document.getElementById("imageCaption").style.display = "block";
-        }
-
-        function removeItem(button) {
-            const li = button.parentNode;
-            li.parentNode.removeChild(li);
-        }
-
-        function finalizarCadastro() {
-            // Lógica para finalizar o cadastro e exibir o cardápio
-            const menuPreviewContainer = document.getElementById("menuPreviewContainer");
-            menuPreviewContainer.innerHTML = ""; // Limpa o conteúdo anterior
-
-            // Obtém os itens do Firestore e exibe no menuPreviewContainer
-            db.collection('Empresas').doc('mCw3txtk3JCUCrnaIRA3').collection('Cardápio').get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        const item = doc.data();
-                        const div = document.createElement("div");
-                        div.innerHTML = `<strong>${item.name}</strong> - R$ ${item.price}`;
-                        menuPreviewContainer.appendChild(div);
-                    });
-                })
-                .catch((error) => {
-                    console.error('Erro ao obter itens do Firestore:', error);
-                });
-
-            // Navega até o menuPreviewContainer
-            const yOffset = -menuPreviewContainer.offsetTop;
-            window.scrollTo(0, yOffset);
-        }
     </script>
 </body>
-
 </html>
-
 
 
 
