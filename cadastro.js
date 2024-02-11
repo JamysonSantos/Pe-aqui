@@ -66,7 +66,7 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         };
 
         // Adiciona um novo documento à coleção "Empresas"
-        return db.collection("Empresas").doc(empresaData).collection("cardapio").add({/* dados do cardápio */});
+        return db.collection("Empresas").add(empresaData);
       })
       .then(() => {
         // Redirecionamento após o cadastro bem-sucedido
