@@ -8,8 +8,11 @@ const firebaseConfig = {
     appId: "1:502925766451:web:52473d00da34033f789846"
 };
 
-// Inicializa o Firebase
+// Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
+
+// Para utilizar os recursos de autenticação e banco de dados
+const auth = firebase.auth();
 const db = firebase.firestore();
 
 // Verifica se há um usuário autenticado
