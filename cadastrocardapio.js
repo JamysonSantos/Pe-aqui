@@ -12,21 +12,85 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Funções JavaScript
-document.addEventListener('DOMContentLoaded', function () {
-    const fileInput = document.getElementById("fileInput");
-    fileInput.addEventListener('change', onFileChange);
+// Verifica se há um usuário autenticado
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // O usuário está autenticado
+        const userId = user.uid;
+
+        // Função para adicionar um item ao Firestore
+        function addItem() {
+            const itemName = document.getElementById("item-nome").value;
+            const itemDescription = document.getElementById("item-descricao").value;
+            const itemPrice = document.getElementById("price").value;
+            const itemCategory = document.getElementById("item-categoria").value;
+
+            // Criar objeto para armazenar os dados do item
+            const itemData = {
+                nome: itemName,
+                descricao: itemDescription,
+                preco: itemPrice,
+                categoria: itemCategory
+            };
+
+            // Recuperar o ID da empresa associada ao usuário
+            db.collection('empresas').where('userId', '==', userId).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const empresaId = doc.id;
+                        // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
+                        db.collection('empresas').doc(empresaId).collection('cardapio').add(itemData)
+                            .then((docRef) => {
+                                console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
+                            })
+                            .catch((error) => {
+                                console.error('Erro ao adicionar item ao Firestore:', error);
+                            });
+                    });
+                })
+                .catch((error) => {
+                    console.error('Erro ao recuperar o ID da empresa:', error);
+                });
+
+            // Limpar formulário após salvar
+            clearFields();
+        }
+    } else {
+        // Se não houver usuário autenticado, redirecione para a página de login ou realize outra ação apropriada
+        console.log("Nenhum usuário autenticado encontrado.");
+    }
 });
 
+// Função para limpar os campos do formulário
+function clearFields() {
+    document.getElementById("item-nome").value = '';
+    document.getElementById("item-descricao").value = '';
+    document.getElementById("price").value = '';
+    document.getElementById("item-categoria").value = '';
+    document.getElementById("fileInput").value = '';
+    document.getElementById("previewContainer").innerHTML = '';
+}
+
+// Function to show detailed view modal
+function showDetailModal() {
+    document.getElementById('detail-modal').classList.remove('hidden');
+}
+
+// Function to close detailed view modal
+function closeDetailModal() {
+    document.getElementById('detail-modal').classList.add('hidden');
+}
+
+// Function to attach image input
 function attachImage() {
     const fileInput = document.getElementById("fileInput");
     fileInput.click();
 }
 
-function onFileChange(e) {
-    const files = e.target.files;
+// Function to handle file input change
+function onFileChange(event) {
+    const files = event.target.files;
     const previewContainer = document.getElementById("previewContainer");
-    const imageCaption = document.getElementById("imageCaption");
 
     if (previewContainer.childElementCount + files.length > 3) {
         alert('Você só pode escolher até 3 fotos.');
@@ -37,77 +101,65 @@ function onFileChange(e) {
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = document.createElement("img");
+            const canvas = document.createElement("canvas"); // Elemento canvas para redimensionamento
+            const ctx = canvas.getContext("2d");
+            img.onload = () => {
+                const MAX_WIDTH = 200; // Largura máxima desejada
+                const MAX_HEIGHT = 200; // Altura máxima desejada
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const dataUrl = canvas.toDataURL('image/jpeg'); // Convertendo a imagem redimensionada para base64
+                img.src = dataUrl;
+            };
             img.src = e.target.result;
             img.alt = "Imagem";
-            img.className = "previewImage";
+            img.className = "preview-image";
             previewContainer.appendChild(img);
         };
         reader.readAsDataURL(files[i]);
     }
-
-    imageCaption.style.display = "none";
 }
 
-function submitForm() {
-    const itemName = document.getElementById("itemName").value;
-    const description = document.getElementById("description").value;
-    const price = document.getElementById("price").value;
-    const itemCategory = document.getElementById("itemCategory").value;
-    const previewContainer = document.getElementById("previewContainer");
+// Função para lidar com a submissão do formulário
+function addItem() {
+    const itemName = document.getElementById("item-nome").value;
+    const itemDescription = document.getElementById("item-descricao").value;
+    const itemPrice = document.getElementById("price").value;
+    const itemCategory = document.getElementById("item-categoria").value;
 
-    if (itemName && price && previewContainer.childElementCount > 0 && previewContainer.childElementCount <= 3 && itemCategory) {
-        const newItem = {
-            name: itemName,
-            description: description,
-            price: parseFloat(price).toFixed(2),
-            category: itemCategory,
-            images: Array.from(previewContainer.children).map(img => ({ url: img.src }))
-        };
+    // Criar elemento HTML para o item
+    const itemElement = document.createElement("div");
+    itemElement.classList.add("mb-2");
+    itemElement.innerHTML = `
+        <h3 class="font-bold">${itemName}</h3>
+        <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
+        <div class="mt-2">
+            <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
+        </div>
+    `;
 
-        // Substitua 'ID_DA_SUA_EMPRESA' pelo código real da sua empresa
-        const empresaId = 'ID_DA_SUA_EMPRESA';
+    // Adicionar item à lista
+    document.getElementById("itemsList").appendChild(itemElement);
 
-        // Adicione o item ao Firestore
-        db.collection('empresas').doc(empresaId).collection('cardapio').add(newItem)
-            .then((docRef) => {
-                console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
-            })
-            .catch((error) => {
-                console.error('Erro ao adicionar item ao Firestore:', error);
-            });
-
-        // Adicione o item à lista na página
-        const menuItemsList = document.getElementById("menuItemsList");
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>${newItem.name}</strong> - R$ ${newItem.price} <button onclick="removeItem(this)" class="bg-red-600 text-white py-1 px-2 rounded">Remover</button>`;
-        menuItemsList.appendChild(li);
-
-        clearFields();
-    } else {
-        alert('Por favor, preencha todos os campos e selecione até 3 imagens.');
-    }
+    // Limpar formulário
+    document.getElementById("addItemForm").reset();
 }
-
-function clearFields() {
-    document.getElementById("itemName").value = '';
-    document.getElementById("description").value = '';
-    document.getElementById("price").value = '';
-    document.getElementById("itemCategory").value = '';
-    document.getElementById("fileInput").value = '';
-    document.getElementById("previewContainer").innerHTML = '';
-    document.getElementById("imageCaption").style.display = "block";
-}
-
-function removeItem(button) {
-    const li = button.parentNode;
-    li.parentNode.removeChild(li);
-}
-
-function visualizarCardapio() {
-    window.location.href = 'vercadapio.html';
-}
-
-function finalizarCadastro() {
-    alert('Implemente a lógica para finalizar o cadastro');
-}
-
