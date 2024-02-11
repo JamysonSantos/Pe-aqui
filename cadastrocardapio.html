@@ -112,6 +112,79 @@
     </div>
 
     <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "Sua API Key",
+            authDomain: "Seu authDomain",
+            projectId: "Seu projectId",
+            storageBucket: "Seu storageBucket",
+            messagingSenderId: "Seu messagingSenderId",
+            appId: "Sua appId"
+        };
+
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Verifica se há um usuário autenticado
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // O usuário está autenticado
+                const userId = user.uid;
+
+                // Função para adicionar um item ao Firestore
+                function addItem() {
+                    const itemName = document.getElementById("item-nome").value;
+                    const itemDescription = document.getElementById("item-descricao").value;
+                    const itemPrice = document.getElementById("price").value;
+                    const itemCategory = document.getElementById("item-categoria").value;
+
+                    // Criar objeto para armazenar os dados do item
+                    const itemData = {
+                        nome: itemName,
+                        descricao: itemDescription,
+                        preco: itemPrice,
+                        categoria: itemCategory
+                    };
+
+                    // Recuperar o ID da empresa associada ao usuário
+                    db.collection('empresas').where('userId', '==', userId).get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                const empresaId = doc.id;
+                                // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
+                                db.collection('empresas').doc(empresaId).collection('cardapio').add(itemData)
+                                    .then((docRef) => {
+                                        console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
+                                    })
+                                    .catch((error) => {
+                                        console.error('Erro ao adicionar item ao Firestore:', error);
+                                    });
+                            });
+                        })
+                        .catch((error) => {
+                            console.error('Erro ao recuperar o ID da empresa:', error);
+                        });
+
+                    // Limpar formulário após salvar
+                    clearFields();
+                }
+            } else {
+                // Se não houver usuário autenticado, redirecione para a página de login ou realize outra ação apropriada
+                console.log("Nenhum usuário autenticado encontrado.");
+            }
+        });
+
+        // Função para limpar os campos do formulário
+        function clearFields() {
+            document.getElementById("item-nome").value = '';
+            document.getElementById("item-descricao").value = '';
+            document.getElementById("price").value = '';
+            document.getElementById("item-categoria").value = '';
+            document.getElementById("fileInput").value = '';
+            document.getElementById("previewContainer").innerHTML = '';
+        }
+
         // Function to show detailed view modal
         function showDetailModal() {
             document.getElementById('detail-modal').classList.remove('hidden');
