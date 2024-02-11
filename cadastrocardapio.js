@@ -34,17 +34,44 @@ firebase.auth().onAuthStateChanged((user) => {
             };
 
             // Recuperar o ID da empresa associada ao usuário
-            db.collection('empresas').where('userId', '==', userId).get()
+            db.collection('Empresas').where('userId', '==', userId).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         const empresaId = doc.id;
-                        // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-                        db.collection('empresas').doc(empresaId).collection('cardapio').add(itemData)
-                            .then((docRef) => {
-                                console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
+                        
+                        // Verifica se a subcoleção "Cardapio" já existe para esta empresa
+                        db.collection('Empresas').doc(empresaId).collection('Cardapio').get()
+                            .then((snapshot) => {
+                                if (snapshot.empty) {
+                                    // A subcoleção "Cardapio" não existe, então cria ela
+                                    db.collection('Empresas').doc(empresaId).collection('Cardapio').add({})
+                                        .then((docRef) => {
+                                            console.log("Subcoleção 'Cardapio' criada com sucesso.");
+                                            // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
+                                            db.collection('empresas').doc(empresaId).collection('Cardapio').doc(docRef.id).set(itemData)
+                                                .then(() => {
+                                                    console.log("Item adicionado ao Firestore com sucesso.");
+                                                })
+                                                .catch((error) => {
+                                                    console.error('Erro ao adicionar item ao Firestore:', error);
+                                                });
+                                        })
+                                        .catch((error) => {
+                                            console.error('Erro ao criar subcoleção "Cardapio":', error);
+                                        });
+                                } else {
+                                    // A subcoleção "Cardapio" já existe, então adiciona o item diretamente
+                                    db.collection('Empresas').doc(empresaId).collection('Cardapio').add(itemData)
+                                        .then((docRef) => {
+                                            console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
+                                        })
+                                        .catch((error) => {
+                                            console.error('Erro ao adicionar item ao Firestore:', error);
+                                        });
+                                }
                             })
                             .catch((error) => {
-                                console.error('Erro ao adicionar item ao Firestore:', error);
+                                console.error('Erro ao verificar a existência da subcoleção "Cardapio":', error);
                             });
                     });
                 })
@@ -163,3 +190,4 @@ function addItem() {
     // Limpar formulário
     document.getElementById("addItemForm").reset();
 }
+
