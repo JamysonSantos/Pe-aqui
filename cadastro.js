@@ -68,6 +68,13 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         // Adiciona um novo documento à coleção "Empresas"
         return db.collection("Empresas").add(empresaData);
       })
+      .then((docRef) => {
+        // Obter o ID da empresa recém-cadastrada
+        const empresaId = docRef.id;
+
+        // Criar a subcoleção "cardapio" para a nova empresa
+        return db.collection("Empresas").doc(empresaId).collection("cardapio").add({});
+      })
       .then(() => {
         // Redirecionamento após o cadastro bem-sucedido
         window.location.href = 'poscadastro.html';
@@ -98,3 +105,4 @@ function validateEmail(email) {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regex.test(email);
 }
+
