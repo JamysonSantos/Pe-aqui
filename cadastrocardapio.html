@@ -113,67 +113,45 @@
 
     <script>
         // Cole suas configurações do Firebase aqui
-const firebaseConfig = {
-  apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
-  authDomain: "pecaqui-cc6c1.firebaseapp.com",
-  projectId: "pecaqui-cc6c1",
-  storageBucket: "pecaqui-cc6c1.appspot.com",
-  messagingSenderId: "502925766451",
-  appId: "1:502925766451:web:52473d00da34033f789846"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
+            authDomain: "pecaqui-cc6c1.firebaseapp.com",
+            projectId: "pecaqui-cc6c1",
+            storageBucket: "pecaqui-cc6c1.appspot.com",
+            messagingSenderId: "502925766451",
+            appId: "1:502925766451:web:52473d00da34033f789846"
+        };
 
         // Inicializa o Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Verifica se há um usuário autenticado
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // O usuário está autenticado
-                const userId = user.uid;
+        // Função para adicionar um item ao Firestore
+        function addItem() {
+            const itemName = document.getElementById("item-nome").value;
+            const itemDescription = document.getElementById("item-descricao").value;
+            const itemPrice = document.getElementById("price").value;
+            const itemCategory = document.getElementById("item-categoria").value;
 
-                // Função para adicionar um item ao Firestore
-                function addItem() {
-                    const itemName = document.getElementById("item-nome").value;
-                    const itemDescription = document.getElementById("item-descricao").value;
-                    const itemPrice = document.getElementById("price").value;
-                    const itemCategory = document.getElementById("item-categoria").value;
+            // Criar objeto para armazenar os dados do item
+            const itemData = {
+                nome: itemName,
+                descricao: itemDescription,
+                preco: itemPrice,
+                categoria: itemCategory
+            };
 
-                    // Criar objeto para armazenar os dados do item
-                    const itemData = {
-                        nome: itemName,
-                        descricao: itemDescription,
-                        preco: itemPrice,
-                        categoria: itemCategory
-                    };
-
-                    // Recuperar o ID da empresa associada ao usuário
-                    db.collection('empresas').where('userId', '==', userId).get()
-                        .then((querySnapshot) => {
-                            querySnapshot.forEach((doc) => {
-                                const empresaId = doc.id;
-                                // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-                                db.collection('empresas').doc(empresaId).collection('cardapio').add(itemData)
-                                    .then((docRef) => {
-                                        console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
-                                    })
-                                    .catch((error) => {
-                                        console.error('Erro ao adicionar item ao Firestore:', error);
-                                    });
-                            });
-                        })
-                        .catch((error) => {
-                            console.error('Erro ao recuperar o ID da empresa:', error);
-                        });
-
+            // Adicionar o item ao Firestore
+            db.collection('cardapio').add(itemData)
+                .then((docRef) => {
+                    console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
                     // Limpar formulário após salvar
                     clearFields();
-                }
-            } else {
-                // Se não houver usuário autenticado, redirecione para a página de login ou realize outra ação apropriada
-                console.log("Nenhum usuário autenticado encontrado.");
-            }
-        });
+                })
+                .catch((error) => {
+                    console.error('Erro ao adicionar item ao Firestore:', error);
+                });
+        }
 
         // Função para limpar os campos do formulário
         function clearFields() {
@@ -251,37 +229,12 @@ const firebaseConfig = {
                 reader.readAsDataURL(files[i]);
             }
         }
-
-        // Função para lidar com a submissão do formulário
-        function addItem() {
-            const itemName = document.getElementById("item-nome").value;
-            const itemDescription = document.getElementById("item-descricao").value;
-            const itemPrice = document.getElementById("price").value;
-            const itemCategory = document.getElementById("item-categoria").value;
-
-            // Criar elemento HTML para o item
-            const itemElement = document.createElement("div");
-            itemElement.classList.add("mb-2");
-            itemElement.innerHTML = `
-                <h3 class="font-bold">${itemName}</h3>
-                <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
-                <div class="mt-2">
-                    <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
-                </div>
-            `;
-
-            // Adicionar item à lista
-            document.getElementById("itemsList").appendChild(itemElement);
-
-            // Limpar formulário
-            document.getElementById("addItemForm").reset();
-        }
     </script>
 
 </body>
 
 </html>
+
 
 
 
