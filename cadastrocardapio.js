@@ -16,7 +16,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 function addItem() {
-    // Verificar se há um usuário autenticado
+    // Obter o usuário atualmente autenticado
     const user = firebase.auth().currentUser;
     if (!user) {
         console.error('Nenhum usuário autenticado encontrado.');
@@ -24,13 +24,20 @@ function addItem() {
         return;
     }
 
-    // Obtendo o ID do usuário atualmente autenticado
+    // Obter o ID do usuário atualmente autenticado
     const userId = user.uid;
 
-    const itemName = document.getElementById("item-nome").value;
-    const itemDescription = document.getElementById("item-descricao").value;
-    const itemPrice = document.getElementById("price").value;
-    const itemCategory = document.getElementById("item-categoria").value;
+    // Obter os valores dos campos do formulário
+    const itemName = document.getElementById("item-nome").value.trim();
+    const itemDescription = document.getElementById("item-descricao").value.trim();
+    const itemPrice = document.getElementById("price").value.trim();
+    const itemCategory = document.getElementById("item-categoria").value.trim();
+
+    // Verificar se os campos obrigatórios estão preenchidos
+    if (!itemName || !itemDescription || !itemPrice || !itemCategory) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+    }
 
     // Criar objeto para armazenar os dados do item
     const itemData = {
@@ -155,4 +162,5 @@ function onFileChange(event) {
         reader.readAsDataURL(files[i]);
     }
 }
+
 
