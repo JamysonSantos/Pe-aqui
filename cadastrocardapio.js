@@ -43,15 +43,15 @@ firebase.auth().onAuthStateChanged((user) => {
                         const empresaId = doc.id;
                         
                         // Verifica se a subcoleção "Cardapio" já existe para esta empresa
-                        db.collection('Empresas').doc(empresaId).collection('Cardapio').get()
+                        db.collection('Empresas').doc(empresaId).collection('cardapio').get()
                             .then((snapshot) => {
                                 if (snapshot.empty) {
                                     // A subcoleção "Cardapio" não existe, então cria ela
-                                    db.collection('Empresas').doc(empresaId).collection('Cardapio').add({})
+                                    db.collection('Empresas').doc(empresaId).collection('cardapio').add({})
                                         .then((docRef) => {
-                                            console.log("Subcoleção 'Cardapio' criada com sucesso.");
+                                            console.log("Subcoleção 'cardapio' criada com sucesso.");
                                             // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-                                            db.collection('empresas').doc(empresaId).collection('Cardapio').doc(docRef.id).set(itemData)
+                                            db.collection('empresas').doc(empresaId).collection('cardapio').doc(docRef.id).set(itemData)
                                                 .then(() => {
                                                     console.log("Item adicionado ao Firestore com sucesso.");
                                                 })
@@ -60,7 +60,7 @@ firebase.auth().onAuthStateChanged((user) => {
                                                 });
                                         })
                                         .catch((error) => {
-                                            console.error('Erro ao criar subcoleção "Cardapio":', error);
+                                            console.error('Erro ao criar subcoleção "cardapio":', error);
                                         });
                                 } else {
                                     // A subcoleção "Cardapio" já existe, então adiciona o item diretamente
@@ -74,7 +74,7 @@ firebase.auth().onAuthStateChanged((user) => {
                                 }
                             })
                             .catch((error) => {
-                                console.error('Erro ao verificar a existência da subcoleção "Cardapio":', error);
+                                console.error('Erro ao verificar a existência da subcoleção "cardapio":', error);
                             });
                     });
                 })
