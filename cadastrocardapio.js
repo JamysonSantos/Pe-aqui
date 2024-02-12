@@ -48,38 +48,44 @@ function addItem() {
     };
 
     // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-    db.collection('Empresas').where('userId', '==', userId).get()
+    const empresaRef = db.collection('Empresas').where('userId', '==', userId);
+
+    empresaRef.get()
         .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                const empresaId = doc.id;
+            if (querySnapshot.empty) {
+                console.error('Nenhuma empresa encontrada para o usuário atual.');
+                return;
+            }
 
-                // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-                db.collection('Empresas').doc(empresaId).collection('cardapio').add(itemData)
-                    .then((docRef) => {
-                        console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
+            const empresaDoc = querySnapshot.docs[0]; // Assumindo que há apenas um documento de empresa por usuário
+            const empresaId = empresaDoc.id;
 
-                        // Atualizar a interface do usuário para refletir a adição do item
-                        const itemElement = document.createElement("div");
-                        itemElement.classList.add("mb-2");
-                        itemElement.innerHTML = `
-                            <h3 class="font-bold">${itemName}</h3>
-                            <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
-                            <div class="mt-2">
-                                <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
-                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
-                            </div>
-                        `;
+            // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
+            db.collection('Empresas').doc(empresaId).collection('cardapio').add(itemData)
+                .then((docRef) => {
+                    console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
 
-                        // Adicionar o elemento do item à lista na interface do usuário
-                        document.getElementById("itemsList").appendChild(itemElement);
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao adicionar item ao Firestore:', error);
-                    });
-            });
+                    // Atualizar a interface do usuário para refletir a adição do item
+                    const itemElement = document.createElement("div");
+                    itemElement.classList.add("mb-2");
+                    itemElement.innerHTML = `
+                        <h3 class="font-bold">${itemName}</h3>
+                        <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
+                        <div class="mt-2">
+                            <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
+                        </div>
+                    `;
+
+                    // Adicionar o elemento do item à lista na interface do usuário
+                    document.getElementById("itemsList").appendChild(itemElement);
+                })
+                .catch((error) => {
+                    console.error('Erro ao adicionar item ao Firestore:', error);
+                });
         })
         .catch((error) => {
-            console.error('Erro ao recuperar o ID da empresa:', error);
+            console.error('Erro ao recuperar informações da empresa:', error);
         });
 
     // Limpar formulário após salvar
