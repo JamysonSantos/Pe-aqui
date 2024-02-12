@@ -15,10 +15,17 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Função para adicionar um item ao Firestore
 function addItem() {
+    // Verificar se há um usuário autenticado
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        console.error('Nenhum usuário autenticado encontrado.');
+        // Redirecionar o usuário para a página de login ou executar outra ação apropriada
+        return;
+    }
+
     // Obtendo o ID do usuário atualmente autenticado
-    const userId = firebase.auth().currentUser.uid;
+    const userId = user.uid;
 
     const itemName = document.getElementById("item-nome").value;
     const itemDescription = document.getElementById("item-descricao").value;
