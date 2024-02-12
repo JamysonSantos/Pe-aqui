@@ -69,11 +69,13 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         return db.collection("Empresas").add(empresaData);
       })
       .then((docRef) => {
-        // Obter o ID da empresa recém-cadastrada
-        const empresaId = docRef.id;
+          // Obter o ID da empresa recém-cadastrada
+          const empresaId = docRef.id;
 
         // Criar a subcoleção "cardapio" para a nova empresa
-        return db.collection("Empresas").doc(empresaId).collection("cardapio").add({});
+        return db.collection("Empresas").doc(empresaId).collection("cardapio").doc("placeholder").set({
+            placeholder: "Este documento serve apenas para indicar que a subcoleção foi criada"
+        });
       })
       .then(() => {
         // Redirecionamento após o cadastro bem-sucedido
