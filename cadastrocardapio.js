@@ -168,6 +168,7 @@ function onFileChange(event) {
     }
 }
 
+
 // Função para adicionar um item ao Firestore
 function addItem() {
     // Obtendo o ID do usuário atualmente autenticado
@@ -191,12 +192,12 @@ function addItem() {
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 const empresaId = doc.id;
-                
+
                 // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
                 db.collection('Empresas').doc(empresaId).collection('cardapio').add(itemData)
                     .then((docRef) => {
                         console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
-                        
+
                         // Atualizar a interface do usuário para refletir a adição do item
                         const itemElement = document.createElement("div");
                         itemElement.classList.add("mb-2");
@@ -208,7 +209,7 @@ function addItem() {
                                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
                             </div>
                         `;
-                        
+
                         // Adicionar o elemento do item à lista na interface do usuário
                         document.getElementById("itemsList").appendChild(itemElement);
                     })
@@ -223,5 +224,10 @@ function addItem() {
 
     // Limpar formulário após salvar
     clearFields();
+}
+
+// Função para limpar os campos do formulário
+function clearFields() {
+    // sua função clearFields()
 }
 
