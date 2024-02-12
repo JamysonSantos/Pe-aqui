@@ -38,6 +38,17 @@ document.getElementById('signupForm').addEventListener('submit', function (event
   console.log('Cidade/Estado:', cityState);
   console.log('Senha:', password);
 
+  // Validação de campos
+  if (!validateEmail(email)) {
+    alert("O e-mail informado é inválido.");
+    return;
+  }
+
+  if (!contactNumber || contactNumber.length < 10) {
+    alert("O número de contato informado é inválido.");
+    return;
+  }
+
   // Verifica se o dispositivo está conectado à internet
   if (navigator.onLine) {
     // Chama o método `createUserWithEmailAndPassword()` do Firebase
@@ -54,6 +65,7 @@ document.getElementById('signupForm').addEventListener('submit', function (event
       })
       .then(() => {
         // Cria um objeto com os dados da empresa
+        const userId = user.uid;
         const empresaData = {
           nomeEmpresa: companyName,
           email: email,
@@ -63,18 +75,19 @@ document.getElementById('signupForm').addEventListener('submit', function (event
           bairro: neighborhood,
           'Cidade/Estado': cityState,
           'Crie sua Senha': password,
+          userId: userId
         };
 
         // Adiciona um novo documento à coleção "Empresas"
         return db.collection("Empresas").add(empresaData);
       })
       .then((docRef) => {
-          // Obter o ID da empresa recém-cadastrada
-          const empresaId = docRef.id;
+        // Obter o ID da empresa recém-cadastrada
+        const empresaId = docRef.id;
 
         // Criar a subcoleção "cardapio" para a nova empresa
         return db.collection("Empresas").doc(empresaId).collection("cardapio").doc("placeholder").set({
-            placeholder: "Este documento serve apenas para indicar que a subcoleção foi criada"
+          placeholder: "Este documento serve apenas para indicar que a subcoleção foi criada"
         });
       })
       .then(() => {
@@ -107,4 +120,11 @@ function validateEmail(email) {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regex.test(email);
 }
+
+// Função para validar o número de contato
+function validateContactNumber(number) {
+  // Adicione aqui a lógica de validação para o número de contato, considerando seu formato desejado (e.g., quantidade de dígitos, caracteres aceitáveis, etc.)
+  // Retorne `true` se o número for válido, caso contrário, `false`
+}
+
 
