@@ -168,29 +168,57 @@ function onFileChange(event) {
     }
 }
 
-// Função para lidar com a submissão do formulário
+// Função para adicionar um item ao Firestore
 function addItem() {
     const itemName = document.getElementById("item-nome").value;
     const itemDescription = document.getElementById("item-descricao").value;
     const itemPrice = document.getElementById("price").value;
     const itemCategory = document.getElementById("item-categoria").value;
 
-    // Criar elemento HTML para o item
-    const itemElement = document.createElement("div");
-    itemElement.classList.add("mb-2");
-    itemElement.innerHTML = `
-        <h3 class="font-bold">${itemName}</h3>
-        <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
-        <div class="mt-2">
-            <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
-            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
-        </div>
-    `;
+    // Criar objeto para armazenar os dados do item
+    const itemData = {
+        nome: itemName,
+        descricao: itemDescription,
+        preco: itemPrice,
+        categoria: itemCategory
+    };
 
-    // Adicionar item à lista
-    document.getElementById("itemsList").appendChild(itemElement);
+    // Recuperar o ID da empresa associada ao usuário
+    db.collection('Empresas').where('userId', '==', userId).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const empresaId = doc.id;
+                
+                // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
+                db.collection('Empresas').doc(empresaId).collection('cardapio').add(itemData)
+                    .then((docRef) => {
+                        console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
+                        
+                        // Atualizar a interface do usuário para refletir a adição do item
+                        const itemElement = document.createElement("div");
+                        itemElement.classList.add("mb-2");
+                        itemElement.innerHTML = `
+                            <h3 class="font-bold">${itemName}</h3>
+                            <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
+                            <div class="mt-2">
+                                <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
+                            </div>
+                        `;
+                        
+                        // Adicionar o elemento do item à lista na interface do usuário
+                        document.getElementById("itemsList").appendChild(itemElement);
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao adicionar item ao Firestore:', error);
+                    });
+            });
+        })
+        .catch((error) => {
+            console.error('Erro ao recuperar o ID da empresa:', error);
+        });
 
-    // Limpar formulário
-    document.getElementById("addItemForm").reset();
+    // Limpar formulário após salvar
+    clearFields();
 }
 
