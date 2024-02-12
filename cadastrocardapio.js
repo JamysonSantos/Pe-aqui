@@ -15,160 +15,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Verifica se há um usuário autenticado
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        // O usuário está autenticado
-        const userId = user.uid;
-
-        // Função para adicionar um item ao Firestore
-        function addItem() {
-            const itemName = document.getElementById("item-nome").value;
-            const itemDescription = document.getElementById("item-descricao").value;
-            const itemPrice = document.getElementById("price").value;
-            const itemCategory = document.getElementById("item-categoria").value;
-
-            // Criar objeto para armazenar os dados do item
-            const itemData = {
-                nome: itemName,
-                descricao: itemDescription,
-                preco: itemPrice,
-                categoria: itemCategory
-            };
-
-            // Recuperar o ID da empresa associada ao usuário
-            db.collection('Empresas').where('userId', '==', userId).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        const empresaId = doc.id;
-                        
-                        // Verifica se a subcoleção "Cardapio" já existe para esta empresa
-                        db.collection('Empresas').doc(empresaId).collection('cardapio').get()
-                            .then((snapshot) => {
-                                if (snapshot.empty) {
-                                    // A subcoleção "Cardapio" não existe, então cria ela
-                                    db.collection('Empresas').doc(empresaId).collection('cardapio').add({})
-                                        .then((docRef) => {
-                                            console.log("Subcoleção 'cardapio' criada com sucesso.");
-                                            // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-                                            db.collection('empresas').doc(empresaId).collection('cardapio').doc(docRef.id).set(itemData)
-                                                .then(() => {
-                                                    console.log("Item adicionado ao Firestore com sucesso.");
-                                                })
-                                                .catch((error) => {
-                                                    console.error('Erro ao adicionar item ao Firestore:', error);
-                                                });
-                                        })
-                                        .catch((error) => {
-                                            console.error('Erro ao criar subcoleção "cardapio":', error);
-                                        });
-                                } else {
-                                    // A subcoleção "Cardapio" já existe, então adiciona o item diretamente
-                                    db.collection('Empresas').doc(empresaId).collection('Cardapio').add(itemData)
-                                        .then((docRef) => {
-                                            console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
-                                        })
-                                        .catch((error) => {
-                                            console.error('Erro ao adicionar item ao Firestore:', error);
-                                        });
-                                }
-                            })
-                            .catch((error) => {
-                                console.error('Erro ao verificar a existência da subcoleção "cardapio":', error);
-                            });
-                    });
-                })
-                .catch((error) => {
-                    console.error('Erro ao recuperar o ID da empresa:', error);
-                });
-
-            // Limpar formulário após salvar
-            clearFields();
-        }
-    } else {
-        // Se não houver usuário autenticado, redirecione para a página de login ou realize outra ação apropriada
-        console.log("Nenhum usuário autenticado encontrado.");
-    }
-});
-
-// Função para limpar os campos do formulário
-function clearFields() {
-    document.getElementById("item-nome").value = '';
-    document.getElementById("item-descricao").value = '';
-    document.getElementById("price").value = '';
-    document.getElementById("item-categoria").value = '';
-    document.getElementById("fileInput").value = '';
-    document.getElementById("previewContainer").innerHTML = '';
-}
-
-// Function to show detailed view modal
-function showDetailModal() {
-    document.getElementById('detail-modal').classList.remove('hidden');
-}
-
-// Function to close detailed view modal
-function closeDetailModal() {
-    document.getElementById('detail-modal').classList.add('hidden');
-}
-
-// Function to attach image input
-function attachImage() {
-    const fileInput = document.getElementById("fileInput");
-    fileInput.click();
-}
-
-// Function to handle file input change
-function onFileChange(event) {
-    const files = event.target.files;
-    const previewContainer = document.getElementById("previewContainer");
-
-    if (previewContainer.childElementCount + files.length > 3) {
-        alert('Você só pode escolher até 3 fotos.');
-        return;
-    }
-
-    for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = document.createElement("img");
-            const canvas = document.createElement("canvas"); // Elemento canvas para redimensionamento
-            const ctx = canvas.getContext("2d");
-            img.onload = () => {
-                const MAX_WIDTH = 200; // Largura máxima desejada
-                const MAX_HEIGHT = 200; // Altura máxima desejada
-                let width = img.width;
-                let height = img.height;
-
-                if (width > height) {
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                } else {
-                    if (height > MAX_HEIGHT) {
-                        width *= MAX_HEIGHT / height;
-                        height = MAX_HEIGHT;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-
-                ctx.drawImage(img, 0, 0, width, height);
-
-                const dataUrl = canvas.toDataURL('image/jpeg'); // Convertendo a imagem redimensionada para base64
-                img.src = dataUrl;
-            };
-            img.src = e.target.result;
-            img.alt = "Imagem";
-            img.className = "preview-image";
-            previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(files[i]);
-    }
-}
-
-
 // Função para adicionar um item ao Firestore
 function addItem() {
     // Obtendo o ID do usuário atualmente autenticado
@@ -228,6 +74,78 @@ function addItem() {
 
 // Função para limpar os campos do formulário
 function clearFields() {
-    // sua função clearFields()
+    document.getElementById("item-nome").value = '';
+    document.getElementById("item-descricao").value = '';
+    document.getElementById("price").value = '';
+    document.getElementById("item-categoria").value = '';
+    document.getElementById("fileInput").value = '';
+    document.getElementById("previewContainer").innerHTML = '';
+}
+
+// Função para mostrar detalhes do item
+function showDetailModal() {
+    document.getElementById('detail-modal').classList.remove('hidden');
+}
+
+// Função para fechar o modal de detalhes
+function closeDetailModal() {
+    document.getElementById('detail-modal').classList.add('hidden');
+}
+
+// Função para anexar imagem
+function attachImage() {
+    const fileInput = document.getElementById("fileInput");
+    fileInput.click();
+}
+
+// Função para manipular mudanças nos arquivos selecionados
+function onFileChange(event) {
+    const files = event.target.files;
+    const previewContainer = document.getElementById("previewContainer");
+
+    if (previewContainer.childElementCount + files.length > 3) {
+        alert('Você só pode escolher até 3 fotos.');
+        return;
+    }
+
+    for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = document.createElement("img");
+            const canvas = document.createElement("canvas"); // Elemento canvas para redimensionamento
+            const ctx = canvas.getContext("2d");
+            img.onload = () => {
+                const MAX_WIDTH = 200; // Largura máxima desejada
+                const MAX_HEIGHT = 200; // Altura máxima desejada
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const dataUrl = canvas.toDataURL('image/jpeg'); // Convertendo a imagem redimensionada para base64
+                img.src = dataUrl;
+            };
+            img.src = e.target.result;
+            img.alt = "Imagem";
+            img.className = "preview-image";
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(files[i]);
+    }
 }
 
