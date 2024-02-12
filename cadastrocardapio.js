@@ -52,7 +52,7 @@ function addItem() {
         .then((querySnapshot) => {
             if (querySnapshot.empty) {
                 console.error('Nenhuma empresa encontrada para o usuário atual.');
-                return;
+                return Promise.reject(new Error('Nenhuma empresa encontrada para o usuário atual.'));
             }
 
             // Como o ID do documento da empresa é único, pode-se assumir que só há um documento correspondente
@@ -82,6 +82,7 @@ function addItem() {
         })
         .catch((error) => {
             console.error('Erro ao adicionar item ao Firestore:', error);
+            alert('Erro ao adicionar item ao Firestore. Consulte o console para mais informações.');
         });
 
     // Limpar formulário após salvar
@@ -164,5 +165,6 @@ function onFileChange(event) {
         reader.readAsDataURL(files[i]);
     }
 }
+
 
 
