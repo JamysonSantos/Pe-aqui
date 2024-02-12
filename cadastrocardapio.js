@@ -170,6 +170,9 @@ function onFileChange(event) {
 
 // Função para adicionar um item ao Firestore
 function addItem() {
+    // Obtendo o ID do usuário atualmente autenticado
+    const userId = firebase.auth().currentUser.uid;
+
     const itemName = document.getElementById("item-nome").value;
     const itemDescription = document.getElementById("item-descricao").value;
     const itemPrice = document.getElementById("price").value;
@@ -183,7 +186,7 @@ function addItem() {
         categoria: itemCategory
     };
 
-    // Recuperar o ID da empresa associada ao usuário
+    // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
     db.collection('Empresas').where('userId', '==', userId).get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
