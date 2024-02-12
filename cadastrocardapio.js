@@ -47,45 +47,41 @@ function addItem() {
         categoria: itemCategory
     };
 
-    // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-    const empresaRef = db.collection('Empresas').where('userId', '==', userId);
-
-    empresaRef.get()
+    // Consultar a coleção "Empresas" para encontrar o documento correspondente ao usuário
+    db.collection('Empresas').where('userId', '==', userId).get()
         .then((querySnapshot) => {
             if (querySnapshot.empty) {
                 console.error('Nenhuma empresa encontrada para o usuário atual.');
                 return;
             }
 
-            const empresaDoc = querySnapshot.docs[0]; // Assumindo que há apenas um documento de empresa por usuário
+            // Como o ID do documento da empresa é único, pode-se assumir que só há um documento correspondente
+            const empresaDoc = querySnapshot.docs[0];
             const empresaId = empresaDoc.id;
 
-            // Adicionar o item ao Firestore usando o ID da empresa associada ao usuário
-            db.collection('Empresas').doc(empresaId).collection('cardapio').add(itemData)
-                .then((docRef) => {
-                    console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
+            // Adicionar o item à subcoleção "cardapio" usando o ID da empresa
+            return db.collection('Empresas').doc(empresaId).collection('cardapio').add(itemData);
+        })
+        .then((docRef) => {
+            console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
 
-                    // Atualizar a interface do usuário para refletir a adição do item
-                    const itemElement = document.createElement("div");
-                    itemElement.classList.add("mb-2");
-                    itemElement.innerHTML = `
-                        <h3 class="font-bold">${itemName}</h3>
-                        <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
-                        <div class="mt-2">
-                            <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
-                            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
-                        </div>
-                    `;
+            // Atualizar a interface do usuário para refletir a adição do item
+            const itemElement = document.createElement("div");
+            itemElement.classList.add("mb-2");
+            itemElement.innerHTML = `
+                <h3 class="font-bold">${itemName}</h3>
+                <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
+                <div class="mt-2">
+                    <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
+                </div>
+            `;
 
-                    // Adicionar o elemento do item à lista na interface do usuário
-                    document.getElementById("itemsList").appendChild(itemElement);
-                })
-                .catch((error) => {
-                    console.error('Erro ao adicionar item ao Firestore:', error);
-                });
+            // Adicionar o elemento do item à lista na interface do usuário
+            document.getElementById("itemsList").appendChild(itemElement);
         })
         .catch((error) => {
-            console.error('Erro ao recuperar informações da empresa:', error);
+            console.error('Erro ao adicionar item ao Firestore:', error);
         });
 
     // Limpar formulário após salvar
