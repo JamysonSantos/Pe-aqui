@@ -39,24 +39,6 @@ function addItem() {
     }
 }
 
-// Função para salvar um item sem imagem no Firestore
-function salvarItemSemImagem(nomeItem, descricaoItem, precoItem, categoriaItem) {
-    cardapioRef.add({
-        nome: nomeItem,
-        descricao: descricaoItem,
-        preco: precoItem,
-        categoria: categoriaItem,
-        imagens: [] // Array vazio para armazenar URLs das imagens
-    })
-    .then((docRef) => {
-        console.log('Item cadastrado com ID:', docRef.id);
-        limparCamposDoFormulario();
-    })
-    .catch((error) => {
-        console.error('Erro ao cadastrar item:', error);
-    });
-}
-
 // Função para salvar um item com imagens no Firestore e armazená-las no Firebase Storage
 function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem, imagens) {
     // Cria uma referência para a coleção "cardapio" dentro do documento do usuário
