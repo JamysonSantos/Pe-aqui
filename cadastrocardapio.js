@@ -12,7 +12,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 // Obtém o ID do usuário logado
-const userId = firebase.auth().currentUser.uid;
+const user = firebase.auth().currentUser;
+const userId = user ? user.uid : null;
 
 // Referência para a coleção de empresas do Firestore
 const empresasRef = firebase.firestore().collection('Empresas');
