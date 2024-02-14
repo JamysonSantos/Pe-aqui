@@ -11,39 +11,61 @@ const firebaseConfig = {
 // Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Obtém o ID do usuário logado
-const user = firebase.auth().currentUser;
-const userId = user ? user.uid : null;
-
-// Referência para a coleção de empresas do Firestore
-const empresasRef = firebase.firestore().collection('Empresas');
-
-// Referência para a coleção de cardápio do usuário
-const cardapioRef = empresasRef.doc(userId).collection('cardapio');
+// Para utilizar os recursos de autenticação e banco de dados
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 // Função para adicionar um novo item ao cardápio
 function addItem() {
-    const nomeItem = document.getElementById('item-nome').value;
-    const descricaoItem = document.getElementById('item-descricao').value;
-    const precoItem = document.getElementById('price').value;
-    const categoriaItem = document.getElementById('item-categoria').value;
-    
+    // Obter o ID do usuário atualmente autenticado
+    const userId = firebase.auth().currentUser.uid;
+
+    // Obter os valores dos campos do formulário
+    const nomeItem = document.getElementById('item-nome').value.trim();
+    const descricaoItem = document.getElementById('item-descricao').value.trim();
+    const precoItem = document.getElementById('price').value.trim();
+    const categoriaItem = document.getElementById('item-categoria').value.trim();
+
+    // Verificar se os campos obrigatórios estão preenchidos
+    if (!nomeItem || !descricaoItem || !precoItem || !categoriaItem) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+    }
+
+    // Obter referência para a coleção "cardapio" do usuário atual
+    const cardapioRef = db.collection('Empresas').doc(userId).collection('cardapio');
+
     // Verifica se o usuário selecionou alguma imagem
     const fileInput = document.getElementById('fileInput');
     if (fileInput.files.length === 0) {
         // Se nenhum arquivo foi selecionado, salva o item sem imagem
-        salvarItemSemImagem(nomeItem, descricaoItem, precoItem, categoriaItem);
+        salvarItemSemImagem(cardapioRef, nomeItem, descricaoItem, precoItem, categoriaItem);
     } else {
         // Se o usuário selecionou uma ou mais imagens, salva o item com as imagens
-        salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem, fileInput.files);
+        salvarItemComImagens(cardapioRef, nomeItem, descricaoItem, precoItem, categoriaItem, fileInput.files);
     }
 }
 
-// Função para salvar um item com imagens no Firestore e armazená-las no Firebase Storage
-function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem, imagens) {
-    // Cria uma referência para a coleção "cardapio" dentro do documento do usuário
-    const cardapioRef = db.collection('Empresas').doc(userId).collection('cardapio');
+// Função para salvar um item sem imagem no Firestore
+function salvarItemSemImagem(cardapioRef, nomeItem, descricaoItem, precoItem, categoriaItem) {
+    cardapioRef.add({
+        nome: nomeItem,
+        descricao: descricaoItem,
+        preco: precoItem,
+        categoria: categoriaItem,
+        imagens: [] // Array vazio para armazenar URLs das imagens
+    })
+    .then(() => {
+        console.log('Item cadastrado com sucesso');
+        limparCamposDoFormulario();
+    })
+    .catch((error) => {
+        console.error('Erro ao cadastrar item:', error);
+    });
+}
 
+// Função para salvar um item com imagens no Firestore e armazená-las no Firebase Storage
+function salvarItemComImagens(cardapioRef, nomeItem, descricaoItem, precoItem, categoriaItem, imagens) {
     // Salva as imagens no Firebase Storage
     const imagensUrls = [];
     const promises = [];
@@ -64,7 +86,6 @@ function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem,
     
     // Após todas as imagens serem carregadas, salva o item no Firestore
     Promise.all(promises).then(() => {
-        // Adiciona um novo documento à subcoleção "cardapio" com um ID único gerado automaticamente
         cardapioRef.add({
             nome: nomeItem,
             descricao: descricaoItem,
@@ -102,6 +123,7 @@ function onFileChange(event) {
 function attachImage() {
     // Adicione o código para anexar imagens aqui
 }
+
 
 
 
