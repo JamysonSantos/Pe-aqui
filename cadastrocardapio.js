@@ -83,27 +83,6 @@ function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem,
         console.error('Erro ao carregar imagens:', error);
     });
 }
-    
-    // Após todas as imagens serem carregadas, salva o item no Firestore
-    Promise.all(promises).then(() => {
-        cardapioRef.doc(itemId).set({
-            nome: nomeItem,
-            descricao: descricaoItem,
-            preco: precoItem,
-            categoria: categoriaItem,
-            imagens: imagensUrls // URLs das imagens carregadas
-        })
-        .then(() => {
-            console.log('Item cadastrado com ID:', itemId);
-            limparCamposDoFormulario();
-        })
-        .catch((error) => {
-            console.error('Erro ao cadastrar item:', error);
-        });
-    }).catch((error) => {
-        console.error('Erro ao carregar imagens:', error);
-    });
-}
 
 // Função para limpar os campos do formulário após o cadastro
 function limparCamposDoFormulario() {
