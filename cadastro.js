@@ -65,7 +65,7 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         };
 
         // Adiciona um novo documento à coleção "Empresas"
-        return db.collection("Empresas").doc(email).set(empresaData); // Usei o e-mail como ID do documento para garantir unicidade
+        return db.collection("Empresas").doc(conpanyName).set(empresaData); // Usei o e-mail como ID do documento para garantir unicidade
       })
       .then(() => {
         // Redirecionamento após o cadastro bem-sucedido
