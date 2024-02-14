@@ -59,14 +59,17 @@ function salvarItemSemImagem(nomeItem, descricaoItem, precoItem, categoriaItem) 
 
 // Função para salvar um item com imagens no Firestore e armazená-las no Firebase Storage
 function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem, imagens) {
-    // Cria um ID único para este item
-    const itemId = firebase.firestore().collection('usuarios').doc().id;
-    
+    // Cria uma referência para a coleção "cardapio" dentro do documento do usuário
+    const cardapioRef = db.collection('Empresas').doc(userId).collection('cardapio');
+
+    // Cria um ID único para este item dentro da subcoleção "cardapio"
+    const itemId = cardapioRef.doc().id;
+
     // Salva as imagens no Firebase Storage
     const imagensUrls = [];
     const promises = [];
     imagens.forEach((imagem) => {
-        const storageRef = firebase.storage().ref().child(`Empresas/${userId}/cardapio/${itemId}/${imagem.name}`);
+        const storageRef = firebase.storage().ref().child(`usuarios/${userId}/cardapio/${itemId}/${imagem.name}`);
         const uploadTask = storageRef.put(imagem);
         promises.push(
             new Promise((resolve, reject) => {
@@ -82,15 +85,15 @@ function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem,
     
     // Após todas as imagens serem carregadas, salva o item no Firestore
     Promise.all(promises).then(() => {
-        cardapioRef.add({
+        cardapioRef.doc(itemId).set({
             nome: nomeItem,
             descricao: descricaoItem,
             preco: precoItem,
             categoria: categoriaItem,
             imagens: imagensUrls // URLs das imagens carregadas
         })
-        .then((docRef) => {
-            console.log('Item cadastrado com ID:', docRef.id);
+        .then(() => {
+            console.log('Item cadastrado com ID:', itemId);
             limparCamposDoFormulario();
         })
         .catch((error) => {
