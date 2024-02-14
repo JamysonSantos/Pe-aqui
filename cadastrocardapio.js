@@ -62,14 +62,11 @@ function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem,
     // Cria uma referência para a coleção "cardapio" dentro do documento do usuário
     const cardapioRef = db.collection('Empresas').doc(userId).collection('cardapio');
 
-    // Cria um ID único para este item dentro da subcoleção "cardapio"
-    const itemId = cardapioRef.doc().id;
-
     // Salva as imagens no Firebase Storage
     const imagensUrls = [];
     const promises = [];
     imagens.forEach((imagem) => {
-        const storageRef = firebase.storage().ref().child(`usuarios/${userId}/cardapio/${itemId}/${imagem.name}`);
+        const storageRef = firebase.storage().ref().child(`usuarios/${userId}/cardapio/${imagem.name}`);
         const uploadTask = storageRef.put(imagem);
         promises.push(
             new Promise((resolve, reject) => {
@@ -82,6 +79,28 @@ function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem,
             })
         );
     });
+    
+    // Após todas as imagens serem carregadas, salva o item no Firestore
+    Promise.all(promises).then(() => {
+        // Adiciona um novo documento à subcoleção "cardapio" com um ID único gerado automaticamente
+        cardapioRef.add({
+            nome: nomeItem,
+            descricao: descricaoItem,
+            preco: precoItem,
+            categoria: categoriaItem,
+            imagens: imagensUrls // URLs das imagens carregadas
+        })
+        .then(() => {
+            console.log('Item cadastrado com sucesso');
+            limparCamposDoFormulario();
+        })
+        .catch((error) => {
+            console.error('Erro ao cadastrar item:', error);
+        });
+    }).catch((error) => {
+        console.error('Erro ao carregar imagens:', error);
+    });
+}
     
     // Após todas as imagens serem carregadas, salva o item no Firestore
     Promise.all(promises).then(() => {
