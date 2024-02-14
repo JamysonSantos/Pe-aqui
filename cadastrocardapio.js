@@ -11,159 +11,113 @@ const firebaseConfig = {
 // Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Para utilizar os recursos de autenticação e banco de dados
-const auth = firebase.auth();
-const db = firebase.firestore();
+// Obtém o ID do usuário logado
+const userId = firebase.auth().currentUser.uid;
 
+// Referência para a coleção de empresas do Firestore
+const empresasRef = firebase.firestore().collection('Empresas');
+
+// Referência para a coleção de cardápio do usuário
+const cardapioRef = empresasRef.doc(userId).collection('cardapio');
+
+// Função para adicionar um novo item ao cardápio
 function addItem() {
-  // Obter o usuário atualmente autenticado
-  const user = firebase.auth().currentUser;
-  if (!user) {
-    console.error('Nenhum usuário autenticado encontrado.');
-    // Redirecionar o usuário para a página de login ou executar outra ação apropriada
-    return;
-  }
+    const nomeItem = document.getElementById('item-nome').value;
+    const descricaoItem = document.getElementById('item-descricao').value;
+    const precoItem = document.getElementById('price').value;
+    const categoriaItem = document.getElementById('item-categoria').value;
+    
+    // Verifica se o usuário selecionou alguma imagem
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput.files.length === 0) {
+        // Se nenhum arquivo foi selecionado, salva o item sem imagem
+        salvarItemSemImagem(nomeItem, descricaoItem, precoItem, categoriaItem);
+    } else {
+        // Se o usuário selecionou uma ou mais imagens, salva o item com as imagens
+        salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem, fileInput.files);
+    }
+}
 
-  // Obter o ID do usuário atualmente autenticado
-  const userId = user.uid;
-
-  // Obter os valores dos campos do formulário
-  const itemName = document.getElementById("item-nome").value.trim();
-  const itemDescription = document.getElementById("item-descricao").value.trim();
-  const itemPrice = document.getElementById("price").value.trim();
-  const itemCategory = document.getElementById("item-categoria").value.trim();
-
-  // Verificar se os campos obrigatórios estão preenchidos
-  if (!itemName || !itemDescription || !itemPrice || !itemCategory) {
-    alert('Por favor, preencha todos os campos.');
-    return;
-  }
-
-  // Criar objeto para armazenar os dados do item
-  const itemData = {
-    nome: itemName,
-    descricao: itemDescription,
-    preco: itemPrice,
-    categoria: itemCategory
-  };
-
-  // Consultar a coleção "Empresas" para encontrar o documento correspondente ao usuário
-  db.collection('Empresas').where('userId', '==', userId).get()
-    .then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        console.error('Nenhuma empresa encontrada para o usuário atual.');
-        return Promise.reject(new Error('Nenhuma empresa encontrada para o usuário atual.'));
-      }
-
-      // Como o ID do documento da empresa é único, pode-se assumir que só há um documento correspondente
-      const empresaDoc = querySnapshot.docs[0];
-      const empresaId = empresaDoc.id;
-
-      // Adicionar o item à subcoleção "cardapio" usando o ID da empresa
-      return db.collection('Empresas').doc(empresaId).collection('cardapio').add(itemData);
+// Função para salvar um item sem imagem no Firestore
+function salvarItemSemImagem(nomeItem, descricaoItem, precoItem, categoriaItem) {
+    cardapioRef.add({
+        nome: nomeItem,
+        descricao: descricaoItem,
+        preco: precoItem,
+        categoria: categoriaItem,
+        imagens: [] // Array vazio para armazenar URLs das imagens
     })
     .then((docRef) => {
-      console.log(`Item adicionado ao Firestore com o ID: ${docRef.id}`);
-
-      // Atualizar a interface do usuário para refletir a adição do item
-      const itemElement = document.createElement("div");
-      itemElement.classList.add("mb-2");
-      itemElement.innerHTML = `
-        <h3 class="font-bold">${itemName}</h3>
-        <p class="text-sm">${itemDescription} | R$ ${itemPrice} | ${itemCategory}</p>
-        <div class="mt-2">
-          <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="showDetailModal()">Editar</button>
-          <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Excluir</button>
-        </div>
-      `;
-
-      // Adicionar o elemento do item à lista na interface do usuário
-      document.getElementById("itemsList").appendChild(itemElement);
+        console.log('Item cadastrado com ID:', docRef.id);
+        limparCamposDoFormulario();
     })
     .catch((error) => {
-      console.error('Erro ao adicionar item ao Firestore:', error);
-      alert('Erro ao adicionar item ao Firestore. Consulte o console para mais informações.');
+        console.error('Erro ao cadastrar item:', error);
     });
-
-  // Limpar formulário após salvar
-  clearFields();
 }
 
-// Função para limpar os campos do formulário
-function clearFields() {
-  document.getElementById("item-nome").value = '';
-  document.getElementById("item-descricao").value = '';
-  document.getElementById("price").value = '';
-  document.getElementById("item-categoria").value = '';
-  document.getElementById("fileInput").value = '';
-  document.getElementById("previewContainer").innerHTML = '';
+// Função para salvar um item com imagens no Firestore e armazená-las no Firebase Storage
+function salvarItemComImagens(nomeItem, descricaoItem, precoItem, categoriaItem, imagens) {
+    // Cria um ID único para este item
+    const itemId = firebase.firestore().collection('usuarios').doc().id;
+    
+    // Salva as imagens no Firebase Storage
+    const imagensUrls = [];
+    const promises = [];
+    imagens.forEach((imagem) => {
+        const storageRef = firebase.storage().ref().child(`Empresas/${userId}/cardapio/${itemId}/${imagem.name}`);
+        const uploadTask = storageRef.put(imagem);
+        promises.push(
+            new Promise((resolve, reject) => {
+                uploadTask.on('state_changed', null, reject, () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        imagensUrls.push(downloadURL);
+                        resolve();
+                    });
+                });
+            })
+        );
+    });
+    
+    // Após todas as imagens serem carregadas, salva o item no Firestore
+    Promise.all(promises).then(() => {
+        cardapioRef.add({
+            nome: nomeItem,
+            descricao: descricaoItem,
+            preco: precoItem,
+            categoria: categoriaItem,
+            imagens: imagensUrls // URLs das imagens carregadas
+        })
+        .then((docRef) => {
+            console.log('Item cadastrado com ID:', docRef.id);
+            limparCamposDoFormulario();
+        })
+        .catch((error) => {
+            console.error('Erro ao cadastrar item:', error);
+        });
+    }).catch((error) => {
+        console.error('Erro ao carregar imagens:', error);
+    });
 }
 
-// Função para mostrar detalhes do item
-function showDetailModal() {
-    document.getElementById('detail-modal').classList.remove('hidden');
+// Função para limpar os campos do formulário após o cadastro
+function limparCamposDoFormulario() {
+    document.getElementById('item-nome').value = '';
+    document.getElementById('item-descricao').value = '';
+    document.getElementById('price').value = '';
+    document.getElementById('item-categoria').value = '';
+    document.getElementById('fileInput').value = ''; // Limpa a seleção de arquivos
 }
 
-// Função para fechar o modal de detalhes
-function closeDetailModal() {
-    document.getElementById('detail-modal').classList.add('hidden');
-}
-
-// Função para anexar imagem
-function attachImage() {
-    const fileInput = document.getElementById("fileInput");
-    fileInput.click();
-}
-
-// Função para manipular mudanças nos arquivos selecionados
+// Função para manipular a mudança de arquivos (se o usuário estiver anexando imagens)
 function onFileChange(event) {
-    const files = event.target.files;
-    const previewContainer = document.getElementById("previewContainer");
-
-    if (previewContainer.childElementCount + files.length > 3) {
-        alert('Você só pode escolher até 3 fotos.');
-        return;
-    }
-
-    for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = document.createElement("img");
-            const canvas = document.createElement("canvas"); // Elemento canvas para redimensionamento
-            const ctx = canvas.getContext("2d");
-            img.onload = () => {
-                const MAX_WIDTH = 200; // Largura máxima desejada
-                const MAX_HEIGHT = 200; // Altura máxima desejada
-                let width = img.width;
-                let height = img.height;
-
-                if (width > height) {
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                } else {
-                    if (height > MAX_HEIGHT) {
-                        width *= MAX_HEIGHT / height;
-                        height = MAX_HEIGHT;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-
-                ctx.drawImage(img, 0, 0, width, height);
-
-                const dataUrl = canvas.toDataURL('image/jpeg'); // Convertendo a imagem redimensionada para base64
-                img.src = dataUrl;
-            };
-            img.src = e.target.result;
-            img.alt = "Imagem";
-            img.className = "preview-image";
-            previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(files[i]);
-    }
+    // Adicione o código para manipular a mudança de arquivos aqui
 }
+
+// Função para anexar imagens aos itens do cardápio
+function attachImage() {
+    // Adicione o código para anexar imagens aqui
+}
+
 
 
