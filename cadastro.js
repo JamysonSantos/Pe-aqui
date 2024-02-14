@@ -61,21 +61,11 @@ document.getElementById('signupForm').addEventListener('submit', function (event
           'numero de contato': contactNumber,
           'rua e numero': addressLine,
           bairro: neighborhood,
-          'Cidade/Estado': cityState,
-          'Crie sua Senha': password,
+          cidadeEstado: cityState, // Alterei o nome do campo para corresponder à estrutura do seu banco de dados
         };
 
         // Adiciona um novo documento à coleção "Empresas"
-        return db.collection("Empresas").add(empresaData);
-      })
-      .then((docRef) => {
-          // Obter o ID da empresa recém-cadastrada
-          const empresaId = docRef.id;
-
-        // Criar a subcoleção "cardapio" para a nova empresa
-        return db.collection("Empresas").doc(empresaId).collection("cardapio").doc("placeholder").set({
-            placeholder: "Este documento serve apenas para indicar que a subcoleção foi criada"
-        });
+        return db.collection("Empresas").doc(email).set(empresaData); // Usei o e-mail como ID do documento para garantir unicidade
       })
       .then(() => {
         // Redirecionamento após o cadastro bem-sucedido
