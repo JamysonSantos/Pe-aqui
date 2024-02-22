@@ -124,7 +124,7 @@ function logout() {
 // Adiciona evento de clique ao botão "Cadastrar Cardápio"
 document.querySelector(".button-cadastrar").addEventListener("click", function() {
   // Redireciona o usuário para a página de cadastro de cardápio
-  window.location.href = "cadastrocardapio.html";
+  window.location.href = "/home/cadastrocardapio.html";
 });
 
 
