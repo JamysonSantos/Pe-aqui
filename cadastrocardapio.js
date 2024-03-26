@@ -97,8 +97,8 @@ const db = firebase.firestore();
 
     // Função do botão "Voltar"
 document.querySelector('.button-voltar').addEventListener('click', function() {
-    // Implemente o comportamento desejado para o botão "Voltar" aqui
-    alert('Botão "Voltar" clicado');
+    // Redirecionar para a página "home.html"
+    window.location.href = 'home.html';
 });
 
 
