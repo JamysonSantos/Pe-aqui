@@ -1,127 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Estilos para a barra laranja */
-        .orange-bar {
-            background: linear-gradient(to right, #ec3517, #ffffff);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            color: white;
+	    body {
+          background: radial-gradient(circle at 30% 107%, #FFBB7A, transparent 62%),
+                radial-gradient(circle at 95% 5%, #FFD7A6, transparent 62%),
+                linear-gradient(90deg, #FFBB7A 0%, #FFD7A6 100%);
+          background-blend-mode: multiply, multiply, normal;
+          background-color: #ffffff; /* Cor de fundo caso o gradiente não seja suportado */
+          opacity: 1;
+        }
+		
+        /* Estilos para a barra superior */
+        .red-bar {
+            background-color: #EF4444; /* Cor vermelha */
+            color: white; /* Texto branco */
+            padding: 10px 20px; /* Espaçamento interno */
+            display: flex; /* Layout flexível */
+            justify-content: space-between; /* Alinhamento entre os elementos */
+            align-items: center; /* Alinhamento vertical */
         }
 
+        /* Estilos para o botão "Voltar" */
         .button-voltar {
-            text-decoration: none;
-            color: white;
+            background-color: #EF4444; /* Cor vermelha */
+            color: white; /* Texto branco */
+            border: none; /* Sem borda */
+            padding: 8px 16px; /* Espaçamento interno */
+            border-radius: 8px; /* Cantos arredondados */
+            cursor: pointer; /* Cursor ao passar por cima */
+            transition: background-color 0.3s ease; /* Transição suave */
+        }
+
+        .button-voltar:hover {
+            background-color: #DC2626; /* Cor vermelho escuro ao passar o mouse */
+        }
+
+        /* Estilos para a exibição dos itens do cardápio */
+        .category-title {
+            font-size: 48px;
             font-weight: bold;
-            background-color: transparent;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            color: #4a5568; /* Cor cinza-escuro */
+            margin-top: 24px;
+            margin-bottom: 16px;
         }
 
-        /* Estilos para a pré-visualização de fotos */
-        .preview-image {
-            max-width: 200px; /* Largura máxima desejada */
-            max-height: 200px; /* Altura máxima desejada */
+        .item-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a202c; /* Cor preta */
+            margin-bottom: 8px;
         }
 
-        /* Estilos para o background */
-        body {
-            background:
-                radial-gradient(35.36% 35.36% at 100% 25%, #0000 66%, #e2ccc3 68% 70%, #0000 72%) 10px 10px/calc(2*10px) calc(2*10px),
-                radial-gradient(35.36% 35.36% at 0 75%, #0000 66%, #e2ccc3 68% 70%, #0000 72%) 10px 10px/calc(2*10px) calc(2*10px),
-                radial-gradient(35.36% 35.36% at 100% 25%, #0000 66%, #e2ccc3 68% 70%, #0000 72%) 0 0/calc(2*10px) calc(2*10px),
-                radial-gradient(35.36% 35.36% at 0 75%, #0000 66%, #e2ccc3 68% 70%, #0000 72%) 0 0/calc(2*10px) calc(2*10px),
-                repeating-conic-gradient(#f9f2eb 0 25%, #0000 0 50%) 0 0/calc(2*10px) calc(2*10px),
-                radial-gradient(#0000 66%, #e2ccc3 68% 70%, #0000 72%) 0 calc(10px/2)/10px 10px
-                #f9f2eb;
-            margin: 0;
-            padding: 0;
+        .item-description {
+            font-size: 18px;
+            color: #4a5568; /* Cor cinza-escuro */
+            margin-bottom: 8px;
         }
 
+        .item-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4a5568; /* Cor cinza-escuro */
+            margin-top: 8px;
+        }
+
+        .item-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
     </style>
 </head>
-
-<body class="bg-gray-100 font-sans">
-
+<body>
     <!-- Barra Superior -->
-    <header class="orange-bar">
+    <header class="red-bar">
         <!-- Botão Voltar -->
-        <button class="button-voltar" onclick="window.history.back()">Voltar</button>
+        <button class="button-voltar">Voltar</button>
         <!-- Título -->
         <h1 class="text-2xl font-bold">Cadastre seu Cardápio</h1>
         <!-- Espaço em Branco -->
         <div></div>
     </header>
 
-    <!-- Main Content -->
-    <div class="container mx-auto flex justify-center mt-8">
-
-        <!-- Formulário de Cadastro -->
-        <div class="w-1/2 p-8">
-            <h2 class="text-lg font-bold mb-4">Adicionar Novo Item</h2>
-            <form id="addItemForm">
-                <div class="mb-4">
-                    <label for="item-nome" class="block mb-2">Nome do Item:</label>
-                    <input type="text" id="item-nome" name="item-nome" class="w-full rounded-md border-gray-300 px-3 py-2">
-                </div>
-                <div class="mb-4">
-                    <label for="item-descricao" class="block mb-2">Descrição:</label>
-                    <textarea id="item-descricao" name="item-descricao" class="w-full rounded-md border-gray-300 px-3 py-2"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
-                        Preço
-                    </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                            R$
-                        </span>
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pl-8" id="price" type="text" placeholder="0,00">
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label for="item-categoria" class="block mb-2">Categoria:</label>
-                    <input id="item-categoria" name="item-categoria" class="w-full rounded-md border-gray-300 px-3 py-2">
-                </div>
-                <h2 class="text-lg font-bold mb-4">Adicionar Fotos</h2>
-                <input type="file" id="fileInput" accept="image/*" multiple style="display: none;" onchange="onFileChange(event)">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="attachImage()">Anexar Fotos</button>
-                <div id="previewContainer" class="mt-4 grid grid-cols-3 gap-4"></div>
-                <div>
-                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="addItem()">Adicionar</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Lista de Itens Cadastrados -->
-        <div class="w-1/2 p-8">
-            <h2 class="text-lg font-bold mb-4">Itens Cadastrados</h2>
-            <div id="itemsList" class="overflow-y-auto max-h-96 border rounded-md px-4 py-2">
-                <!-- Itens serão adicionados dinamicamente aqui -->
+    <!-- Conteúdo centralizado -->
+    <div class="flex justify-center items-center h-screen">
+        <div class="max-w-5xl w-full bg-white p-8 rounded-lg shadow-lg flex">
+            <!-- Formulário -->
+            <div class="w-1/2 pr-8">
+                <h2 class="text-2xl font-bold mb-4">Adicionar Item ao Cardápio</h2>
+                <input type="text" placeholder="Nome do item" class="w-full rounded-lg p-2 mb-4">
+                <textarea placeholder="Descrição" class="w-full rounded-lg p-2 mb-4"></textarea>
+                <input type="number" placeholder="Preço" class="w-full rounded-lg p-2 mb-4">
+                <!-- Campo de Categorias com Autocompletar -->
+                <input type="text" id="categoryInput" placeholder="Categoria" class="w-full rounded-lg p-2 mb-4">
+                <!-- Exibição de Categorias Sugeridas -->
+                <div id="suggestedCategories" class="w-full bg-gray-200 rounded-lg p-2 mb-4 hidden"></div>
+                <input type="file" accept="image/*" class="mb-4">
+                <button class="bg-red-700 text-white rounded-lg px-4 py-2 hover:bg-red-500">Adicionar</button>
             </div>
-        </div>
-
-    </div>
-
-    <!-- Detailed View Modal -->
-    <div id="detail-modal" class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-        <div class="bg-white p-8 rounded-md">
-            <h2 class="text-lg font-bold mb-4">Detalhes do Item</h2>
-            <p>Nome: Nome do Item</p>
-            <p>Descrição: Breve descrição do item.</p>
-            <p>Preço: R$ 10.00</p>
-            <p>Categoria: Categoria</p>
-            <button id="close-modal" class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded mt-4" onclick="closeDetailModal()">Fechar</button>
+            <!-- Exibição de Itens -->
+            <div class="w-1/2 pl-8 border-l">
+                <div id="menuItems" class="overflow-y-auto max-h-96"></div>
+                <button class="bg-red-700 text-white rounded-lg px-4 py-2 mt-4 hover:bg-red-500">Salvar Cardápio</button>
+            </div>
         </div>
     </div>
 
