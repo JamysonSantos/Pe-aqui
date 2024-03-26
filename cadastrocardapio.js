@@ -96,6 +96,12 @@ const db = firebase.firestore();
     displayMenuItems();
     }
 
+    // Função do botão "Voltar"
+document.querySelector('.button-voltar').addEventListener('click', function() {
+    // Implemente o comportamento desejado para o botão "Voltar" aqui
+    alert('Botão "Voltar" clicado');
+});
+
 
 
 
