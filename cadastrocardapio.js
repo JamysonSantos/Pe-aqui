@@ -94,6 +94,7 @@ const db = firebase.firestore();
 
     // Exibe os itens do cardápio ao carregar a página
     displayMenuItems();
+    }
 
 
 
