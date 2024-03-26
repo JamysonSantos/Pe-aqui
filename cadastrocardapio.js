@@ -94,7 +94,6 @@ const db = firebase.firestore();
 
     // Exibe os itens do cardápio ao carregar a página
     displayMenuItems();
-    }
 
     // Função do botão "Voltar"
 document.querySelector('.button-voltar').addEventListener('click', function() {
