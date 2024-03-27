@@ -140,7 +140,7 @@ function salvarItensCardapio() {
 
     // Faz upload da imagem (se selecionada) e obtém a URL de download
     if (itemCardapio.image) {
-      const referenciaArmazenamento = firebase.storage().ref(`imagens-cardapio/${referenciaMenu.id}`);
+      const referenciaArmazenamento = firebase.storage().ref(`Fotos de cardapio/${referenciaMenu.id}`);
       const tarefaUpload = referenciaArmazenamento.put(itemCardapio.image);
 
       tarefaUpload.on(
