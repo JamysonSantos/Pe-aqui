@@ -101,6 +101,53 @@ document.querySelector('.button-voltar').addEventListener('click', function() {
     window.location.href = 'home.html';
 });
 
+function salvarItensCardapio() {
+  const itensCardapio = Object.values(categorias).flat(); // Combina todos os itens do objeto categorias
+
+  // Laço para cada item do menu
+  itensCardapio.forEach(itemCardapio => {
+    // Cria uma referência para um novo documento na coleção "Cardápio"
+    const referenciaMenu = db.collection("Cardápio").doc();
+
+    // Faz upload da imagem (se selecionada) e obtém a URL de download
+    if (itemCardapio.imagem) {
+      const referenciaArmazenamento = firebase.storage().ref(`imagens-cardapio/${referenciaMenu.id}`);
+      const tarefaUpload = referenciaArmazenamento.put(itemCardapio.imagem);
+
+      tarefaUpload.on(
+        "state_changed",
+        (snapshot) => {
+          // Observa eventos de mudança de estado como progresso, pausa e resumo
+          // ...
+        },
+        (error) => {
+          // Trata erros de upload
+          console.error("Erro ao carregar imagem:", error);
+        },
+        () => {
+          tarefaUpload.snapshot.ref.getDownloadURL().then((urlDownload) => {
+            itemCardapio.imagem = urlDownload;
+            // Salva o item do menu com a URL de download
+            referenciaMenu.set(itemCardapio);
+          });
+        }
+      );
+    } else {
+      // Salva o item do menu sem imagem
+      referenciaMenu.set(itemCardapio);
+    }
+  });
+
+  // Limpa o objeto de categorias após salvar
+  categorias = {};
+
+  // Exibe uma mensagem de sucesso ou redireciona para outra página (opcional)
+  alert("Cardápio salvo com sucesso!");
+}
+
+// Vincula a função salvarItensCardapio ao clique em um botão ou evento de envio de formulário
+document.querySelector('.botao-salvar-menu').addEventListener('click', salvarItensCardapio);
+
 
 
 
