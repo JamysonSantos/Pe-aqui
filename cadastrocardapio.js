@@ -135,7 +135,7 @@ function salvarItensCardapio() {
     // Pega a categoria digitada pelo usuário
     const categoria = document.getElementById("categoryInput").value;
 
-    // Cria uma referência para um novo documento na coleção "Cardápio"
+    // Cria uma referência para um novo documento na coleção "Cardápios"
     const referenciaMenu = db.collection("Cardápios").doc();
 
     // Faz upload da imagem (se selecionada) e obtém a URL de download
