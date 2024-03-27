@@ -13,7 +13,7 @@ firebase.initializeApp(firebaseConfig);
 
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
-const storage = firebase.storage();
+const db = firebase.firestore();
 
 // Array de categorias e itens
 let categories = {};
