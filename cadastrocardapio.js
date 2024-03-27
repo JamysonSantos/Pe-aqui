@@ -107,7 +107,7 @@ function salvarItensCardapio() {
   // Laço para cada item do menu
   itensCardapio.forEach(itemCardapio => {
     // Cria uma referência para um novo documento na coleção "Cardápio"
-    const referenciaMenu = db.collection("Cardápio").doc();
+    const referenciaMenu = db.collection("Cardápios").doc();
 
     // Faz upload da imagem (se selecionada) e obtém a URL de download
     if (itemCardapio.imagem) {
