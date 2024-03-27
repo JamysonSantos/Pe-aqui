@@ -18,11 +18,6 @@ const db = firebase.firestore();
 // Array de categorias e itens
 let categories = {};
 
-// Adiciona evento ao botão "Salvar Cardápio"
-document.querySelector("#saveMenuBtn").addEventListener("click", function () {
-  salvarItensCardapio();
-});
-
 // Adiciona evento ao botão "Adicionar"
 document.querySelector(".bg-red-700").addEventListener("click", function () {
   const name = document.querySelector('input[placeholder="Nome do item"]').value;
