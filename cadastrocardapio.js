@@ -1,11 +1,11 @@
 // Configuração do Firebase
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
+    apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
+    authDomain: "pecaqui-cc6c1.firebaseapp.com",
+    projectId: "pecaqui-cc6c1",
+    storageBucket: "pecaqui-cc6c1.appspot.com",
+    messagingSenderId: "502925766451",
+    appId: "1:502925766451:web:52473d00da34033f789846"
 };
 
 // Inicialize o Firebase
@@ -131,7 +131,7 @@ function salvarItensCardapio() {
     const categoria = document.getElementById("categoryInput").value;
 
     // Cria uma referência para um novo documento na coleção "Cardápio"
-    const referenciaMenu = db.collection("Cardápio").doc();
+    const referenciaMenu = db.collection("Cardápios").doc();
 
     // Faz upload da imagem (se selecionada) e obtém a URL de download
     if (itemCardapio.image) {
