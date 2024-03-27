@@ -115,11 +115,16 @@ categoryInput.addEventListener("input", function () {
 // Exibe os itens do cardápio ao carregar a página
 displayMenuItems();
 
-// Função do botão "Voltar"
-document.querySelector(".button-voltar").addEventListener("click", function () {
-  // Redirecionar para a página "home.html"
-  window.location.href = "home.html";
-});
+const botaoVoltar = document.querySelector('.button-voltar');
+
+if (botaoVoltar) {
+  botaoVoltar.addEventListener('click', function() {
+    // Redirecionar para a página "home.html"
+    window.location.href = "home.html";
+  });
+} else {
+  console.error("Elemento '.button-voltar' não encontrado.");
+}
 
 // Função para salvar os itens do cardápio
 function salvarItensCardapio() {
