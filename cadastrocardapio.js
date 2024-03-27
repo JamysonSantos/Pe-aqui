@@ -106,13 +106,17 @@ document.querySelector('.button-voltar').addEventListener('click', function() {
     window.location.href = 'home.html';
 });
 
+// Função para salvar os itens do cardápio
 function salvarItensCardapio() {
-  const itensCardapio = Object.values(categorias).flat(); // Combina todos os itens do objeto categorias
+  const itensCardapio = Object.values(categories).flat(); // Combina todos os itens do objeto categorias
 
   // Laço para cada item do menu
   itensCardapio.forEach(itemCardapio => {
+    // Pega a categoria digitada pelo usuário
+    const categoria = document.getElementById('categoryInput').value;
+
     // Cria uma referência para um novo documento na coleção "Cardápio"
-    const referenciaMenu = db.collection("Cardápios").doc();
+    const referenciaMenu = db.collection("Cardápio").doc();
 
     // Faz upload da imagem (se selecionada) e obtém a URL de download
     if (itemCardapio.imagem) {
@@ -122,7 +126,7 @@ function salvarItensCardapio() {
       tarefaUpload.on(
         "state_changed",
         (snapshot) => {
-          // Observa eventos de mudança de estado como progresso, pausa e resumo
+          // Observe eventos de mudança de estado como progresso, pausa e resumo
           // ...
         },
         (error) => {
@@ -132,19 +136,23 @@ function salvarItensCardapio() {
         () => {
           tarefaUpload.snapshot.ref.getDownloadURL().then((urlDownload) => {
             itemCardapio.imagem = urlDownload;
-            // Salva o item do menu com a URL de download
+            // Adiciona a categoria digitada ao objeto do item
+            itemCardapio.categoria = categoria;
+            // Salva o item do menu com a URL de download e categoria
             referenciaMenu.set(itemCardapio);
           });
         }
       );
     } else {
+      // Adiciona a categoria digitada ao objeto do item (sem imagem)
+      itemCardapio.categoria = categoria;
       // Salva o item do menu sem imagem
       referenciaMenu.set(itemCardapio);
     }
   });
 
   // Limpa o objeto de categorias após salvar
-  categorias = {};
+  categories = {};
 
   // Exibe uma mensagem de sucesso ou redireciona para outra página (opcional)
   alert("Cardápio salvo com sucesso!");
