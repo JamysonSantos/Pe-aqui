@@ -178,8 +178,9 @@ function salvarItensCardapio() {
   alert("Cardápio salvo com sucesso!");
 }
 
-// Vincula a função salvarItensCardapio ao clique em um botão ou evento de envio de formulário
-document.querySelector(".botao-salvar-menu").addEventListener("click", salvarItensCardapio);
+document.querySelector("#saveMenuBtn").addEventListener("click", function () {
+  salvarItensCardapio();
+});
 
 
 
