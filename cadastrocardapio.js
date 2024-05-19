@@ -1,5 +1,3 @@
-import { getStorage } from "firebase/storage";
-
 // Configuração do Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
@@ -12,6 +10,8 @@ const firebaseConfig = {
 
 // Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
+
+import { getStorage } from "firebase/storage";
 
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
