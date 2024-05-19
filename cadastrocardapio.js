@@ -11,11 +11,10 @@ const firebaseConfig = {
 // Inicialize o Firebase
 firebase.initializeApp(firebaseConfig);
 
-import { getStorage } from "firebase/storage";
-
 // Para utilizar os recursos de autenticação e banco de dados
 const auth = firebase.auth();
 const db = firebase.firestore();
+const storage = firebase.storage();
 
 // Array de categorias e itens
 let categories = {};
