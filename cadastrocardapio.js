@@ -1,3 +1,5 @@
+import { getStorage } from "firebase/storage";
+
 // Configuração do Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDb7m40G6cT8zZ0tqxmkyQ78OWBHy8w9LI",
@@ -135,8 +137,8 @@ function salvarItensCardapio() {
 
     // Faz upload da imagem (se selecionada) e obtém a URL de download
     if (itemCardapio.image) {
-      const referenciaArmazenamento = firebase.storage().ref(`Fotos de cardapio/${referenciaMenu.id}`);
-      const tarefaUpload = referenciaArmazenamento.put(itemCardapio.image);
+      const referenciaArquivo = getStorage().ref(`Fotos de cardapio/${referenciaMenu.id}`);
+      const tarefaUpload = referenciaArquivo.put(itemCardapio.image);
 
       tarefaUpload.on(
         "state_changed",
